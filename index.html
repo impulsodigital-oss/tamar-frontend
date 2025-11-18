@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tamar: Homeschooling, Arte y Certificación Académica</title>
+    <link rel="stylesheet" href="CSS/style.css"> 
+</head>
+<body>
+    <header>
+        <div class="container">
+            <img src="images/logo-tamar.png" alt="Logo Tamar Educación" style="height: 40px; margin-right: 15px;"> 
+            <h1>Tamar | Centro de Capacitación Homeschool</h1>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Inicio</a></li>
+                    <li id="registro-link"><a href="registro.html">Regístrate</a></li>
+                    <li id="login-link"><a href="login.html">Iniciar Sesión</a></li>
+                    <li id="mis-cursos-link" style="display: none;"><a href="videos.html">Mis Cursos</a></li>
+                    <li id="cerrar-sesion-link" style="display: none;"><a href="#" id="logout-btn">Cerrar Sesión</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container main-content">
+        <section id="hero" class="hero-section">
+            <div class="hero-text">
+                <h2>Transforma la Educación de tu Familia con Propósito y Arte.</h2>
+                <p>Guiamos a las familias homeschoolers a través de la metodología de **Sofía** (CEO y profesora de Arte), enfocada en el desarrollo integral, la autonomía y la obtención de **certificación escolar respaldada por EE. UU.**</p>
+                <a href="#free-guide" class="btn btn-primary">¡Descarga la Guía Gratuita Ahora!</a>
+            </div>
+            <img src="images/nina-hamaca.jpg" alt="Niña leyendo en hamaca en la playa" class="hero-image">
+        </section>
+        
+        <hr>
+
+        <section id="about" class="staff-section">
+            <h3>Nuestra Visión: Desarrollo Integral, Liderada por Expertos</h3>
+            <div class="staff-content">
+                <img src="images/retrato-sofi-circulo (2).jpg" alt="Retrato de Sofía, CEO de Tamar" class="ceo-portrait">
+                <p>Desde el enfoque en **Arte** y **Neurodivergencia**, nuestro staff de **25 profesores** y psicopedagogos acompaña cada etapa (Kinder a High School). No solo certificamos estudios, sino que entrenamos a las familias para que descubran el propósito de sus hijos.</p>
+                <p>Nuestra misión es asegurar que los estudiantes crezcan en **valores**, **salud física y mental**, y obtengan las **habilidades prácticas** para el futuro. Contamos con **30 videos principales** que sirven como base para la enseñanza de los padres.</p>
+            </div>
+        </section>
+
+        <hr>
+
+        <section id="courses-overview">
+            <h3>Planes de Acompañamiento y Certificación</h3>
+            <p>Elige el plan que mejor se adapte a las necesidades de tu familia. Todos los planes incluyen el acceso a la comunidad y descuentos en clases privadas.</p>
+            <img src="images/banner-inscripciones.jpg" alt="Banner Inscripciones Abiertas 2026 Tamar" class="full-width-banner">
+        </section>
+
+        <hr>
+
+        <section id="benefits">
+            <h3>¿Por Qué Elegir Tamar?</h3>
+            <div class="benefits-grid">
+                <ul>
+                    <li>**Certificación Escolar:** Extendemos la certificación pertinente en cualquier etapa escolar (Kinder a High School).</li>
+                    <li>**Planes Flexibles:** Contamos con tarifas que se ajustan a las posibilidades de cada familia.</li>
+                    <li>**Staff Especializado:** Acompañamiento por 25 profesionales en diferentes áreas (Arte, Finanzas, etc.).</li>
+                    <li>**Metodología Integral:** Enfocada en el autodescubrimiento y desarrollo personal, no solo lo académico.</li>
+                </ul>
+                <img src="images/ninos-playa.jpg" alt="Niños estudiando en la playa" class="benefits-image">
+            </div>
+        </section>
+        
+        <hr>
+
+        <section id="free-guide">
+            <h3>¡Regalo Exclusivo! Descarga nuestra guía gratuita: "5 Mitos sobre el Homeschooling"</h3>
+            <p>En esta guía esencial, descubrirás las verdades detrás de los mayores temores del Homeschooling. Te proporcionaremos el mapa de ruta que necesitas para iniciar tu viaje educativo con confianza y claridad.</p>
+            <img src="images/banner-guia-mitos.jpg" alt="Banner de la guía 5 Mitos sobre Homeschooling" class="guide-banner">
+            <form id="lead-form">
+                <div class="form-group">
+                    <label for="nombre-lead">Tu Nombre:</label>
+                    <input type="text" id="nombre-lead" placeholder="Escribe tu nombre" required>
+                </div>
+                <div class="form-group">
+                    <label for="email-lead">Tu Mejor Email:</label>
+                    <input type="email" id="email-lead" placeholder="ejemplo@correo.com" required>
+                </div>
+                <button type="submit" class="btn btn-primary">¡Quiero la guía ahora!</button>
+                <div id="lead-message" class="message" style="display:none;"></div>
+            </form>
+        </section>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Tamar. Todos los derechos reservados.</p>
+    </footer>
+
+    <script type="module" src="JS/api.js"></script>
+    <script type="module" src="JS/main.js"></script>
+    <script type="module">
+        // Importación corregida a la carpeta JS en mayúsculas
+        import { showMessage, hideMessage, postData } from './JS/main.js';
+
+        // Aseguramos que la URL en API.JS esté corregida: https://tamar-backend-api-gqy9.onrender.com/api
+
+        document.getElementById('lead-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            hideMessage('lead-message');
+
+            const nombre = document.getElementById('nombre-lead').value;
+            const email = document.getElementById('email-lead').value;
+
+            try {
+                // Endpoint para registrar el Lead
+                const response = await postData('leads', { nombre, email });
+                const data = await response.json();
+
+                if (response.ok) {
+                    showMessage('lead-message', '¡Lead registrado exitosamente! Revisa tu email para descargar la guía.', 'success');
+                    document.getElementById('lead-form').reset();
+                    // Aquí iría la redirección o la lógica para servir el PDF de la guía
+                } else {
+                    showMessage('lead-message', data.error || 'Ocurrió un error al registrar el lead.', 'error');
+                }
+            } catch (error) {
+                console.error('Error al enviar el lead:', error);
+                showMessage('lead-message', 'No se pudo conectar con el servidor. Intenta de nuevo más tarde.', 'error');
+            }
+        });
+    </script>
+</body>
+</html>
