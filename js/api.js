@@ -1,6 +1,6 @@
 // tamar-frontend/js/api.js
 
-const API_BASE_URL = 'https://tamar-backend-api.onrender.com/api'; // La URL base de tu backend local
+const API_BASE_URL = 'https://tamar-backend-api-gqy9.onrender.com'; // La URL base de tu backend local
 
 // Función para hacer solicitudes POST
 async function postData(endpoint, data) {
@@ -35,4 +35,5 @@ function getAuthToken() {
 }
 
 // Exportamos las funciones para que puedan ser usadas en otros archivos JS
+
 export { postData, getData, getAuthToken };
