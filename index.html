@@ -4,12 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tamar: Homeschooling, Arte y Certificación Académica</title>
+    <!-- RUTA CORREGIDA A LA CARPETA CSS EN MAYÚSCULAS -->
     <link rel="stylesheet" href="CSS/style.css"> 
 </head>
 <body>
     <header>
         <div class="container">
-            <img src="images/logo-tamar.png" alt="Logo Tamar Educación" style="height: 40px; margin-right: 15px;"> 
+            <!-- RUTA DEL LOGO -->
+            <img src="images/logo-tamar.png" alt="Logo Tamar Educación" class="logo"> 
             <h1>Tamar | Centro de Capacitación Homeschool</h1>
             <nav>
                 <ul>
@@ -30,25 +32,30 @@
                 <p>Guiamos a las familias homeschoolers a través de la metodología de **Sofía** (CEO y profesora de Arte), enfocada en el desarrollo integral, la autonomía y la obtención de **certificación escolar respaldada por EE. UU.**</p>
                 <a href="#free-guide" class="btn btn-primary">¡Descarga la Guía Gratuita Ahora!</a>
             </div>
+            <!-- IMAGEN DE IMPACTO DE HOMESCHOOLING -->
             <img src="images/nina-hamaca.jpg" alt="Niña leyendo en hamaca en la playa" class="hero-image">
         </section>
         
         <hr>
 
         <section id="about" class="staff-section">
-            <h3>Nuestra Visión: Desarrollo Integral, Liderada por Expertos</h3>
+            <h3>Nuestra Misión: Liderazgo y Acompañamiento Integral</h3>
             <div class="staff-content">
+                <!-- Retrato de Sofía, CEO -->
                 <img src="images/retrato-sofi-circulo (2).jpg" alt="Retrato de Sofía, CEO de Tamar" class="ceo-portrait">
-                <p>Desde el enfoque en **Arte** y **Neurodivergencia**, nuestro staff de **25 profesores** y psicopedagogos acompaña cada etapa (Kinder a High School). No solo certificamos estudios, sino que entrenamos a las familias para que descubran el propósito de sus hijos.</p>
-                <p>Nuestra misión es asegurar que los estudiantes crezcan en **valores**, **salud física y mental**, y obtengan las **habilidades prácticas** para el futuro. Contamos con **30 videos principales** que sirven como base para la enseñanza de los padres.</p>
+                <div class="staff-description">
+                    <p>Tamar, fundado por **Sofía (Profe de Arte)**, nació de la convicción de que la familia es la principal institución educativa. Nuestro método se basa en el **análisis y el arte** para el autodescubrimiento y crecimiento personal.</p>
+                    <p>Contamos con un staff de **25 profesores** (en áreas como finanzas, arte, y desarrollo personal) listos para acompañar a tu hijo/a desde Kinder hasta High School. Nuestro enfoque garantiza que, además de la **certificación escolar**, desarrollen la disciplina y el mérito para el mundo adulto.</p>
+                </div>
             </div>
         </section>
 
         <hr>
 
         <section id="courses-overview">
-            <h3>Planes de Acompañamiento y Certificación</h3>
-            <p>Elige el plan que mejor se adapte a las necesidades de tu familia. Todos los planes incluyen el acceso a la comunidad y descuentos en clases privadas.</p>
+            <h3>Planes de Acompañamiento, Cursos y Clases Streaming</h3>
+            <p>Accede a la biblioteca de **30 videos principales** para padres (contenido pago) y a las clases streaming para los chicos. ¡La educación personalizada es la clave!</p>
+            <!-- Banner de Inscripciones para resaltar la oferta -->
             <img src="images/banner-inscripciones.jpg" alt="Banner Inscripciones Abiertas 2026 Tamar" class="full-width-banner">
         </section>
 
@@ -58,20 +65,20 @@
             <h3>¿Por Qué Elegir Tamar?</h3>
             <div class="benefits-grid">
                 <ul>
-                    <li>**Certificación Escolar:** Extendemos la certificación pertinente en cualquier etapa escolar (Kinder a High School).</li>
-                    <li>**Planes Flexibles:** Contamos con tarifas que se ajustan a las posibilidades de cada familia.</li>
-                    <li>**Staff Especializado:** Acompañamiento por 25 profesionales en diferentes áreas (Arte, Finanzas, etc.).</li>
-                    <li>**Metodología Integral:** Enfocada en el autodescubrimiento y desarrollo personal, no solo lo académico.</li>
+                    <li>**Respaldo y Certificación:** Acreditación escolar respaldada por "Integrative Learning Academy" (EE. UU.).</li>
+                    <li>**Staff de 25 Expertos:** Profesores especializados en áreas clave, desde arte hasta finanzas.</li>
+                    <li>**Metodología Basada en el Arte:** Fomentamos el autodescubrimiento y el pensamiento crítico desde la creatividad.</li>
+                    <li>**Planes Flexibles:** Opciones de acompañamiento mensual y semanal adaptadas a sus necesidades.</li>
                 </ul>
-                <img src="images/ninos-playa.jpg" alt="Niños estudiando en la playa" class="benefits-image">
+                <img src="images/familia-leyendo.jpg" alt="Familia leyendo junta en el sofá" class="benefits-image">
             </div>
         </section>
         
         <hr>
 
-        <section id="free-guide">
+        <section id="free-guide" class="lead-magnet">
             <h3>¡Regalo Exclusivo! Descarga nuestra guía gratuita: "5 Mitos sobre el Homeschooling"</h3>
-            <p>En esta guía esencial, descubrirás las verdades detrás de los mayores temores del Homeschooling. Te proporcionaremos el mapa de ruta que necesitas para iniciar tu viaje educativo con confianza y claridad.</p>
+            <p>Obtén el mapa de ruta que necesitas para iniciar tu viaje educativo con confianza y claridad. Descubre las verdades detrás de los mayores temores.</p>
             <img src="images/banner-guia-mitos.jpg" alt="Banner de la guía 5 Mitos sobre Homeschooling" class="guide-banner">
             <form id="lead-form">
                 <div class="form-group">
@@ -89,16 +96,15 @@
     </div>
 
     <footer>
-        <p>&copy; 2024 Tamar. Todos los derechos reservados.</p>
+        <p>&copy; 2024 Tamar. Todos los derechos reservados. <a href="mailto:educaciontamar@gmail.com">Contacto</a></p>
     </footer>
 
+    <!-- RUTAS CORREGIDAS A LA CARPETA JS EN MAYÚSCULAS -->
     <script type="module" src="JS/api.js"></script>
     <script type="module" src="JS/main.js"></script>
     <script type="module">
         // Importación corregida a la carpeta JS en mayúsculas
         import { showMessage, hideMessage, postData } from './JS/main.js';
-
-        // Aseguramos que la URL en API.JS esté corregida: https://tamar-backend-api-gqy9.onrender.com/api
 
         document.getElementById('lead-form').addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -115,7 +121,6 @@
                 if (response.ok) {
                     showMessage('lead-message', '¡Lead registrado exitosamente! Revisa tu email para descargar la guía.', 'success');
                     document.getElementById('lead-form').reset();
-                    // Aquí iría la redirección o la lógica para servir el PDF de la guía
                 } else {
                     showMessage('lead-message', data.error || 'Ocurrió un error al registrar el lead.', 'error');
                 }
