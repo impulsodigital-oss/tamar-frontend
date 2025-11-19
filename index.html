@@ -5,84 +5,108 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tamar: Homeschooling, Arte y Certificación Académica</title>
     
-    <!-- Fuentes para el nuevo diseño -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Montserrat:wght@600;700&display=swap" rel="stylesheet">
     
-    <!-- RUTA CORREGIDA: CSS EN MAYÚSCULAS -->
     <link rel="stylesheet" href="CSS/style.css"> 
 </head>
 <body>
     <header class="header">
         <div class="container">
-            <!-- RUTA DEL LOGO -->
             <img src="images/logo-tamar.png" alt="Logo Tamar Educación" class="logo"> 
-            <h1>Tamar | Centro de Capacitación Homeschool</h1>
+            
             <nav class="nav">
                 <ul>
-                    <li><a href="index.html">Inicio</a></li>
-                    <!-- LINKS DE NAVEGACIÓN COMPLETOS Y CON ID's -->
-                    <li id="registro-link"><a href="registro.html">Regístrate</a></li>
-                    <li id="login-link"><a href="login.html">Iniciar Sesión</a></li>
+                    <li><a href="#hero">Inicio</a></li>
+                    <li><a href="#why-tamar">Por qué Tamar</a></li>
+                    <li><a href="#about">Quién Soy</a></li>
+                    <li><a href="#testimonials">Testimonios</a></li>
+                    
+                    <li id="registro-link"><a href="registro.html" class="btn" style="padding: 8px 20px; font-size: 0.9rem;">Regístrate</a></li>
+                    <li id="login-link"><a href="login.html">Ingresar</a></li>
                     <li id="mis-cursos-link" style="display: none;"><a href="videos.html">Mis Cursos</a></li>
-                    <li id="cerrar-sesion-link" style="display: none;"><a href="#" id="logout-btn">Cerrar Sesión</a></li>
+                    <li id="cerrar-sesion-link" style="display: none;"><a href="#" id="logout-btn">Salir</a></li>
                 </ul>
             </nav>
         </div>
     </header>
 
-    <div class="container main-content">
-        <section id="hero" class="hero-section">
-            <div class="hero-text">
-                <h2>Transforma la Educación de tu Familia con Propósito y Arte.</h2>
-                <p>Guiamos a las familias homeschoolers a través de la metodología de **Sofía** (CEO y profesora de Arte), enfocada en el desarrollo integral, la autonomía y la obtención de **certificación escolar respaldada por EE. UU.**</p>
-                <a href="#free-guide" class="btn btn-primary">¡Descarga la Guía Gratuita Ahora!</a>
+    <div class="main-content"> <section id="hero" class="hero-section">
+            <div class="container">
+                <div class="hero-text">
+                    <h1>Transforma la Educación de tu Familia con Propósito y Arte.</h1>
+                    <p>Guiamos a las familias homeschoolers enfocados en el desarrollo integral, la autonomía y la obtención de certificación escolar respaldada por EE. UU.</p>
+                    <a href="#free-guide" class="btn">¡Descarga la Guía Gratuita Ahora!</a>
+                </div>
             </div>
-            <!-- IMAGEN DE IMPACTO DE HOMESCHOOLING -->
-            <img src="images/nina-hamaca.jpg" alt="Niña leyendo en hamaca en la playa" class="section-image">
         </section>
         
+        <section id="why-tamar">
+            <div class="container">
+                <h2>¿Por Qué Elegir Tamar?</h2>
+                <p style="text-align: center; max-width: 800px; margin: 0 auto 40px; font-size: 1.1rem;">
+                    TAMAR es un espacio diseñado para responder a las necesidades educativas de éste tiempo y con visión a futuro.
+                </p>
+                
+                <div class="grid-3-col">
+                    <div class="card">
+                        <h3>Nuestra Misión</h3>
+                        <p>Potenciar las habilidades de tus hijos a través del arte, en un entorno de aprendizaje seguro, libre y con valores cristianos.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Visión de Servicio</h3>
+                        <p>Cada persona de nuestro staff tiene la visión de acompañar a cada familia brindando un servicio de excelencia y cercanía.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Respaldo Académico</h3>
+                        <p>Ofrecemos una estructura educativa sólida que combina la libertad del homeschooling con la validez de una certificación internacional.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <hr>
 
         <section id="about" class="staff-section">
-            <h3>Nuestra Misión: Liderazgo y Acompañamiento Integral</h3>
-            <div class="staff-content">
-                <!-- Retrato de Sofía, CEO -->
-                <img src="images/retrato-sofi-circulo (2).jpg" alt="Retrato de Sofía, CEO de Tamar" class="section-image" style="max-width: 300px; border-radius: 50%;">
-                <div class="staff-description">
-                    <p>Tamar, fundado por **Sofía (Profe de Arte)**, nació de la convicción de que la familia es la principal institución educativa. Nuestro método se basa en el **análisis y el arte** para el autodescubrimiento y crecimiento personal.</p>
-                    <p>Contamos con un staff de **25 profesores** (en áreas como finanzas, arte, y desarrollo personal) listos para acompañar a tu hijo/a desde Kinder hasta High School. Nuestro enfoque garantiza que, además de la **certificación escolar**, desarrollen la disciplina y el mérito para el mundo adulto.</p>
+            <div class="container">
+                <h3>Hola, soy Sofía</h3>
+                <div class="staff-content">
+                    <img src="images/retrato-sofi-circulo (2).jpg" alt="Retrato de Sofía" class="section-image" style="max-width: 300px; border-radius: 50%;">
+                    
+                    <div class="staff-description">
+                        <p>Soy artista y educadora, pero sobre todo <strong>mamá que educa en casa</strong>. Luego de hacer mi carrera docente confirmé lo que sentía ya desde muy pequeña cuando iba a la escuela: el sistema educativo no está diseñado para impulsar a los alumnos para un futuro cimentado en la validación de sus dones y talentos, ni les brinda herramientas actualizadas para tener éxito en el mundo que les espera.</p>
+                        
+                        <p>Es por eso que desde antes de ser mamá tenía la convicción de que cuando tuviera hijos buscaría la manera de instruirlos de manera más orgánica, respetuosa, creativa y conforme a las necesidades de nuestra familia.</p>
+                        
+                        <p>Me llevó años de trabajo poder construir una preciosa comunidad de familias homeschoolers y darle una estructura al trabajo que comenzó en una pequeña localidad de Santa Fe, Argentina y se fue expandiendo en toda Latinoamérica y España.</p>
+                    </div>
                 </div>
             </div>
         </section>
 
         <hr>
 
-        <section id="courses-overview">
-            <h3>Planes de Acompañamiento, Cursos y Clases Streaming</h3>
-            <p style="text-align: center;">Accede a la biblioteca de **30 videos principales** para padres (contenido pago) y a las clases streaming para los chicos. ¡La educación personalizada es la clave!</p>
-            <!-- Banner de Inscripciones para resaltar la oferta -->
-            <img src="images/banner-inscripciones.jpg" alt="Banner Inscripciones Abiertas 2026 Tamar" class="section-image">
-        </section>
+        <section id="testimonials" style="background-color: #fff;">
+            <div class="container">
+                <h2>Lo que dicen las familias de Tamar</h2>
+                <div class="grid-3-col">
+                    
+                    <div class="card testimonial-card">
+                        <p>"He notado un avance significativo en mi hijo de 6 años: mayor concentración, atención a los detalles y entusiasmo por expresarse. Más que un taller, es una tribu llena de cariño, respeto y belleza."</p>
+                        <span class="author">- Kismalú, mamá de JJN (6 años)</span>
+                    </div>
 
-        <hr>
+                    <div class="card testimonial-card">
+                        <p>"Ella apareció: como cuando compras algo nuevo y viene con manual de uso. Ese manual era ella. Una facilitadora tan creativa, apasionada, amante del hogar que te conecta con tu propia esencia para que seas tu mejor versión."</p>
+                        <span class="author">- Virgina, mamá de dos peques (2 y 5 años)</span>
+                    </div>
 
-        <section id="benefits">
-            <h3>¿Por Qué Elegir Tamar?</h3>
-            <!-- Usamos la clase grid-3-col para que se vea moderno -->
-            <div class="grid-3-col">
-                <div class="card">
-                    <h4>Respaldo y Certificación</h4>
-                    <p>Acreditación escolar respaldada por "Integrative Learning Academy" (EE. UU.).</p>
-                </div>
-                <div class="card">
-                    <h4>Staff de 25 Expertos</h4>
-                    <p>Profesores especializados en áreas clave, desde arte hasta finanzas.</p>
-                </div>
-                <div class="card">
-                    <h4>Metodología Basada en el Arte</h4>
-                    <p>Fomentamos el autodescubrimiento y el pensamiento crítico desde la creatividad.</p>
+                    <div class="card testimonial-card">
+                        <p>"Su acompañamiento desinteresado, tanto en lo académico como en lo emocional, nos ha brindado fuerza y motivación para seguir adelante. Gracias a ella, ya no nos sentimos solas."</p>
+                        <span class="author">- Mariana, mamá de Luz (10 años)</span>
+                    </div>
+
                 </div>
             </div>
         </section>
@@ -90,22 +114,24 @@
         <hr>
 
         <section id="free-guide" class="lead-magnet">
-            <h3>¡Regalo Exclusivo! Descarga nuestra guía gratuita: "5 Mitos sobre el Homeschooling"</h3>
-            <p style="text-align: center;">Obtén el mapa de ruta que necesitas para iniciar tu viaje educativo con confianza y claridad. Descubre las verdades detrás de los mayores temores.</p>
-            <div class="lead-form-content">
-                <img src="images/banner-guia-mitos.jpg" alt="Banner de la guía 5 Mitos sobre Homeschooling" class="section-image">
-                <form id="lead-form">
-                    <div class="form-group">
-                        <label for="nombre-lead">Tu Nombre:</label>
-                        <input type="text" id="nombre-lead" placeholder="Escribe tu nombre" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="email-lead">Tu Mejor Email:</label>
-                        <input type="email" id="email-lead" placeholder="ejemplo@correo.com" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary">¡Quiero la guía ahora!</button>
-                    <div id="lead-message" class="message" style="display:none;"></div>
-                </form>
+            <div class="container">
+                <h3>¡Regalo Exclusivo! Descarga nuestra guía gratuita: "5 Mitos sobre el Homeschooling"</h3>
+                <p style="text-align: center;">Obtén el mapa de ruta que necesitas para iniciar tu viaje educativo con confianza y claridad. Descubre las verdades detrás de los mayores temores.</p>
+                <div class="lead-form-content">
+                    <img src="images/banner-guia-mitos.jpg" alt="Guía Gratuita" class="section-image">
+                    <form id="lead-form">
+                        <div class="form-group">
+                            <label for="nombre-lead">Tu Nombre:</label>
+                            <input type="text" id="nombre-lead" placeholder="Escribe tu nombre" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email-lead">Tu Mejor Email:</label>
+                            <input type="email" id="email-lead" placeholder="ejemplo@correo.com" required>
+                        </div>
+                        <button type="submit" class="btn" style="width: 100%;">¡Quiero la guía ahora!</button>
+                        <div id="lead-message" class="message" style="display:none;"></div>
+                    </form>
+                </div>
             </div>
         </section>
     </div>
@@ -116,24 +142,25 @@
         </div>
     </footer>
 
-    <!-- RUTAS JS ESTÁN EN MINÚSCULAS -->
     <script type="module" src="js/api.js"></script>
     <script type="module" src="js/main.js"></script>
     <script type="module">
         import { showMessage, hideMessage, postData } from './js/main.js';
 
-        // Lógica para mostrar/ocultar links de navegación basada en la autenticación
+        // 1. Lógica de Autenticación (Mostrar/Ocultar Menú)
         function checkAuth() {
             const token = localStorage.getItem('token');
             const isLoggedIn = !!token;
             
+            // Enlaces públicos
             document.getElementById('registro-link').style.display = isLoggedIn ? 'none' : 'block';
             document.getElementById('login-link').style.display = isLoggedIn ? 'none' : 'block';
+            // Enlaces privados
             document.getElementById('mis-cursos-link').style.display = isLoggedIn ? 'block' : 'none';
             document.getElementById('cerrar-sesion-link').style.display = isLoggedIn ? 'block' : 'none';
         }
         
-        // Lógica de logout
+        // 2. Lógica de Logout
         document.getElementById('logout-btn').addEventListener('click', (e) => {
             e.preventDefault();
             localStorage.removeItem('token');
@@ -141,9 +168,10 @@
             window.location.href = 'index.html';
         });
 
+        // Ejecutar al cargar
         document.addEventListener('DOMContentLoaded', checkAuth);
 
-
+        // 3. Lógica del Formulario de Leads
         document.getElementById('lead-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             hideMessage('lead-message');
@@ -152,19 +180,18 @@
             const email = document.getElementById('email-lead').value;
 
             try {
-                // Endpoint para registrar el Lead
                 const response = await postData('leads', { nombre, email });
                 const data = await response.json();
 
                 if (response.ok) {
-                    showMessage('lead-message', '¡Lead registrado exitosamente! Revisa tu email para descargar la guía.', 'success');
+                    showMessage('lead-message', '¡Lead registrado exitosamente! Revisa tu email.', 'success');
                     document.getElementById('lead-form').reset();
                 } else {
-                    showMessage('lead-message', data.error || 'Ocurrió un error al registrar el lead. (Revisa la clave API de Brevo en Render)', 'error');
+                    showMessage('lead-message', data.error || 'Error al registrar.', 'error');
                 }
             } catch (error) {
-                console.error('Error al enviar el lead:', error);
-                showMessage('lead-message', 'No se pudo conectar con el servidor. Intenta de nuevo más tarde.', 'error');
+                console.error('Error lead:', error);
+                showMessage('lead-message', 'Error de conexión.', 'error');
             }
         });
     </script>
