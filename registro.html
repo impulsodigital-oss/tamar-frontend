@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tamar - Inicia Sesión</title>
-    <!-- RUTA CORREGIDA A LA CARPETA CSS EN MAYÚSCULAS -->
+    <title>Tamar - Regístrate</title>
+    <!-- RUTA CORREGIDA: CSS EN MAYÚSCULAS -->
     <link rel="stylesheet" href="CSS/style.css">
 </head>
 <body>
@@ -24,60 +24,70 @@
     </header>
 
     <div class="container main-content">
-        <h2>Accede a tu Cuenta Tamar</h2>
-        <p>Introduce tus credenciales para continuar tu aprendizaje.</p>
-        <form id="login-form">
+        <h2>Únete a la Familia Tamar</h2>
+        <p>Regístrate ahora y accede a todo el contenido de aprendizaje y certificación.</p>
+        <form id="registro-form">
             <div class="form-group">
-                <label for="email-login">Email:</label>
-                <input type="email" id="email-login" placeholder="tu@email.com" required>
+                <label for="nombre-registro">Nombre Completo:</label>
+                <input type="text" id="nombre-registro" placeholder="Tu nombre" required>
             </div>
             <div class="form-group">
-                <label for="password-login">Contraseña:</label>
-                <input type="password" id="password-login" placeholder="Tu contraseña" required>
+                <label for="email-registro">Email:</label>
+                <input type="email" id="email-registro" placeholder="tu@email.com" required>
             </div>
-            <button type="submit" class="btn">Acceder</button>
-            <div id="login-message" class="message" style="display:none;"></div>
+            <div class="form-group">
+                <label for="password-registro">Contraseña:</label>
+                <input type="password" id="password-registro" placeholder="Crea una contraseña segura" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Crear Cuenta</button>
+            <div id="registro-message" class="message" style="display:none;"></div>
         </form>
-        <p>¿No tienes cuenta? <a href="registro.html">Regístrate aquí</a>.</p>
+        <p>¿Ya tienes cuenta? <a href="login.html">Inicia Sesión</a>.</p>
     </div>
 
     <footer>
         <p>&copy; 2024 Tamar. Todos los derechos reservados.</p>
     </footer>
 
-    <!-- RUTAS CORREGIDAS A LA CARPETA JS EN MAYÚSCULAS -->
+    <!-- RUTAS JS ESTÁN EN MINÚSCULAS -->
     <script type="module" src="js/api.js"></script>
     <script type="module" src="js/main.js"></script>
     <script type="module">
-        import { showMessage, hideMessage, postData } from './JS/main.js';
+        // Importación corregida a la carpeta js en minúsculas
+        import { showMessage, hideMessage, postData } from './js/main.js';
 
-        document.getElementById('login-form').addEventListener('submit', async (e) => {
+        document.getElementById('registro-form').addEventListener('submit', async (e) => {
             e.preventDefault();
-            hideMessage('login-message');
+            hideMessage('registro-message');
 
-            const email = document.getElementById('email-login').value;
-            const password = document.getElementById('password-login').value;
-            
+            const nombre = document.getElementById('nombre-registro').value;
+            const email = document.getElementById('email-registro').value;
+            const password = document.getElementById('password-registro').value;
+
             try {
-                const response = await postData('login', { email, password });
+                // Llama al endpoint /api/registro (RUTA 2 en el backend)
+                const response = await postData('registro', { nombre, email, password });
                 const data = await response.json();
 
                 if (response.ok) {
-                    showMessage('login-message', data.message, 'success');
+                    showMessage('registro-message', data.message || 'Registro exitoso. Redirigiendo...', 'success');
                     localStorage.setItem('token', data.token);
                     localStorage.setItem('userId', data.userId);
                     window.location.href = 'videos.html'; // Redirigir a la página de videos
-                } else {
-                    showMessage('login-message', data.error || 'Email o contraseña incorrectos.', 'error');
+                } else if (response.status === 409) {
+                    showMessage('registro-message', data.error || 'El email ya está registrado.', 'error');
+                }
+                else {
+                    // Este es el punto donde podría fallar por el error 401/403 de bcrypt o Brevo
+                    showMessage('registro-message', data.error || 'Error al registrar. Verifica tu conexión y el estado del servidor.', 'error');
                 }
             } catch (error) {
-                console.error('Error al intentar iniciar sesión:', error);
-                showMessage('login-message', 'No se pudo conectar con el servidor. Intenta de nuevo más tarde.', 'error');
+                console.error('Error al intentar registrarse:', error);
+                showMessage('registro-message', 'No se pudo conectar con el servidor. Intenta de nuevo más tarde.', 'error');
             }
         });
     </script>
 </body>
 </html>
-
 
 
