@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tamar - Crea tu Cuenta</title>
+    <title>Tamar - Inicia Sesión</title>
+    <!-- RUTA CORREGIDA A LA CARPETA CSS EN MAYÚSCULAS -->
     <link rel="stylesheet" href="CSS/style.css">
 </head>
 <body>
@@ -23,64 +24,59 @@
     </header>
 
     <div class="container main-content">
-        <h2>Únete a la Comunidad Tamar</h2>
-        <p>Crea tu cuenta hoy mismo y desbloquea el acceso a nuestra biblioteca completa de cursos, recursos exclusivos y una comunidad de aprendizaje apasionada.</p>
-        <form id="registro-form">
+        <h2>Accede a tu Cuenta Tamar</h2>
+        <p>Introduce tus credenciales para continuar tu aprendizaje.</p>
+        <form id="login-form">
             <div class="form-group">
-                <label for="nombre-registro">Nombre Completo:</label>
-                <input type="text" id="nombre-registro" placeholder="Tu nombre" required>
+                <label for="email-login">Email:</label>
+                <input type="email" id="email-login" placeholder="tu@email.com" required>
             </div>
             <div class="form-group">
-                <label for="email-registro">Email:</label>
-                <input type="email" id="email-registro" placeholder="tu@email.com" required>
+                <label for="password-login">Contraseña:</label>
+                <input type="password" id="password-login" placeholder="Tu contraseña" required>
             </div>
-            <div class="form-group">
-                <label for="password-registro">Contraseña:</label>
-                <input type="password" id="password-registro" placeholder="Crea una contraseña segura" required>
-            </div>
-            <button type="submit" class="btn">Crear Cuenta</button>
-            <div id="registro-message" class="message" style="display:none;"></div>
+            <button type="submit" class="btn">Acceder</button>
+            <div id="login-message" class="message" style="display:none;"></div>
         </form>
-        <p>¿Ya tienes cuenta? <a href="login.html">Inicia Sesión aquí</a>.</p>
+        <p>¿No tienes cuenta? <a href="registro.html">Regístrate aquí</a>.</p>
     </div>
 
     <footer>
         <p>&copy; 2024 Tamar. Todos los derechos reservados.</p>
     </footer>
 
-    <script type="module" src="js/api.js"></script>
-    <script type="module" src="js/main.js"></script>
+    <!-- RUTAS CORREGIDAS A LA CARPETA JS EN MAYÚSCULAS -->
+    <script type="module" src="JS/api.js"></script>
+    <script type="module" src="JS/main.js"></script>
     <script type="module">
-        import { showMessage, hideMessage, postData } from './js/main.js';
+        import { showMessage, hideMessage, postData } from './JS/main.js';
 
-        document.getElementById('registro-form').addEventListener('submit', async (e) => {
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
             e.preventDefault();
-            hideMessage('registro-message');
+            hideMessage('login-message');
 
-            const nombre = document.getElementById('nombre-registro').value;
-            const email = document.getElementById('email-registro').value;
-            const password = document.getElementById('password-registro').value;
-
+            const email = document.getElementById('email-login').value;
+            const password = document.getElementById('password-login').value;
+            
             try {
-                const response = await postData('registro', { nombre, email, password });
+                const response = await postData('login', { email, password });
                 const data = await response.json();
 
                 if (response.ok) {
-                    showMessage('registro-message', data.message, 'success');
+                    showMessage('login-message', data.message, 'success');
                     localStorage.setItem('token', data.token);
                     localStorage.setItem('userId', data.userId);
-                    // Redirigir al usuario si el registro fue exitoso
-                    window.location.href = 'videos.html'; 
+                    window.location.href = 'videos.html'; // Redirigir a la página de videos
                 } else {
-                    showMessage('registro-message', data.error || 'Ocurrió un error al registrar el alumno.', 'error');
+                    showMessage('login-message', data.error || 'Email o contraseña incorrectos.', 'error');
                 }
             } catch (error) {
-                console.error('Error al enviar el registro:', error);
-                showMessage('registro-message', 'No se pudo conectar con el servidor. Intenta de nuevo más tarde.', 'error');
+                console.error('Error al intentar iniciar sesión:', error);
+                showMessage('login-message', 'No se pudo conectar con el servidor. Intenta de nuevo más tarde.', 'error');
             }
         });
     </script>
 </body>
-
 </html>
+
 
