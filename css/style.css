@@ -22,9 +22,7 @@ body {
     color: var(--color-texto); 
     line-height: 1.7; 
     
-    /* --- FIX CRÍTICO --- */
     /* Empujamos todo el cuerpo hacia abajo lo mismo que mide el header (80px) */
-    /* para que el menú nunca tape el contenido */
     padding-top: 80px; 
 }
 
@@ -75,20 +73,18 @@ hr {
     box-shadow: 0 8px 20px rgba(224, 65, 157, 0.6);
 }
 
-/* Cabecera (Header) - REDISEÑADO PARA SER COMPACTO */
+/* Cabecera (Header) - COMPACTA Y FIJA */
 .header { 
     background-color: var(--color-blanco); 
     box-shadow: 0 2px 8px rgba(0,0,0,0.1); 
     
-    /* Fijamos el menú arriba */
     position: fixed; 
     top: 0; 
     left: 0;
     width: 100%; 
-    height: 80px; /* Altura fija controlada */
+    height: 80px; 
     z-index: 1000; 
     
-    /* Alineación vertical perfecta */
     display: flex;
     align-items: center;
 }
@@ -98,19 +94,22 @@ hr {
     justify-content: space-between; 
     align-items: center; 
     width: 100%;
-    height: 100%; /* Ocupa los 80px de altura */
-    padding: 0 30px; /* Sin padding vertical para no engordar */
+    height: 100%; 
 }
 
-.logo img {
-    max-height: 45px;      /* Forzamos una altura máxima segura */
-    width: auto;           /* Mantiene la proporción correcta */
-    margin: 0;             /* Quita cualquier margen externo */
-    display: block;        /* Elimina espacios fantasma debajo de la imagen */
-    object-fit: contain;   /* Asegura que la imagen entre completa en el espacio */
+/* --- CORRECCIÓN DEL LOGO --- */
+/* Antes decía .logo img (incorrecto), ahora es img.logo */
+img.logo { 
+    height: 50px;       /* Altura fija perfecta para barra de 80px */
+    width: auto;        /* Mantiene proporción */
+    max-width: 200px;   /* Seguridad extra */
+    object-fit: contain;
+    display: block; 
+    margin-right: 20px;
+    transition: transform 0.3s;
 }
 
-.logo img:hover {
+img.logo:hover {
     transform: rotate(-3deg);
 }
 
@@ -142,7 +141,7 @@ hr {
 
 /* Ajuste especial para página interior (videos.html) */
 .main-content {
-    padding-top: 40px; /* Espacio extra debajo del menú fijo */
+    padding-top: 40px; 
     min-height: 80vh;
 }
 
@@ -150,10 +149,7 @@ hr {
 #hero { 
     background: url('images/nina-hamaca.jpg') no-repeat center center/cover; 
     color: var(--color-blanco); 
-    
-    /* Ajustamos la altura considerando el menú fijo */
     min-height: calc(85vh - 80px); 
-    
     display: flex; 
     flex-direction: column; 
     justify-content: center; 
@@ -161,8 +157,8 @@ hr {
     text-align: center; 
     position: relative; 
     padding: 30px;
-    margin-top: -80px; /* Truco para que el fondo empiece desde arriba del todo */
-    padding-top: 110px; /* Compensamos el margen negativo + espacio visual */
+    margin-top: -80px; 
+    padding-top: 110px; 
 }
 #hero::before { 
     content: ''; 
@@ -238,7 +234,7 @@ hr {
     color: var(--color-azul-profundo);
 }
 
-/* Perfil (Sección Solución) */
+/* Perfil */
 #about { padding-top: 40px; }
 #about .staff-content {
     display: flex;
@@ -267,7 +263,7 @@ hr {
     margin-top: 20px;
 }
 
-/* Sección de Formulario (Lead Magnet) */
+/* Lead Magnet */
 #free-guide { 
     background-color: var(--color-gris-claro);
     text-align: center;
@@ -295,7 +291,7 @@ hr {
     margin-right: auto; 
 }
 
-/* Formularios Generales */
+/* Formularios */
 .form-group {
     margin-bottom: 20px;
     text-align: left;
@@ -361,23 +357,20 @@ footer a { color: var(--color-blanco); text-decoration: underline; }
     h1 { font-size: 2.5rem; }
     h2 { font-size: 2rem; }
     
-    /* Ajuste Header Móvil */
-    .header { height: auto; position: sticky; } /* En móvil suele ser mejor sticky que fixed */
+    .header { height: auto; position: sticky; }
     .header .container { flex-direction: column; padding: 15px; height: auto; }
-    body { padding-top: 0; } /* Quitamos el padding fijo en móvil */
+    body { padding-top: 0; }
     
-    .logo img { height: 50px; }
-    .nav { margin-top: 15px; }
+    img.logo { height: 50px; margin-bottom: 10px; margin-right: 0; } /* Logo ajustado para móvil */
+    
+    .nav { margin-top: 5px; }
     .nav ul { gap: 10px; flex-wrap: wrap; justify-content: center; }
     .nav ul li a:not(.btn) { font-size: 0.8rem; }
-    .grid-3-col { 
-        grid-template-columns: 1fr; 
-        gap: 20px;
-    }
+    .grid-3-col { grid-template-columns: 1fr; gap: 20px; }
     .card { padding: 25px; }
 }
 
-/* Estilos de Cursos (para videos.html) */
+/* Mis Cursos */
 .course-list-container {
     max-width: 900px;
     margin: 40px auto;
@@ -404,20 +397,6 @@ footer a { color: var(--color-blanco); text-decoration: underline; }
     font-size: 0.9rem;
     color: #666;
     margin: 0;
-}
-.status-badge {
-    padding: 5px 10px;
-    border-radius: 5px;
-    font-size: 0.8rem;
-    font-weight: 700;
-}
-.status-badge.completed {
-    background-color: #e5f7e8;
-    color: #28a745;
-}
-.status-badge.pending {
-    background-color: #fff3cd;
-    color: #856404;
 }
 .mark-completed-btn {
     padding: 8px 15px;
