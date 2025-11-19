@@ -102,11 +102,12 @@ hr {
     padding: 0 30px; /* Sin padding vertical para no engordar */
 }
 
-.logo img { 
-    height: 50px; /* Tamaño ideal para barra de 80px */
-    width: auto; 
-    transition: transform 0.3s;
-    display: block; /* Elimina espacios fantasma */
+.logo img {
+    max-height: 45px;      /* Forzamos una altura máxima segura */
+    width: auto;           /* Mantiene la proporción correcta */
+    margin: 0;             /* Quita cualquier margen externo */
+    display: block;        /* Elimina espacios fantasma debajo de la imagen */
+    object-fit: contain;   /* Asegura que la imagen entre completa en el espacio */
 }
 
 .logo img:hover {
