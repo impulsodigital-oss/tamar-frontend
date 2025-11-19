@@ -4,18 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tamar: Homeschooling, Arte y Certificación Académica</title>
-    <!-- RUTA CORREGIDA A LA CARPETA CSS EN MAYÚSCULAS -->
+    
+    <!-- Fuentes para el nuevo diseño -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Montserrat:wght@600;700&display=swap" rel="stylesheet">
+    
+    <!-- RUTA CORREGIDA: CSS EN MAYÚSCULAS -->
     <link rel="stylesheet" href="CSS/style.css"> 
 </head>
 <body>
-    <header>
+    <header class="header">
         <div class="container">
             <!-- RUTA DEL LOGO -->
             <img src="images/logo-tamar.png" alt="Logo Tamar Educación" class="logo"> 
             <h1>Tamar | Centro de Capacitación Homeschool</h1>
-            <nav>
+            <nav class="nav">
                 <ul>
                     <li><a href="index.html">Inicio</a></li>
+                    <!-- LINKS DE NAVEGACIÓN COMPLETOS Y CON ID's -->
                     <li id="registro-link"><a href="registro.html">Regístrate</a></li>
                     <li id="login-link"><a href="login.html">Iniciar Sesión</a></li>
                     <li id="mis-cursos-link" style="display: none;"><a href="videos.html">Mis Cursos</a></li>
@@ -33,7 +40,7 @@
                 <a href="#free-guide" class="btn btn-primary">¡Descarga la Guía Gratuita Ahora!</a>
             </div>
             <!-- IMAGEN DE IMPACTO DE HOMESCHOOLING -->
-            <img src="images/nina-hamaca.jpg" alt="Niña leyendo en hamaca en la playa" class="hero-image">
+            <img src="images/nina-hamaca.jpg" alt="Niña leyendo en hamaca en la playa" class="section-image">
         </section>
         
         <hr>
@@ -42,7 +49,7 @@
             <h3>Nuestra Misión: Liderazgo y Acompañamiento Integral</h3>
             <div class="staff-content">
                 <!-- Retrato de Sofía, CEO -->
-                <img src="images/retrato-sofi-circulo (2).jpg" alt="Retrato de Sofía, CEO de Tamar" class="ceo-portrait">
+                <img src="images/retrato-sofi-circulo (2).jpg" alt="Retrato de Sofía, CEO de Tamar" class="section-image" style="max-width: 300px; border-radius: 50%;">
                 <div class="staff-description">
                     <p>Tamar, fundado por **Sofía (Profe de Arte)**, nació de la convicción de que la familia es la principal institución educativa. Nuestro método se basa en el **análisis y el arte** para el autodescubrimiento y crecimiento personal.</p>
                     <p>Contamos con un staff de **25 profesores** (en áreas como finanzas, arte, y desarrollo personal) listos para acompañar a tu hijo/a desde Kinder hasta High School. Nuestro enfoque garantiza que, además de la **certificación escolar**, desarrollen la disciplina y el mérito para el mundo adulto.</p>
@@ -54,23 +61,29 @@
 
         <section id="courses-overview">
             <h3>Planes de Acompañamiento, Cursos y Clases Streaming</h3>
-            <p>Accede a la biblioteca de **30 videos principales** para padres (contenido pago) y a las clases streaming para los chicos. ¡La educación personalizada es la clave!</p>
+            <p style="text-align: center;">Accede a la biblioteca de **30 videos principales** para padres (contenido pago) y a las clases streaming para los chicos. ¡La educación personalizada es la clave!</p>
             <!-- Banner de Inscripciones para resaltar la oferta -->
-            <img src="images/banner-inscripciones.jpg" alt="Banner Inscripciones Abiertas 2026 Tamar" class="full-width-banner">
+            <img src="images/banner-inscripciones.jpg" alt="Banner Inscripciones Abiertas 2026 Tamar" class="section-image">
         </section>
 
         <hr>
 
         <section id="benefits">
             <h3>¿Por Qué Elegir Tamar?</h3>
-            <div class="benefits-grid">
-                <ul>
-                    <li>**Respaldo y Certificación:** Acreditación escolar respaldada por "Integrative Learning Academy" (EE. UU.).</li>
-                    <li>**Staff de 25 Expertos:** Profesores especializados en áreas clave, desde arte hasta finanzas.</li>
-                    <li>**Metodología Basada en el Arte:** Fomentamos el autodescubrimiento y el pensamiento crítico desde la creatividad.</li>
-                    <li>**Planes Flexibles:** Opciones de acompañamiento mensual y semanal adaptadas a sus necesidades.</li>
-                </ul>
-                <img src="images/familia-leyendo.jpg" alt="Familia leyendo junta en el sofá" class="benefits-image">
+            <!-- Usamos la clase grid-3-col para que se vea moderno -->
+            <div class="grid-3-col">
+                <div class="card">
+                    <h4>Respaldo y Certificación</h4>
+                    <p>Acreditación escolar respaldada por "Integrative Learning Academy" (EE. UU.).</p>
+                </div>
+                <div class="card">
+                    <h4>Staff de 25 Expertos</h4>
+                    <p>Profesores especializados en áreas clave, desde arte hasta finanzas.</p>
+                </div>
+                <div class="card">
+                    <h4>Metodología Basada en el Arte</h4>
+                    <p>Fomentamos el autodescubrimiento y el pensamiento crítico desde la creatividad.</p>
+                </div>
             </div>
         </section>
         
@@ -78,33 +91,58 @@
 
         <section id="free-guide" class="lead-magnet">
             <h3>¡Regalo Exclusivo! Descarga nuestra guía gratuita: "5 Mitos sobre el Homeschooling"</h3>
-            <p>Obtén el mapa de ruta que necesitas para iniciar tu viaje educativo con confianza y claridad. Descubre las verdades detrás de los mayores temores.</p>
-            <img src="images/banner-guia-mitos.jpg" alt="Banner de la guía 5 Mitos sobre Homeschooling" class="guide-banner">
-            <form id="lead-form">
-                <div class="form-group">
-                    <label for="nombre-lead">Tu Nombre:</label>
-                    <input type="text" id="nombre-lead" placeholder="Escribe tu nombre" required>
-                </div>
-                <div class="form-group">
-                    <label for="email-lead">Tu Mejor Email:</label>
-                    <input type="email" id="email-lead" placeholder="ejemplo@correo.com" required>
-                </div>
-                <button type="submit" class="btn btn-primary">¡Quiero la guía ahora!</button>
-                <div id="lead-message" class="message" style="display:none;"></div>
-            </form>
+            <p style="text-align: center;">Obtén el mapa de ruta que necesitas para iniciar tu viaje educativo con confianza y claridad. Descubre las verdades detrás de los mayores temores.</p>
+            <div class="lead-form-content">
+                <img src="images/banner-guia-mitos.jpg" alt="Banner de la guía 5 Mitos sobre Homeschooling" class="section-image">
+                <form id="lead-form">
+                    <div class="form-group">
+                        <label for="nombre-lead">Tu Nombre:</label>
+                        <input type="text" id="nombre-lead" placeholder="Escribe tu nombre" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email-lead">Tu Mejor Email:</label>
+                        <input type="email" id="email-lead" placeholder="ejemplo@correo.com" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">¡Quiero la guía ahora!</button>
+                    <div id="lead-message" class="message" style="display:none;"></div>
+                </form>
+            </div>
         </section>
     </div>
 
     <footer>
-        <p>&copy; 2024 Tamar. Todos los derechos reservados. <a href="mailto:educaciontamar@gmail.com">Contacto</a></p>
+        <div class="container">
+            <p>&copy; 2024 Tamar. Todos los derechos reservados. <a href="mailto:educaciontamar@gmail.com">Contacto</a></p>
+        </div>
     </footer>
 
-    <!-- RUTAS CORREGIDAS A LA CARPETA JS EN MAYÚSCULAS -->
-    <script type="module" src="JS/api.js"></script>
-    <script type="module" src="JS/main.js"></script>
+    <!-- RUTAS JS ESTÁN EN MINÚSCULAS -->
+    <script type="module" src="js/api.js"></script>
+    <script type="module" src="js/main.js"></script>
     <script type="module">
-        // Importación corregida a la carpeta JS en mayúsculas
-        import { showMessage, hideMessage, postData } from './JS/main.js';
+        import { showMessage, hideMessage, postData } from './js/main.js';
+
+        // Lógica para mostrar/ocultar links de navegación basada en la autenticación
+        function checkAuth() {
+            const token = localStorage.getItem('token');
+            const isLoggedIn = !!token;
+            
+            document.getElementById('registro-link').style.display = isLoggedIn ? 'none' : 'block';
+            document.getElementById('login-link').style.display = isLoggedIn ? 'none' : 'block';
+            document.getElementById('mis-cursos-link').style.display = isLoggedIn ? 'block' : 'none';
+            document.getElementById('cerrar-sesion-link').style.display = isLoggedIn ? 'block' : 'none';
+        }
+        
+        // Lógica de logout
+        document.getElementById('logout-btn').addEventListener('click', (e) => {
+            e.preventDefault();
+            localStorage.removeItem('token');
+            localStorage.removeItem('userId');
+            window.location.href = 'index.html';
+        });
+
+        document.addEventListener('DOMContentLoaded', checkAuth);
+
 
         document.getElementById('lead-form').addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -122,7 +160,7 @@
                     showMessage('lead-message', '¡Lead registrado exitosamente! Revisa tu email para descargar la guía.', 'success');
                     document.getElementById('lead-form').reset();
                 } else {
-                    showMessage('lead-message', data.error || 'Ocurrió un error al registrar el lead.', 'error');
+                    showMessage('lead-message', data.error || 'Ocurrió un error al registrar el lead. (Revisa la clave API de Brevo en Render)', 'error');
                 }
             } catch (error) {
                 console.error('Error al enviar el lead:', error);
