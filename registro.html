@@ -4,14 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tamar - Regístrate</title>
+    
+    <!-- Incluye las fuentes necesarias -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Montserrat:wght@600;700&display=swap" rel="stylesheet">
+    
     <!-- RUTA CORREGIDA: CSS EN MAYÚSCULAS -->
     <link rel="stylesheet" href="CSS/style.css">
 </head>
 <body>
-    <header>
+    <header class="header">
         <div class="container">
             <h1>Tamar</h1>
-            <nav>
+            <nav class="nav">
                 <ul>
                     <li><a href="index.html">Inicio</a></li>
                     <li id="registro-link"><a href="registro.html">Regístrate</a></li>
@@ -46,15 +52,37 @@
     </div>
 
     <footer>
-        <p>&copy; 2024 Tamar. Todos los derechos reservados.</p>
+        <div class="container">
+            <p>&copy; 2024 Tamar. Todos los derechos reservados. <a href="mailto:educaciontamar@gmail.com">Contacto</a></p>
+        </div>
     </footer>
 
     <!-- RUTAS JS ESTÁN EN MINÚSCULAS -->
     <script type="module" src="js/api.js"></script>
     <script type="module" src="js/main.js"></script>
     <script type="module">
-        // Importación corregida a la carpeta js en minúsculas
         import { showMessage, hideMessage, postData } from './js/main.js';
+        
+        // Lógica de navegación (para ocultar/mostrar links en el header)
+        function checkAuth() {
+            const token = localStorage.getItem('token');
+            const isLoggedIn = !!token;
+            
+            document.getElementById('registro-link').style.display = isLoggedIn ? 'none' : 'block';
+            document.getElementById('login-link').style.display = isLoggedIn ? 'none' : 'block';
+            document.getElementById('mis-cursos-link').style.display = isLoggedIn ? 'block' : 'none';
+            document.getElementById('cerrar-sesion-link').style.display = isLoggedIn ? 'block' : 'none';
+        }
+
+        // Lógica de logout
+        document.getElementById('logout-btn').addEventListener('click', (e) => {
+            e.preventDefault();
+            localStorage.removeItem('token');
+            localStorage.removeItem('userId');
+            window.location.href = 'index.html';
+        });
+
+        document.addEventListener('DOMContentLoaded', checkAuth);
 
         document.getElementById('registro-form').addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -78,7 +106,6 @@
                     showMessage('registro-message', data.error || 'El email ya está registrado.', 'error');
                 }
                 else {
-                    // Este es el punto donde podría fallar por el error 401/403 de bcrypt o Brevo
                     showMessage('registro-message', data.error || 'Error al registrar. Verifica tu conexión y el estado del servidor.', 'error');
                 }
             } catch (error) {
@@ -89,5 +116,3 @@
     </script>
 </body>
 </html>
-
-
