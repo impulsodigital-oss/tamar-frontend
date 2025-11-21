@@ -3,8 +3,184 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tamar - Mis Cursos</title>
+    <title>Aula Virtual - Tamar</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="CSS/style.css">
+
+    <style>
+        /* Layout de pantalla completa para el curso */
+        body {
+            background-color: #f8f9fa;
+        }
+        .classroom-container {
+            display: grid;
+            grid-template-columns: 350px 1fr; /* Sidebar fijo | Contenido flexible */
+            gap: 0;
+            min-height: calc(100vh - 80px); /* Restamos el header */
+            margin-top: 0; /* El padding lo maneja el body */
+        }
+
+        /* BARRA LATERAL (TEMARIO) */
+        .course-sidebar {
+            background: white;
+            border-right: 1px solid #e0e0e0;
+            height: calc(100vh - 80px);
+            overflow-y: auto;
+            position: fixed; /* Fija a la izquierda */
+            width: 350px;
+            top: 80px;
+            bottom: 0;
+            z-index: 10;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            background: var(--color-azul-profundo);
+            color: white;
+        }
+        
+        .progress-container {
+            margin-top: 10px;
+        }
+        .progress-bar-bg {
+            background: rgba(255,255,255,0.2);
+            height: 6px;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        .progress-bar-fill {
+            background: var(--color-acento);
+            height: 100%;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        .progress-text {
+            font-size: 0.8rem;
+            margin-top: 5px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        /* LISTA DE LECCIONES */
+        .lesson-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .lesson-item {
+            border-bottom: 1px solid #f0f0f0;
+            cursor: pointer;
+            transition: background 0.2s;
+            padding: 15px 20px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+        .lesson-item:hover {
+            background-color: #f9f9f9;
+        }
+        .lesson-item.active {
+            background-color: #eef1f4;
+            border-left: 4px solid var(--color-acento);
+        }
+        .lesson-item.completed .lesson-title {
+            color: #888;
+            text-decoration: line-through;
+        }
+        .check-icon {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #ccc;
+            border-radius: 50%;
+            flex-shrink: 0;
+            margin-top: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .lesson-item.completed .check-icon {
+            background-color: #28a745;
+            border-color: #28a745;
+            color: white;
+            font-size: 12px;
+        }
+        .lesson-info {
+            flex-grow: 1;
+        }
+        .lesson-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 4px;
+            display: block;
+        }
+        .lesson-meta {
+            font-size: 0.8rem;
+            color: #777;
+        }
+
+        /* ÁREA PRINCIPAL (VIDEO) */
+        .course-content {
+            margin-left: 350px; /* Espacio para la sidebar */
+            padding: 40px;
+            max-width: 1000px;
+        }
+
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+            background: black;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            margin-bottom: 30px;
+        }
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+
+        .lesson-header {
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 20px;
+        }
+        .lesson-header h2 {
+            margin-bottom: 10px;
+            text-align: left;
+            font-size: 2rem;
+        }
+
+        /* RESPONSIVE (MÓVIL) */
+        @media (max-width: 900px) {
+            .classroom-container {
+                display: block;
+            }
+            .course-sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+                top: 0;
+                border-right: none;
+                border-bottom: 1px solid #ddd;
+                order: 2; /* Poner debajo del video en móvil */
+            }
+            .course-content {
+                margin-left: 0;
+                padding: 20px;
+                order: 1;
+            }
+        }
+    </style>
 </head>
 <body>
     <header class="header">
@@ -13,25 +189,65 @@
             <nav class="nav">
                 <ul>
                     <li><a href="index.html">Inicio</a></li>
+                    <li><a href="#" onclick="mostrarClasesVivo()" style="color: var(--color-acento);">🔴 Clases en Vivo</a></li>
                     <li><a href="#" id="logout-btn">Cerrar Sesión</a></li>
                 </ul>
             </nav>
         </div>
     </header>
 
-    <div class="container main-content">
-        <h2>Mi Biblioteca de Cursos</h2>
-        
-        <div id="video-list">
-            <p>Cargando contenido...</p>
-        </div>
+    <div id="loading-screen" style="text-align: center; padding: 100px;">
+        <p>Cargando tu aula virtual...</p>
+    </div>
 
-        <div id="video-message" class="message" style="display:none;"></div>
+    <div id="classroom-ui" class="classroom-container" style="display: none;">
+        
+        <aside class="course-sidebar">
+            <div class="sidebar-header">
+                <h4>Tu Progreso</h4>
+                <div class="progress-container">
+                    <div class="progress-bar-bg">
+                        <div id="progress-fill" class="progress-bar-fill"></div>
+                    </div>
+                    <div class="progress-text">
+                        <span id="progress-percent">0% Completado</span>
+                        <span id="progress-count">0/0 Lecciones</span>
+                    </div>
+                </div>
+            </div>
+            <ul id="lesson-list-ul" class="lesson-list">
+                </ul>
+        </aside>
+
+        <main class="course-content">
+            <div id="video-area">
+                <div class="video-wrapper">
+                    <iframe id="main-video-frame" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                </div>
+                
+                <div class="lesson-header">
+                    <h2 id="main-video-title">Selecciona una lección</h2>
+                    <p id="main-video-desc" style="color: #666;">...</p>
+                    
+                    <div style="margin-top: 20px; display: flex; justify-content: space-between; align-items: center;">
+                        <button id="btn-mark-complete" class="btn" style="background-image: none; background-color: #ccc;">
+                            Marcar como Vista
+                        </button>
+                        
+                        <button id="btn-next-lesson" class="btn" style="display:none;">
+                            Siguiente Lección →
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="video-message" class="message" style="display:none;"></div>
+        </main>
     </div>
 
     <footer>
         <div class="container">
-            <p>&copy; 2024 Tamar. Todos los derechos reservados.</p>
+            <p>&copy; 2024 Tamar. Plataforma Educativa.</p>
         </div>
     </footer>
 
@@ -41,9 +257,11 @@
     <script type="module">
         import { showMessage, hideMessage, getData, postData, getAuthToken } from './js/main.js';
 
+        let allVideos = [];
+        let currentVideoIndex = 0;
+
         document.addEventListener('DOMContentLoaded', async () => {
             const token = getAuthToken();
-            const videoListDiv = document.getElementById('video-list');
             
             if (!token) {
                 window.location.href = 'login.html';
@@ -57,79 +275,64 @@
                 window.location.href = 'index.html';
             });
 
-            // 1. CHECK URL PARAMS (Retorno de PayPal o Mercado Pago)
+            // 1. LÓGICA DE PAGOS (Mismo código de antes para detectar pagos)
             const urlParams = new URLSearchParams(window.location.search);
-            
-            // A) Retorno de Mercado Pago
             if (urlParams.get('status') === 'success') {
-                showMessage('video-message', '¡Pago con Mercado Pago exitoso! Tu cuenta se está activando...', 'success');
-                setTimeout(() => { window.location.href = 'videos.html'; }, 3000); // Limpiar URL
+                showMessage('video-message', '¡Pago con Mercado Pago exitoso! Activando...', 'success');
+                setTimeout(() => window.location.href = 'videos.html', 3000);
             }
-            
-            // B) Retorno de PayPal
             if (urlParams.get('status') === 'paypal_success' && urlParams.get('token')) {
-                showMessage('video-message', 'Procesando pago de PayPal...', 'success');
+                showMessage('video-message', 'Procesando PayPal...', 'success');
                 try {
-                    // Capturar el pago en el backend
                     const response = await postData('capturar-pago-paypal', { orderID: urlParams.get('token') }, token);
-                    if (response.ok) {
-                        showMessage('video-message', '¡Pago Internacional Aprobado! Bienvenido.', 'success');
-                        setTimeout(() => { window.location.href = 'videos.html'; }, 3000);
-                    } else {
-                        showMessage('video-message', 'Hubo un problema al confirmar el pago de PayPal.', 'error');
-                    }
-                } catch (error) {
-                    console.error(error);
-                }
+                    if(response.ok) setTimeout(() => window.location.href = 'videos.html', 3000);
+                } catch(e) { console.error(e); }
             }
 
-            // 2. CARGAR VIDEOS O MOSTRAR PAGOS
+            // 2. CARGAR CURSOS
             try {
                 const response = await getData('videos', token);
                 const data = await response.json();
 
-                if (response.ok) {
-                    // -- CASO: ALUMNO ACTIVO --
-                    if (data.videos && data.videos.length > 0) {
-                        videoListDiv.innerHTML = data.videos.map(video => `
-                            <div class="video-item">
-                                <div>
-                                    <h3>${video.titulo_completo}</h3>
-                                    <p>${video.titulo_corto} (Módulo ${video.modulo})</p>
-                                </div>
-                                ${video.completado 
-                                    ? '<button class="btn" disabled style="opacity:0.7; background:#ccc; color:#333; box-shadow:none;">Completado</button>' 
-                                    : `<button class="btn mark-completed-btn" data-video-id="${video.id}">Marcar Visto</button>`}
-                            </div>
-                        `).join('');
+                document.getElementById('loading-screen').style.display = 'none';
 
-                        document.querySelectorAll('.mark-completed-btn').forEach(btn => {
-                            btn.addEventListener('click', (e) => markAsCompleted(e.target.dataset.videoId));
-                        });
+                if (response.ok) {
+                    // CASO: ALUMNO ACTIVO
+                    if (data.videos && data.videos.length > 0) {
+                        allVideos = data.videos;
+                        document.getElementById('classroom-ui').style.display = 'grid';
+                        
+                        renderSidebar(allVideos);
+                        
+                        // Cargar el primer video no visto, o el primero de todos
+                        const firstUnwatched = allVideos.findIndex(v => !v.completado);
+                        loadVideo(firstUnwatched !== -1 ? firstUnwatched : 0);
+
                     } else {
-                        videoListDiv.innerHTML = '<p>No hay videos cargados aún.</p>';
+                        document.getElementById('video-message').style.display = 'block';
+                        document.getElementById('video-message').innerHTML = '<h3>No hay videos cargados aún.</h3>';
                     }
 
                 } else if (response.status === 403 && data.requierePago) {
-                    // -- CASO: FALTA PAGO (MOSTRAR OPCIONES) --
-                    videoListDiv.innerHTML = `
-                        <div style="text-align: center; padding: 40px; border: 1px solid #ddd; border-radius: 12px; background: white; max-width: 600px; margin: 0 auto;">
-                            <h3 style="color: #e0419d; margin-bottom: 15px;">🔒 Contenido Exclusivo</h3>
-                            <p style="margin-bottom: 30px;">Para acceder a la Certificación y Biblioteca de Tamar, debes realizar la matrícula anual.</p>
+                    // CASO: NO PAGO (Mostrar Bloqueo Estilo Pro)
+                    document.getElementById('loading-screen').style.display = 'none';
+                    document.querySelector('.main-content').innerHTML = `
+                        <div style="text-align: center; padding: 60px; max-width: 800px; margin: 0 auto;">
+                            <h1 style="color: var(--color-azul-profundo); margin-bottom: 20px;">🔒 Acceso Exclusivo para Alumnos</h1>
+                            <p style="font-size: 1.2rem; margin-bottom: 40px;">Estás a un paso de entrar a la academia. Elige tu método de pago para comenzar.</p>
                             
-                            <div style="display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
-                                <div style="border: 1px solid #eee; padding: 20px; border-radius: 8px;">
-                                    <h4>🇦🇷 Desde Argentina</h4>
-                                    <p style="font-size: 0.9rem; color: #666;">Tarjetas de débito, crédito y dinero en cuenta.</p>
-                                    <p><strong>$50.000 ARS</strong></p>
-                                    <button onclick="pagarMP()" class="btn" style="width:100%; background-color: #009ee3; margin-top: 10px;">Pagar con Mercado Pago</button>
+                            <div style="display: grid; gap: 30px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
+                                <div class="card" style="text-align: center; align-items: center;">
+                                    <h3>🇦🇷 Argentina</h3>
+                                    <p>Mercado Pago (Débito/Crédito/Efectivo)</p>
+                                    <h2 style="color: var(--color-acento);">$50.000 ARS</h2>
+                                    <button onclick="window.pagarMP()" class="btn" style="width:100%; background: #009ee3;">Pagar Ahora</button>
                                 </div>
-
-                                <div style="border: 1px solid #eee; padding: 20px; border-radius: 8px;">
-                                    <h4>🌍 Internacional</h4>
-                                    <p style="font-size: 0.9rem; color: #666;">Cualquier país (USD). Tarjetas internacionales.</p>
-                                    <p><strong>$50.00 USD</strong></p>
-                                    <button onclick="pagarPayPal()" class="btn" style="width:100%; background-color: #ffc439; color: #003087; margin-top: 10px;">Pagar con PayPal</button>
+                                <div class="card" style="text-align: center; align-items: center;">
+                                    <h3>🌍 Internacional</h3>
+                                    <p>PayPal (Dólares USD)</p>
+                                    <h2 style="color: var(--color-acento);">$50 USD</h2>
+                                    <button onclick="window.pagarPayPal()" class="btn" style="width:100%; background: #ffc439; color: #003087;">Pay with PayPal</button>
                                 </div>
                             </div>
                         </div>
@@ -141,39 +344,133 @@
             }
         });
 
-        // Funciones Globales para los botones
+        // --- FUNCIONES DEL REPRODUCTOR ---
+
+        function renderSidebar(videos) {
+            const ul = document.getElementById('lesson-list-ul');
+            ul.innerHTML = videos.map((video, index) => `
+                <li class="lesson-item ${video.completado ? 'completed' : ''}" onclick="loadVideo(${index})">
+                    <div class="check-icon">${video.completado ? '✔' : ''}</div>
+                    <div class="lesson-info">
+                        <span class="lesson-title">${video.titulo_corto || video.titulo_completo}</span>
+                        <span class="lesson-meta">Módulo ${video.modulo}</span>
+                    </div>
+                </li>
+            `).join('');
+            
+            updateProgress(videos);
+        }
+
+        window.loadVideo = (index) => {
+            currentVideoIndex = index;
+            const video = allVideos[index];
+            
+            // 1. Actualizar UI Activa
+            document.querySelectorAll('.lesson-item').forEach((el, i) => {
+                el.classList.toggle('active', i === index);
+            });
+
+            // 2. Cargar Video en Iframe
+            const iframe = document.getElementById('main-video-frame');
+            // Si es link de youtube normal, convertir a embed
+            let url = video.url_video || '';
+            if(url.includes('watch?v=')) url = url.replace('watch?v=', 'embed/');
+            iframe.src = url;
+
+            // 3. Textos
+            document.getElementById('main-video-title').textContent = video.titulo_completo;
+            document.getElementById('main-video-desc').textContent = video.descripcion || 'Sin descripción adicional.';
+
+            // 4. Botón Completar
+            const btnComplete = document.getElementById('btn-mark-complete');
+            const btnNext = document.getElementById('btn-next-lesson');
+            
+            if (video.completado) {
+                btnComplete.textContent = '✅ Lección Completada';
+                btnComplete.style.backgroundColor = '#28a745';
+                btnComplete.disabled = true;
+                
+                // Mostrar botón siguiente si no es el último
+                if (index < allVideos.length - 1) btnNext.style.display = 'inline-block';
+            } else {
+                btnComplete.textContent = 'Marcar como Vista';
+                btnComplete.style.backgroundColor = 'var(--color-acento)';
+                btnComplete.disabled = false;
+                btnNext.style.display = 'none';
+            }
+            
+            // Scroll sidebar to active element
+            // ...
+        };
+
+        document.getElementById('btn-mark-complete').addEventListener('click', async () => {
+            const video = allVideos[currentVideoIndex];
+            const token = getAuthToken();
+            
+            try {
+                const res = await postData('progreso', { videoId: video.id }, token);
+                if (res.ok) {
+                    // Actualizar estado local sin recargar toda la página
+                    allVideos[currentVideoIndex].completado = true;
+                    renderSidebar(allVideos); // Re-pintar sidebar
+                    loadVideo(currentVideoIndex); // Re-pintar botones
+                }
+            } catch (e) { console.error(e); }
+        });
+
+        document.getElementById('btn-next-lesson').addEventListener('click', () => {
+            if (currentVideoIndex < allVideos.length - 1) {
+                loadVideo(currentVideoIndex + 1);
+            }
+        });
+
+        function updateProgress(videos) {
+            const completedCount = videos.filter(v => v.completado).length;
+            const total = videos.length;
+            const percent = total === 0 ? 0 : Math.round((completedCount / total) * 100);
+            
+            document.getElementById('progress-fill').style.width = `${percent}%`;
+            document.getElementById('progress-percent').textContent = `${percent}% Completado`;
+            document.getElementById('progress-count').textContent = `${completedCount}/${total} Lecciones`;
+        }
+
+        // --- PAGOS GLOBALES ---
         window.pagarMP = async () => {
             const token = getAuthToken();
-            showMessage('video-message', 'Conectando con Mercado Pago...', 'success');
             try {
-                const response = await postData('crear-pago', {}, token);
-                const data = await response.json();
+                const res = await postData('crear-pago', {}, token);
+                const data = await res.json();
                 if (data.init_point) window.location.href = data.init_point;
-            } catch (e) { showMessage('video-message', 'Error al iniciar pago.', 'error'); }
+            } catch (e) { alert('Error al conectar con Mercado Pago'); }
         };
 
         window.pagarPayPal = async () => {
             const token = getAuthToken();
-            showMessage('video-message', 'Conectando con PayPal...', 'success');
             try {
-                const response = await postData('crear-pago-paypal', {}, token);
-                const data = await response.json();
-                // PayPal devuelve una lista de links, buscamos el de "approve"
-                const approveLink = data.links.find(link => link.rel === 'approve');
-                if (approveLink) window.location.href = approveLink.href;
-                else showMessage('video-message', 'Error configuración PayPal.', 'error');
-            } catch (e) { showMessage('video-message', 'Error al iniciar PayPal.', 'error'); }
+                const res = await postData('crear-pago-paypal', {}, token);
+                const data = await res.json();
+                const link = data.links.find(l => l.rel === 'approve');
+                if (link) window.location.href = link.href;
+            } catch (e) { alert('Error al conectar con PayPal'); }
         };
-
-        async function markAsCompleted(videoId) {
+        
+        window.mostrarClasesVivo = async () => {
              const token = getAuthToken();
              try {
-                const response = await postData('progreso', { videoId }, token);
-                if(response.ok) { 
-                    window.location.reload();
-                }
-             } catch (e) { console.error(e); }
+                 const res = await getData('clases-en-vivo', token);
+                 if(res.status === 403) { alert("Función exclusiva para alumnos."); return; }
+                 const data = await res.json();
+                 
+                 let html = '<h3>📅 Próximas Clases</h3><ul>';
+                 data.clases.forEach(c => {
+                     html += `<li><strong>${new Date(c.fecha_hora).toLocaleDateString()}</strong>: ${c.titulo} <a href="${c.link_zoom}" target="_blank" class="btn" style="padding:2px 8px; font-size:0.7rem;">Zoom</a></li>`;
+                 });
+                 html += '</ul>';
+                 
+                 document.getElementById('video-area').innerHTML = html; // Reemplazo simple para demo
+             } catch(e) { console.error(e); }
         }
+
     </script>
 </body>
 </html>
