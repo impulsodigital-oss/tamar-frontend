@@ -200,6 +200,17 @@ img.logo:hover { transform: rotate(-3deg); }
 /* Staff & Formularios */
 #about img { max-width: 300px; height: auto; object-fit: cover; display: block; margin: 0 auto 40px; box-shadow: 0 15px 30px rgba(74, 71, 163, 0.2); }
 .lead-form-content { max-width: 500px; margin: 0 auto; background: var(--color-blanco); padding: 30px; border-radius: 16px; box-shadow: 0 15px 40px rgba(0,0,0,0.08); }
+.section-image { max-width: 100%; border-radius: 10px; margin-bottom: 30px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); display: block; margin-left: auto; margin-right: auto; }
+
+/* --- FIX IMAGEN FORMULARIO (Para que no se vea gigante) --- */
+.lead-form-content img {
+    max-height: 180px; /* Altura máxima controlada */
+    width: 100%;
+    object-fit: cover; /* Recorte elegante */
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
 .form-group input { width: 100%; padding: 14px; border: 1px solid #ccc; border-radius: 8px; font-size: 1rem; transition: border-color 0.3s; background-color: #fafafa; }
 .form-group input:focus { outline: none; border-color: var(--color-acento); box-shadow: 0 0 0 3px rgba(224, 65, 157, 0.1); background-color: #fff; }
 .message { padding: 15px; border-radius: 8px; margin-top: 20px; font-weight: 700; text-align: center; }
