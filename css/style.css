@@ -8,8 +8,8 @@
     --color-gris-claro: #eef1f4;
     
     /* Fuentes */
-    --font-titulos: 'Playfair Display', serif;
-    --font-cuerpo: 'Lato', sans-serif;
+    --font-titulos: 'Playfair Display', serif; /* Elegancia académica */
+    --font-cuerpo: 'Lato', sans-serif;         /* Lectura clara */
 }
 
 /* Base Global */
@@ -28,19 +28,33 @@ body {
     max-width: 1100px; margin: 0 auto; padding: 0 30px; 
 }
 
+/* Tipografía */
 h1, h2, h3 { 
     font-family: var(--font-titulos); color: var(--color-azul-profundo); font-weight: 700; 
 }
 
-h1 { font-size: 3rem; line-height: 1.2; margin-bottom: 20px; text-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-h2 { font-size: 2.5rem; text-align: center; margin-bottom: 50px; position: relative; display: block; }
-h2::after { content: ''; display: block; width: 60px; height: 4px; background-color: var(--color-acento); margin: 15px auto 0; border-radius: 2px; }
+h1 { 
+    font-size: 3rem; line-height: 1.2; margin-bottom: 20px; 
+    text-shadow: 0 2px 10px rgba(0,0,0,0.1); 
+}
+
+h2 { 
+    font-size: 2.5rem; text-align: center; margin-bottom: 50px; 
+    position: relative; display: block; 
+}
+
+/* Línea decorativa bajo H2 */
+h2::after { 
+    content: ''; display: block; width: 60px; height: 4px; 
+    background-color: var(--color-acento); margin: 15px auto 0; border-radius: 2px; 
+}
+
 h3 { font-size: 1.75rem; margin-bottom: 20px; }
 p { margin-bottom: 15px; }
 section { padding: 80px 0; }
 hr { border: none; border-top: 1px solid var(--color-gris-claro); margin: 40px auto; max-width: 800px; }
 
-/* BOTONES */
+/* --- BOTONES --- */
 .btn { 
     display: inline-block; 
     background-image: linear-gradient(to right, var(--color-acento) 0%, #ff6bbd 100%);
@@ -62,7 +76,7 @@ hr { border: none; border-top: 1px solid var(--color-gris-claro); margin: 40px a
     background-image: linear-gradient(to right, #c23082 0%, var(--color-acento) 100%);
 }
 
-/* HEADER */
+/* --- HEADER & NAV --- */
 .header { 
     background-color: var(--color-blanco); 
     box-shadow: 0 2px 8px rgba(0,0,0,0.1); 
@@ -78,12 +92,13 @@ img.logo {
 img.logo:hover { transform: rotate(-3deg); }
 
 .nav ul { list-style: none; display: flex; gap: 20px; align-items: center; margin: 0; padding: 0; }
+.nav ul li { padding: 0; margin: 0; }
 .nav ul li a:not(.btn) { 
     color: var(--color-texto); text-decoration: none; font-weight: 700; transition: all 0.3s ease; padding-bottom: 5px; border-bottom: 2px solid transparent; 
 }
 .nav ul li a:hover:not(.btn) { color: var(--color-acento); border-bottom: 2px solid var(--color-acento); }
 
-/* --- ESTILOS AULA VIRTUAL (CLASSROOM) --- */
+/* --- AULA VIRTUAL (VIDEOS.HTML) --- */
 .classroom-container {
     display: grid; grid-template-columns: 350px 1fr; gap: 0; min-height: calc(100vh - 80px); margin-top: 0;
 }
@@ -113,7 +128,7 @@ img.logo:hover { transform: rotate(-3deg); }
 .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
 .lesson-header { margin-bottom: 20px; border-bottom: 1px solid #ddd; padding-bottom: 20px; }
 .lesson-header h2 { margin-bottom: 10px; text-align: left; font-size: 2rem; }
-.lesson-header h2::after { display: none; } /* Quitar linea decorativa del player */
+.lesson-header h2::after { display: none; }
 
 /* MODAL CLASES EN VIVO */
 .modal-overlay {
@@ -129,7 +144,6 @@ img.logo:hover { transform: rotate(-3deg); }
 }
 .close-modal { position: absolute; top: 15px; right: 20px; font-size: 2rem; cursor: pointer; color: #666; }
 
-/* TARJETA DE CLASE */
 .live-class-card {
     display: flex; gap: 20px;
     border: 1px solid #eee; border-radius: 8px;
@@ -146,19 +160,36 @@ img.logo:hover { transform: rotate(-3deg); }
 .btn-zoom { background-color: #2D8CFF; color: white; text-align: center; padding: 8px; border-radius: 5px; text-decoration: none; font-weight: bold; font-size: 0.9rem; }
 .btn-materials { background-color: #f1f3f4; color: #333; text-align: center; padding: 8px; border-radius: 5px; text-decoration: none; font-size: 0.9rem; border: 1px solid #ccc; }
 
-/* LANDING PAGE ESTILOS (HERO, GRID, TESTIMONIOS) */
-#hero { background: url('images/nina-hamaca.jpg') no-repeat center center; background-size: cover; background-attachment: fixed; color: var(--color-blanco); min-height: calc(90vh - 80px); display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; position: relative; padding: 30px; margin-top: -80px; padding-top: 110px; }
-#hero::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, rgba(74, 71, 163, 0.9) 0%, rgba(74, 71, 163, 0.7) 50%, rgba(224, 65, 157, 0.4) 100%); }
+/* --- LANDING PAGE (INDEX.HTML) --- */
+#hero { 
+    background: url('images/nina-hamaca.jpg') no-repeat center center; 
+    background-size: cover; background-attachment: fixed; 
+    color: var(--color-blanco); min-height: calc(90vh - 80px); 
+    display: flex; flex-direction: column; justify-content: center; align-items: center; 
+    text-align: center; position: relative; padding: 30px; 
+    margin-top: -80px; padding-top: 110px; 
+}
+#hero::before { 
+    content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
+    background: linear-gradient(135deg, rgba(74, 71, 163, 0.9) 0%, rgba(74, 71, 163, 0.7) 50%, rgba(224, 65, 157, 0.4) 100%); 
+}
 #hero * { position: relative; z-index: 10; }
 #hero h1 { color: var(--color-blanco); max-width: 900px; }
 #hero h3 { font-family: var(--font-cuerpo); font-weight: 400; max-width: 700px; font-size: 1.4rem; margin-bottom: 40px; }
 
 .grid-3-col { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-top: 50px; }
-.card { background: var(--color-blanco); padding: 35px 30px; border-radius: 16px; box-shadow: 0 10px 30px -5px rgba(74, 71, 163, 0.08); border: 1px solid rgba(0,0,0,0.03); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); border-left: none; border-top: 5px solid var(--color-azul-profundo); display: flex; flex-direction: column; align-items: flex-start; height: 100%; }
+.card { 
+    background: var(--color-blanco); padding: 35px 30px; border-radius: 16px; 
+    box-shadow: 0 10px 30px -5px rgba(74, 71, 163, 0.08); border: 1px solid rgba(0,0,0,0.03); 
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+    border-left: none; border-top: 5px solid var(--color-azul-profundo); 
+    display: flex; flex-direction: column; align-items: flex-start; height: 100%; 
+}
 .card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px -10px rgba(74, 71, 163, 0.15); }
 .card img { width: 100%; height: auto; max-height: 200px; object-fit: contain; border-radius: 8px; margin-bottom: 20px; }
 .card h3 { margin-top: 0; color: var(--color-azul-profundo); font-size: 1.4rem; margin-bottom: 15px; }
 
+/* Testimonios */
 .testimonial-card { border-top-color: var(--color-acento); }
 .testimonial-card p { font-style: italic; color: var(--color-texto); flex-grow: 1; }
 .testimonial-header { display: flex; align-items: center; margin-bottom: 15px; }
@@ -166,7 +197,7 @@ img.logo:hover { transform: rotate(-3deg); }
 .testimonial-avatar svg { width: 30px; height: 30px; fill: #a0aec0; }
 .author { font-style: normal; font-weight: 700; text-align: left; display: block; color: var(--color-azul-profundo); }
 
-/* Staff & Lead Magnet */
+/* Staff & Formularios */
 #about img { max-width: 300px; height: auto; object-fit: cover; display: block; margin: 0 auto 40px; box-shadow: 0 15px 30px rgba(74, 71, 163, 0.2); }
 .lead-form-content { max-width: 500px; margin: 0 auto; background: var(--color-blanco); padding: 30px; border-radius: 16px; box-shadow: 0 15px 40px rgba(0,0,0,0.08); }
 .form-group input { width: 100%; padding: 14px; border: 1px solid #ccc; border-radius: 8px; font-size: 1rem; transition: border-color 0.3s; background-color: #fafafa; }
@@ -175,8 +206,31 @@ img.logo:hover { transform: rotate(-3deg); }
 .message.success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
 .message.error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
 
+/* Footer */
 footer { background-color: var(--color-azul-profundo); color: var(--color-blanco); text-align: center; padding: 40px 0; border-top: 8px solid var(--color-acento); }
 footer a { color: var(--color-blanco); text-decoration: underline; }
+
+/* --- BOTÓN FLOTANTE DE SOPORTE (WHATSAPP) --- */
+.support-btn {
+    position: fixed; bottom: 30px; right: 30px;
+    background-color: #25D366; /* Verde WhatsApp */
+    color: white; width: 60px; height: 60px; border-radius: 50%;
+    display: flex; justify-content: center; align-items: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    z-index: 9999; /* Siempre visible */
+    transition: all 0.3s ease; text-decoration: none;
+}
+.support-btn:hover { transform: scale(1.1); box-shadow: 0 6px 20px rgba(0,0,0,0.3); }
+.support-btn svg { width: 35px; height: 35px; fill: white; }
+.support-btn::after {
+    content: '¿Necesitas Ayuda?';
+    position: absolute; right: 70px;
+    background: white; color: #333; padding: 5px 10px; border-radius: 5px;
+    font-size: 0.8rem; font-weight: bold; white-space: nowrap;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    opacity: 0; transition: opacity 0.3s; pointer-events: none;
+}
+.support-btn:hover::after { opacity: 1; }
 
 /* RESPONSIVE */
 @media(max-width: 900px) {
@@ -190,7 +244,7 @@ footer a { color: var(--color-blanco); text-decoration: underline; }
     .grid-3-col { grid-template-columns: 1fr; gap: 20px; }
     #hero { background-attachment: scroll; }
     
-    /* Classroom Mobile */
+    /* Ajuste Classroom en Móvil */
     .classroom-container { display: block; }
     .course-sidebar { position: relative; width: 100%; height: auto; top: 0; border-right: none; border-bottom: 1px solid #ddd; order: 2; }
     .course-content { margin-left: 0; padding: 20px; order: 1; }
