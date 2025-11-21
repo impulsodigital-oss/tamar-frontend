@@ -72,6 +72,20 @@
         }
         .stat-card h4 { color: white; margin-bottom: 10px; font-size: 2rem; }
         .stat-card p { margin: 0; opacity: 0.9; }
+        
+        /* Estilo para el botón de contacto rápido */
+        .btn-contact {
+            padding: 5px 12px; 
+            font-size: 0.8rem; 
+            background-color: #333; 
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            display: inline-block;
+        }
+        .btn-contact:hover {
+            background-color: #555;
+        }
     </style>
 </head>
 <body>
@@ -136,10 +150,10 @@
                             <th>Email</th>
                             <th>Fecha Registro</th>
                             <th>Estado</th>
-                        </tr>
+                            <th>Acciones</th> </tr>
                     </thead>
                     <tbody>
-                        <tr><td colspan="4">Cargando...</td></tr>
+                        <tr><td colspan="5">Cargando...</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -219,21 +233,32 @@
                 `).join('');
             }
 
-            // Renderizar Tabla Leads
+            // Renderizar Tabla Leads (CON BOTÓN DE CONTACTO)
             function renderLeads(lista) {
                 const tbody = document.querySelector('#tabla-leads tbody');
                 if (lista.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="4">No hay leads pendientes.</td></tr>';
+                    tbody.innerHTML = '<tr><td colspan="5">No hay leads pendientes.</td></tr>';
                     return;
                 }
-                tbody.innerHTML = lista.map(u => `
+                tbody.innerHTML = lista.map(u => {
+                    // Preparamos el asunto y cuerpo del correo
+                    const mailSubject = "Hola " + u.nombre + " - Te escribo de Escuela Tamar";
+                    const mailBody = "Hola " + u.nombre + ", vimos que te registraste pero no completaste la inscripción. ¿Tienes alguna duda en la que podamos ayudarte?";
+                    
+                    return `
                     <tr>
                         <td>${u.nombre}</td>
                         <td>${u.email}</td>
                         <td>${u.fecha_registro ? new Date(u.fecha_registro).toLocaleDateString() : '-'}</td>
                         <td><span class="badge-pendiente">Sin Pago</span></td>
+                        <td>
+                            <a href="mailto:${u.email}?subject=${encodeURIComponent(mailSubject)}&body=${encodeURIComponent(mailBody)}" 
+                               class="btn-contact" target="_blank">
+                               📩 Contactar
+                            </a>
+                        </td>
                     </tr>
-                `).join('');
+                `}).join('');
             }
 
             // Logout
