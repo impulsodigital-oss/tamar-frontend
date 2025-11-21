@@ -10,18 +10,30 @@
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Montserrat:wght@600;700&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="CSS/style.css">
+    
     <style>
         .testimonial-header {
             display: flex;
             align-items: center;
             margin-bottom: 15px;
         }
-        .placeholder-circle {
+        .testimonial-avatar {
             width: 50px;
             height: 50px;
-            background-color: #ccc;
+            min-width: 50px; /* Para que no se aplaste en móviles */
+            background-color: #eef1f4; /* Fondo gris claro */
             border-radius: 50%;
             margin-right: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid #e0e0e0;
+        }
+        /* Color y tamaño de la silueta */
+        .testimonial-avatar svg {
+            width: 30px;
+            height: 30px;
+            fill: #a0aec0; /* Color gris de la silueta */
         }
     </style>
 </head>
@@ -53,7 +65,6 @@
                 <div class="hero-text">
                     <h1>Transforma la Educación de tu Hijo/a a Través del Arte y Educa con Propósito.</h1>
                     <p>Guiamos a las familias homeschoolers en sus momentos de aprendizaje enfocados en las habilidades de los niños y conforme a las necesidades familiares. Certificamos sus estudios respaldados por <strong>Integrative Learning</strong>.</p>
-                    
                     <a href="#free-guide" class="btn">¡Descarga la Guía Gratuita Ahora!</a>
                 </div>
             </div>
@@ -90,11 +101,11 @@
             <div class="container">
                 <h3>Hola, soy Sofía</h3>
                 <div class="staff-content">
-                    <img src="images/foto-sofia-oficina.jpg" alt="Retrato de Sofía" class="section-image" style="max-width: 300px; border-radius: 15px;"> <div class="staff-description">
+                    <img src="images/foto-sofia-oficina.jpg" alt="Retrato de Sofía" class="section-image" style="max-width: 300px; border-radius: 15px;">
+                    
+                    <div class="staff-description">
                         <p>Soy artista y educadora, pero sobre todo <strong>mamá que educa en casa</strong>. Luego de hacer mi carrera docente confirmé lo que sentía ya desde muy pequeña cuando iba a la escuela: el sistema educativo no está diseñado para impulsar a los alumnos para un futuro cimentado en la validación de sus dones y talentos, ni les brinda herramientas actualizadas para tener éxito en el mundo que les espera.</p>
-                        
                         <p>Es por eso que desde antes de ser mamá tenía la convicción de que cuando tuviera hijos buscaría la manera de instruirlos de manera más orgánica, respetuosa, creativa y conforme a las necesidades de nuestra familia.</p>
-                        
                         <p>Me llevó años de trabajo poder construir una preciosa comunidad de familias homeschoolers y darle una estructura al trabajo que comenzó en una pequeña localidad de Santa Fe, Argentina y se fue expandiendo en toda Latinoamérica y España.</p>
                     </div>
                 </div>
@@ -110,21 +121,30 @@
                     
                     <div class="card testimonial-card">
                         <div class="testimonial-header">
-                            <div class="placeholder-circle"></div> <span class="author" style="margin:0; text-align:left;">Kismalú, mamá de JJN (6 años)</span>
+                            <div class="testimonial-avatar">
+                                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                            </div>
+                            <span class="author" style="margin:0; text-align:left;">Kismalú, mamá de JJN (6 años)</span>
                         </div>
                         <p>"He notado un avance significativo en mi hijo de 6 años: mayor concentración, atención a los detalles y entusiasmo por expresarse. Más que un taller, es una tribu llena de cariño, respeto y belleza."</p>
                     </div>
 
                     <div class="card testimonial-card">
                         <div class="testimonial-header">
-                            <div class="placeholder-circle"></div> <span class="author" style="margin:0; text-align:left;">Virgina, mamá de dos peques (2 y 5 años)</span>
+                            <div class="testimonial-avatar">
+                                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                            </div>
+                            <span class="author" style="margin:0; text-align:left;">Virgina, mamá de dos peques (2 y 5 años)</span>
                         </div>
                         <p>"Ella apareció: como cuando compras algo nuevo y viene con manual de uso. Ese manual era ella. Una facilitadora tan creativa, apasionada, amante del hogar que te conecta con tu propia esencia para que seas tu mejor versión."</p>
                     </div>
 
                     <div class="card testimonial-card">
                         <div class="testimonial-header">
-                            <div class="placeholder-circle"></div> <span class="author" style="margin:0; text-align:left;">Mariana, mamá de Luz (10 años)</span>
+                             <div class="testimonial-avatar">
+                                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                            </div>
+                            <span class="author" style="margin:0; text-align:left;">Mariana, mamá de Luz (10 años)</span>
                         </div>
                         <p>"Su acompañamiento desinteresado, tanto en lo académico como en lo emocional, nos ha brindado fuerza y motivación para seguir adelante. Gracias a ella, ya no nos sentimos solas."</p>
                     </div>
@@ -174,10 +194,8 @@
             const token = localStorage.getItem('token');
             const isLoggedIn = !!token;
             
-            // Enlaces públicos
             document.getElementById('registro-link').style.display = isLoggedIn ? 'none' : 'block';
             document.getElementById('login-link').style.display = isLoggedIn ? 'none' : 'block';
-            // Enlaces privados
             document.getElementById('mis-cursos-link').style.display = isLoggedIn ? 'block' : 'none';
             document.getElementById('cerrar-sesion-link').style.display = isLoggedIn ? 'block' : 'none';
         }
@@ -190,7 +208,6 @@
             window.location.href = 'index.html';
         });
 
-        // Ejecutar al cargar
         document.addEventListener('DOMContentLoaded', checkAuth);
 
         // 3. Lógica del Formulario de Leads
