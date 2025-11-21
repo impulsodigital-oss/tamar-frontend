@@ -10,177 +10,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="CSS/style.css">
-
-    <style>
-        /* Layout de pantalla completa para el curso */
-        body {
-            background-color: #f8f9fa;
-        }
-        .classroom-container {
-            display: grid;
-            grid-template-columns: 350px 1fr; /* Sidebar fijo | Contenido flexible */
-            gap: 0;
-            min-height: calc(100vh - 80px); /* Restamos el header */
-            margin-top: 0; /* El padding lo maneja el body */
-        }
-
-        /* BARRA LATERAL (TEMARIO) */
-        .course-sidebar {
-            background: white;
-            border-right: 1px solid #e0e0e0;
-            height: calc(100vh - 80px);
-            overflow-y: auto;
-            position: fixed; /* Fija a la izquierda */
-            width: 350px;
-            top: 80px;
-            bottom: 0;
-            z-index: 10;
-        }
-
-        .sidebar-header {
-            padding: 20px;
-            background: var(--color-azul-profundo);
-            color: white;
-        }
-        
-        .progress-container {
-            margin-top: 10px;
-        }
-        .progress-bar-bg {
-            background: rgba(255,255,255,0.2);
-            height: 6px;
-            border-radius: 3px;
-            overflow: hidden;
-        }
-        .progress-bar-fill {
-            background: var(--color-acento);
-            height: 100%;
-            width: 0%;
-            transition: width 0.5s ease;
-        }
-        .progress-text {
-            font-size: 0.8rem;
-            margin-top: 5px;
-            display: flex;
-            justify-content: space-between;
-        }
-
-        /* LISTA DE LECCIONES */
-        .lesson-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-        .lesson-item {
-            border-bottom: 1px solid #f0f0f0;
-            cursor: pointer;
-            transition: background 0.2s;
-            padding: 15px 20px;
-            display: flex;
-            align-items: flex-start;
-            gap: 10px;
-        }
-        .lesson-item:hover {
-            background-color: #f9f9f9;
-        }
-        .lesson-item.active {
-            background-color: #eef1f4;
-            border-left: 4px solid var(--color-acento);
-        }
-        .lesson-item.completed .lesson-title {
-            color: #888;
-            text-decoration: line-through;
-        }
-        .check-icon {
-            width: 20px;
-            height: 20px;
-            border: 2px solid #ccc;
-            border-radius: 50%;
-            flex-shrink: 0;
-            margin-top: 2px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .lesson-item.completed .check-icon {
-            background-color: #28a745;
-            border-color: #28a745;
-            color: white;
-            font-size: 12px;
-        }
-        .lesson-info {
-            flex-grow: 1;
-        }
-        .lesson-title {
-            font-size: 0.95rem;
-            font-weight: 700;
-            color: #333;
-            margin-bottom: 4px;
-            display: block;
-        }
-        .lesson-meta {
-            font-size: 0.8rem;
-            color: #777;
-        }
-
-        /* ÁREA PRINCIPAL (VIDEO) */
-        .course-content {
-            margin-left: 350px; /* Espacio para la sidebar */
-            padding: 40px;
-            max-width: 1000px;
-        }
-
-        .video-wrapper {
-            position: relative;
-            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
-            height: 0;
-            background: black;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-            margin-bottom: 30px;
-        }
-        .video-wrapper iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: 0;
-        }
-
-        .lesson-header {
-            margin-bottom: 20px;
-            border-bottom: 1px solid #ddd;
-            padding-bottom: 20px;
-        }
-        .lesson-header h2 {
-            margin-bottom: 10px;
-            text-align: left;
-            font-size: 2rem;
-        }
-
-        /* RESPONSIVE (MÓVIL) */
-        @media (max-width: 900px) {
-            .classroom-container {
-                display: block;
-            }
-            .course-sidebar {
-                position: relative;
-                width: 100%;
-                height: auto;
-                top: 0;
-                border-right: none;
-                border-bottom: 1px solid #ddd;
-                order: 2; /* Poner debajo del video en móvil */
-            }
-            .course-content {
-                margin-left: 0;
-                padding: 20px;
-                order: 1;
-            }
-        }
-    </style>
 </head>
 <body>
     <header class="header">
@@ -189,7 +18,7 @@
             <nav class="nav">
                 <ul>
                     <li><a href="index.html">Inicio</a></li>
-                    <li><a href="#" onclick="mostrarClasesVivo()" style="color: var(--color-acento);">🔴 Clases en Vivo</a></li>
+                    <li><a href="#" onclick="window.mostrarClasesVivo()" style="color: var(--color-acento); font-weight: bold;">🔴 Clases en Vivo</a></li>
                     <li><a href="#" id="logout-btn">Cerrar Sesión</a></li>
                 </ul>
             </nav>
@@ -245,6 +74,16 @@
         </main>
     </div>
 
+    <div id="live-modal" class="modal-overlay">
+        <div class="modal-content">
+            <span class="close-modal" onclick="document.getElementById('live-modal').style.display='none'">&times;</span>
+            <h2 style="color: var(--color-azul-profundo); border-bottom: 2px solid #eee; padding-bottom: 15px; margin-bottom: 20px;">📅 Calendario de Clases en Vivo</h2>
+            <div id="live-classes-list">
+                <p>Cargando clases...</p>
+            </div>
+        </div>
+    </div>
+
     <footer>
         <div class="container">
             <p>&copy; 2024 Tamar. Plataforma Educativa.</p>
@@ -275,7 +114,7 @@
                 window.location.href = 'index.html';
             });
 
-            // 1. LÓGICA DE PAGOS (Mismo código de antes para detectar pagos)
+            // 1. LÓGICA DE PAGOS (Check URL)
             const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.get('status') === 'success') {
                 showMessage('video-message', '¡Pago con Mercado Pago exitoso! Activando...', 'success');
@@ -289,7 +128,7 @@
                 } catch(e) { console.error(e); }
             }
 
-            // 2. CARGAR CURSOS
+            // 2. CARGAR DATOS DEL CURSO
             try {
                 const response = await getData('videos', token);
                 const data = await response.json();
@@ -304,18 +143,17 @@
                         
                         renderSidebar(allVideos);
                         
-                        // Cargar el primer video no visto, o el primero de todos
+                        // Cargar el primer video no visto
                         const firstUnwatched = allVideos.findIndex(v => !v.completado);
                         loadVideo(firstUnwatched !== -1 ? firstUnwatched : 0);
 
                     } else {
-                        document.getElementById('video-message').style.display = 'block';
-                        document.getElementById('video-message').innerHTML = '<h3>No hay videos cargados aún.</h3>';
+                        // Si pagó pero no hay videos cargados en DB
+                        document.querySelector('.main-content').innerHTML = '<div style="padding:50px; text-align:center;"><h3>¡Bienvenido!</h3><p>Aún no hay lecciones publicadas. Vuelve pronto.</p></div>';
                     }
 
                 } else if (response.status === 403 && data.requierePago) {
-                    // CASO: NO PAGO (Mostrar Bloqueo Estilo Pro)
-                    document.getElementById('loading-screen').style.display = 'none';
+                    // CASO: NO PAGO (Mostrar Bloqueo)
                     document.querySelector('.main-content').innerHTML = `
                         <div style="text-align: center; padding: 60px; max-width: 800px; margin: 0 auto;">
                             <h1 style="color: var(--color-azul-profundo); margin-bottom: 20px;">🔒 Acceso Exclusivo para Alumnos</h1>
@@ -324,7 +162,7 @@
                             <div style="display: grid; gap: 30px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
                                 <div class="card" style="text-align: center; align-items: center;">
                                     <h3>🇦🇷 Argentina</h3>
-                                    <p>Mercado Pago (Débito/Crédito/Efectivo)</p>
+                                    <p>Mercado Pago (Débito/Crédito)</p>
                                     <h2 style="color: var(--color-acento);">$50.000 ARS</h2>
                                     <button onclick="window.pagarMP()" class="btn" style="width:100%; background: #009ee3;">Pagar Ahora</button>
                                 </div>
@@ -332,7 +170,7 @@
                                     <h3>🌍 Internacional</h3>
                                     <p>PayPal (Dólares USD)</p>
                                     <h2 style="color: var(--color-acento);">$50 USD</h2>
-                                    <button onclick="window.pagarPayPal()" class="btn" style="width:100%; background: #ffc439; color: #003087;">Pay with PayPal</button>
+                                    <button onclick="window.pagarPayPal()" class="btn" style="width:100%; background: #ffc439; color: #003087;">Pagar con PayPal</button>
                                 </div>
                             </div>
                         </div>
@@ -357,7 +195,6 @@
                     </div>
                 </li>
             `).join('');
-            
             updateProgress(videos);
         }
 
@@ -365,23 +202,20 @@
             currentVideoIndex = index;
             const video = allVideos[index];
             
-            // 1. Actualizar UI Activa
-            document.querySelectorAll('.lesson-item').forEach((el, i) => {
-                el.classList.toggle('active', i === index);
-            });
+            // UI Activa
+            document.querySelectorAll('.lesson-item').forEach((el, i) => el.classList.toggle('active', i === index));
 
-            // 2. Cargar Video en Iframe
+            // Video Iframe
             const iframe = document.getElementById('main-video-frame');
-            // Si es link de youtube normal, convertir a embed
             let url = video.url_video || '';
             if(url.includes('watch?v=')) url = url.replace('watch?v=', 'embed/');
             iframe.src = url;
 
-            // 3. Textos
+            // Textos
             document.getElementById('main-video-title').textContent = video.titulo_completo;
-            document.getElementById('main-video-desc').textContent = video.descripcion || 'Sin descripción adicional.';
+            document.getElementById('main-video-desc').textContent = video.descripcion || '';
 
-            // 4. Botón Completar
+            // Botones
             const btnComplete = document.getElementById('btn-mark-complete');
             const btnNext = document.getElementById('btn-next-lesson');
             
@@ -389,8 +223,6 @@
                 btnComplete.textContent = '✅ Lección Completada';
                 btnComplete.style.backgroundColor = '#28a745';
                 btnComplete.disabled = true;
-                
-                // Mostrar botón siguiente si no es el último
                 if (index < allVideos.length - 1) btnNext.style.display = 'inline-block';
             } else {
                 btnComplete.textContent = 'Marcar como Vista';
@@ -398,43 +230,36 @@
                 btnComplete.disabled = false;
                 btnNext.style.display = 'none';
             }
-            
-            // Scroll sidebar to active element
-            // ...
         };
 
         document.getElementById('btn-mark-complete').addEventListener('click', async () => {
             const video = allVideos[currentVideoIndex];
             const token = getAuthToken();
-            
             try {
                 const res = await postData('progreso', { videoId: video.id }, token);
                 if (res.ok) {
-                    // Actualizar estado local sin recargar toda la página
                     allVideos[currentVideoIndex].completado = true;
-                    renderSidebar(allVideos); // Re-pintar sidebar
-                    loadVideo(currentVideoIndex); // Re-pintar botones
+                    renderSidebar(allVideos);
+                    loadVideo(currentVideoIndex);
                 }
             } catch (e) { console.error(e); }
         });
 
         document.getElementById('btn-next-lesson').addEventListener('click', () => {
-            if (currentVideoIndex < allVideos.length - 1) {
-                loadVideo(currentVideoIndex + 1);
-            }
+            if (currentVideoIndex < allVideos.length - 1) loadVideo(currentVideoIndex + 1);
         });
 
         function updateProgress(videos) {
             const completedCount = videos.filter(v => v.completado).length;
             const total = videos.length;
             const percent = total === 0 ? 0 : Math.round((completedCount / total) * 100);
-            
             document.getElementById('progress-fill').style.width = `${percent}%`;
             document.getElementById('progress-percent').textContent = `${percent}% Completado`;
             document.getElementById('progress-count').textContent = `${completedCount}/${total} Lecciones`;
         }
 
-        // --- PAGOS GLOBALES ---
+        // --- FUNCIONES GLOBALES (Pagos y Clases en Vivo) ---
+        
         window.pagarMP = async () => {
             const token = getAuthToken();
             try {
@@ -456,21 +281,51 @@
         
         window.mostrarClasesVivo = async () => {
              const token = getAuthToken();
+             document.getElementById('live-modal').style.display = 'flex'; // Abrir modal
+             
              try {
                  const res = await getData('clases-en-vivo', token);
-                 if(res.status === 403) { alert("Función exclusiva para alumnos."); return; }
+                 if(res.status === 403) { 
+                     document.getElementById('live-classes-list').innerHTML = '<p style="color:red; text-align:center;">🔒 Acceso restringido a alumnos pagos.</p>'; 
+                     return; 
+                 }
                  const data = await res.json();
                  
-                 let html = '<h3>📅 Próximas Clases</h3><ul>';
-                 data.clases.forEach(c => {
-                     html += `<li><strong>${new Date(c.fecha_hora).toLocaleDateString()}</strong>: ${c.titulo} <a href="${c.link_zoom}" target="_blank" class="btn" style="padding:2px 8px; font-size:0.7rem;">Zoom</a></li>`;
-                 });
-                 html += '</ul>';
+                 if(!data.clases || data.clases.length === 0) {
+                     document.getElementById('live-classes-list').innerHTML = '<p style="text-align:center;">No hay clases programadas próximamente.</p>';
+                     return;
+                 }
+
+                 // RENDERIZAR TARJETAS DE CLASE
+                 document.getElementById('live-classes-list').innerHTML = data.clases.map(c => {
+                    const dateObj = new Date(c.fecha_hora);
+                    const day = dateObj.getDate();
+                    const month = dateObj.toLocaleString('es-ES', { month: 'short' });
+                    const time = dateObj.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+
+                    return `
+                    <div class="live-class-card">
+                        <div class="class-date">
+                            <span class="date-day">${day}</span>
+                            <span class="date-month">${month}</span>
+                            <span style="display:block; font-size:0.8rem; margin-top:5px;">${time} hs</span>
+                        </div>
+                        <div class="class-info">
+                            <span class="badge-materia">${c.materia || 'General'}</span>
+                            <h3 style="margin: 5px 0; font-size:1.2rem;">${c.titulo}</h3>
+                            <p style="margin:0; color:#666; font-size:0.9rem;">👨‍🏫 ${c.profesor || 'Staff Tamar'}</p>
+                            <p style="font-size:0.85rem; color:#888; margin-top:5px;">${c.descripcion || ''}</p>
+                        </div>
+                        <div class="class-actions">
+                            <a href="${c.link_zoom}" target="_blank" class="btn-zoom">🎥 Unirse a Zoom</a>
+                            ${c.link_recursos ? `<a href="${c.link_recursos}" target="_blank" class="btn-materials">📂 Materiales</a>` : ''}
+                        </div>
+                    </div>
+                    `;
+                 }).join('');
                  
-                 document.getElementById('video-area').innerHTML = html; // Reemplazo simple para demo
              } catch(e) { console.error(e); }
         }
-
     </script>
 </body>
 </html>
