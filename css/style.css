@@ -38,8 +38,33 @@ h1, h2, h3 {
     font-weight: 700; 
 }
 
-h1 { font-size: 3rem; line-height: 1.2; margin-bottom: 20px; }
-h2 { font-size: 2.5rem; text-align: center; margin-bottom: 40px; }
+h1 { 
+    font-size: 3rem; 
+    line-height: 1.2; 
+    margin-bottom: 20px; 
+    /* MEJORA: Sombra de texto sutil */
+    text-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+h2 { 
+    font-size: 2.5rem; 
+    text-align: center; 
+    margin-bottom: 50px; 
+    position: relative;
+    display: block;
+}
+
+/* MEJORA: Línea decorativa debajo de los títulos H2 */
+h2::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 4px;
+    background-color: var(--color-acento);
+    margin: 15px auto 0;
+    border-radius: 2px;
+}
+
 h3 { font-size: 1.75rem; margin-bottom: 20px; }
 p { margin-bottom: 15px; }
 
@@ -52,25 +77,33 @@ hr {
     max-width: 800px;
 }
 
-/* Botones (CTAs) */
+/* --- BOTONES MODERNOS (MEJORADOS) --- */
 .btn { 
     display: inline-block; 
-    background-color: var(--color-acento); 
+    /* Degradado Premium */
+    background-image: linear-gradient(to right, var(--color-acento) 0%, #ff6bbd 100%);
+    background-color: var(--color-acento); /* Fallback */
     color: var(--color-blanco); 
-    padding: 15px 30px; 
+    padding: 16px 32px; 
     border-radius: 50px; 
     text-decoration: none; 
     font-weight: 700; 
     font-family: var(--font-titulos); 
-    transition: transform 0.3s ease, background-color 0.3s ease;
     border: none;
     cursor: pointer;
-    box-shadow: 0 5px 15px rgba(224, 65, 157, 0.4);
+    
+    /* Efecto Glow */
+    box-shadow: 0 4px 15px rgba(224, 65, 157, 0.4);
+    transition: all 0.3s ease;
+    text-transform: uppercase; 
+    font-size: 0.9rem;
+    letter-spacing: 1px;
 }
+
 .btn:hover { 
-    background-color: #c23082; 
-    transform: scale(1.03); 
-    box-shadow: 0 8px 20px rgba(224, 65, 157, 0.6);
+    transform: translateY(-2px); 
+    box-shadow: 0 8px 25px rgba(224, 65, 157, 0.6);
+    background-image: linear-gradient(to right, #c23082 0%, var(--color-acento) 100%);
 }
 
 /* Cabecera (Header) - COMPACTA Y FIJA */
@@ -97,12 +130,11 @@ hr {
     height: 100%; 
 }
 
-/* --- CORRECCIÓN DEL LOGO --- */
-/* Antes decía .logo img (incorrecto), ahora es img.logo */
+/* CORRECCIÓN DEL LOGO (Mantenemos la lógica que funcionó) */
 img.logo { 
     height: 50px;       /* Altura fija perfecta para barra de 80px */
     width: auto;        /* Mantiene proporción */
-    max-width: 200px;   /* Seguridad extra */
+    max-width: 200px;   
     object-fit: contain;
     display: block; 
     margin-right: 20px;
@@ -145,11 +177,13 @@ img.logo:hover {
     min-height: 80vh;
 }
 
-/* Sección Hero (Inicio) */
+/* --- SECCIÓN HERO (MEJORADA) --- */
 #hero { 
-    background: url('images/nina-hamaca.jpg') no-repeat center center/cover; 
+    background: url('images/nina-hamaca.jpg') no-repeat center center; 
+    background-size: cover;
+    background-attachment: fixed; /* Efecto Parallax */
     color: var(--color-blanco); 
-    min-height: calc(85vh - 80px); 
+    min-height: calc(90vh - 80px); /* Un poco más alto para impacto */
     display: flex; 
     flex-direction: column; 
     justify-content: center; 
@@ -160,6 +194,7 @@ img.logo:hover {
     margin-top: -80px; 
     padding-top: 110px; 
 }
+
 #hero::before { 
     content: ''; 
     position: absolute; 
@@ -167,8 +202,10 @@ img.logo:hover {
     left: 0; 
     width: 100%; 
     height: 100%; 
-    background-color: rgba(74, 71, 163, 0.75); 
+    /* Degradado diagonal moderno en lugar de color plano */
+    background: linear-gradient(135deg, rgba(74, 71, 163, 0.9) 0%, rgba(74, 71, 163, 0.7) 50%, rgba(224, 65, 157, 0.4) 100%);
 }
+
 #hero * { position: relative; z-index: 10; }
 #hero h1 { color: var(--color-blanco); max-width: 900px; }
 #hero h3 { 
@@ -179,45 +216,59 @@ img.logo:hover {
     margin-bottom: 40px; 
 }
 
-/* Layout de Tarjetas (Grid) */
+/* --- TARJETAS PREMIUM (GRID) --- */
 .grid-3-col { 
     display: grid; 
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
     gap: 30px; 
     margin-top: 50px; 
 }
+
 .card { 
     background: var(--color-blanco); 
-    padding: 30px; 
-    border-radius: 12px; 
-    box-shadow: 0 8px 25px rgba(0,0,0,0.1); 
-    transition: transform 0.4s ease, box-shadow 0.4s ease; 
-    border-left: 5px solid var(--color-azul-profundo); 
+    padding: 35px 30px; 
+    border-radius: 16px; /* Bordes más suaves */
+    
+    /* Sombra difusa moderna */
+    box-shadow: 0 10px 30px -5px rgba(74, 71, 163, 0.08); 
+    border: 1px solid rgba(0,0,0,0.03);
+    
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Rebote suave */
+    
+    /* Borde superior de color en lugar de izquierdo */
+    border-left: none;
+    border-top: 5px solid var(--color-azul-profundo); 
+    
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    height: 100%;
 }
+
 .card:hover { 
-    transform: translateY(-5px); 
-    box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+    transform: translateY(-10px); 
+    box-shadow: 0 20px 40px -10px rgba(74, 71, 163, 0.15);
 }
+
 .card img { 
     width: 100%; 
     height: auto; 
     max-height: 200px; 
-    object-fit: cover; 
+    object-fit: contain; /* Para que el logo de Integrative no se corte */
     border-radius: 8px; 
     margin-bottom: 20px; 
 }
+
 .card h3 { 
     margin-top: 0; 
-    color: var(--color-acento); 
-    font-size: 1.5rem;
+    color: var(--color-azul-profundo); 
+    font-size: 1.4rem;
+    margin-bottom: 15px;
 }
 
 /* Testimonios */
 .testimonial-card { 
-    border-left-color: var(--color-acento); 
+    border-top-color: var(--color-acento); /* Detalle rosa para testimonios */
 }
 .testimonial-card p { 
     font-style: italic; 
@@ -227,10 +278,9 @@ img.logo:hover {
 .testimonial-card .author { 
     font-style: normal; 
     font-weight: 700; 
-    text-align: right; 
-    margin-top: 20px; 
+    text-align: left; 
+    margin-top: 5px; 
     display: block; 
-    width: 100%;
     color: var(--color-azul-profundo);
 }
 
@@ -245,12 +295,12 @@ img.logo:hover {
 }
 #about img {
     max-width: 300px;
-    height: 300px;
+    height: auto;
     object-fit: cover;
     display: block;
     margin: 0 auto 40px;
-    border: 5px solid var(--color-azul-profundo);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+    /* Sombra para la foto de perfil */
+    box-shadow: 0 15px 30px rgba(74, 71, 163, 0.2);
 }
 #about p {
     max-width: 800px;
@@ -278,8 +328,8 @@ img.logo:hover {
     margin: 0 auto;
     background: var(--color-blanco);
     padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+    border-radius: 16px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.08);
 }
 .section-image { 
     max-width: 100%; 
@@ -306,16 +356,18 @@ img.logo:hover {
 .form-group input[type="email"],
 .form-group input[type="password"] {
     width: 100%;
-    padding: 12px;
+    padding: 14px; /* Un poco más grandes los inputs */
     border: 1px solid #ccc;
     border-radius: 8px;
     font-size: 1rem;
     transition: border-color 0.3s;
+    background-color: #fafafa;
 }
 .form-group input:focus {
     outline: none;
     border-color: var(--color-acento);
-    box-shadow: 0 0 0 3px rgba(224, 65, 157, 0.2);
+    box-shadow: 0 0 0 3px rgba(224, 65, 157, 0.1);
+    background-color: #fff;
 }
 #lead-form {
     display: flex;
@@ -361,13 +413,16 @@ footer a { color: var(--color-blanco); text-decoration: underline; }
     .header .container { flex-direction: column; padding: 15px; height: auto; }
     body { padding-top: 0; }
     
-    img.logo { height: 50px; margin-bottom: 10px; margin-right: 0; } /* Logo ajustado para móvil */
+    img.logo { height: 50px; margin-bottom: 10px; margin-right: 0; } 
     
     .nav { margin-top: 5px; }
     .nav ul { gap: 10px; flex-wrap: wrap; justify-content: center; }
     .nav ul li a:not(.btn) { font-size: 0.8rem; }
     .grid-3-col { grid-template-columns: 1fr; gap: 20px; }
     .card { padding: 25px; }
+    
+    /* Ajuste Parallax en móvil */
+    #hero { background-attachment: scroll; }
 }
 
 /* Mis Cursos */
