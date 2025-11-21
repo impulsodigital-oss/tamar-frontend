@@ -7,9 +7,9 @@
     --color-blanco: #ffffff;
     --color-gris-claro: #eef1f4;
     
-    /* Fuentes */
-    --font-titulos: 'Montserrat', sans-serif;
-    --font-cuerpo: 'Lato', sans-serif;
+    /* --- FUENTES ACTUALIZADAS (Estilo Académico/Artístico) --- */
+    --font-titulos: 'Playfair Display', serif; /* Elegancia para títulos */
+    --font-cuerpo: 'Lato', sans-serif;         /* Legibilidad para textos */
 }
 
 /* Base Global */
@@ -130,7 +130,7 @@ hr {
     height: 100%; 
 }
 
-/* CORRECCIÓN DEL LOGO (Mantenemos la lógica que funcionó) */
+/* CORRECCIÓN DEL LOGO */
 img.logo { 
     height: 50px;       /* Altura fija perfecta para barra de 80px */
     width: auto;        /* Mantiene proporción */
@@ -282,6 +282,30 @@ img.logo:hover {
     margin-top: 5px; 
     display: block; 
     color: var(--color-azul-profundo);
+}
+
+/* ESTILOS NUEVOS: Avatares de Testimonios */
+.testimonial-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+.testimonial-avatar {
+    width: 50px;
+    height: 50px;
+    min-width: 50px;
+    background-color: #eef1f4;
+    border-radius: 50%;
+    margin-right: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #e0e0e0;
+}
+.testimonial-avatar svg {
+    width: 30px;
+    height: 30px;
+    fill: #a0aec0;
 }
 
 /* Perfil */
