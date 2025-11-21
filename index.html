@@ -9,7 +9,21 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Montserrat:wght@600;700&display=swap" rel="stylesheet">
     
-    <link rel="stylesheet" href="CSS/style.css"> 
+    <link rel="stylesheet" href="CSS/style.css">
+    <style>
+        .testimonial-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .placeholder-circle {
+            width: 50px;
+            height: 50px;
+            background-color: #ccc;
+            border-radius: 50%;
+            margin-right: 15px;
+        }
+    </style>
 </head>
 <body>
     <header class="header">
@@ -32,11 +46,14 @@
         </div>
     </header>
 
-    <div class="main-content"> <section id="hero" class="hero-section">
+    <div class="main-content"> 
+        
+        <section id="hero" class="hero-section">
             <div class="container">
                 <div class="hero-text">
-                    <h1>Transforma la Educación de tu Familia con Propósito y Arte.</h1>
-                    <p>Guiamos a las familias homeschoolers enfocados en el desarrollo integral, la autonomía y la obtención de certificación escolar respaldada por EE. UU.</p>
+                    <h1>Transforma la Educación de tu Hijo/a a Través del Arte y Educa con Propósito.</h1>
+                    <p>Guiamos a las familias homeschoolers en sus momentos de aprendizaje enfocados en las habilidades de los niños y conforme a las necesidades familiares. Certificamos sus estudios respaldados por <strong>Integrative Learning</strong>.</p>
+                    
                     <a href="#free-guide" class="btn">¡Descarga la Guía Gratuita Ahora!</a>
                 </div>
             </div>
@@ -52,7 +69,7 @@
                 <div class="grid-3-col">
                     <div class="card">
                         <h3>Nuestra Misión</h3>
-                        <p>Potenciar las habilidades de tus hijos a través del arte, en un entorno de aprendizaje seguro, libre y con valores cristianos.</p>
+                        <p>Potenciar las habilidades de tu hijo/a haciendo una adaptación curricular personalizada a su esencia, brindándole las herramientas necesarias para un excelente futuro.</p>
                     </div>
                     <div class="card">
                         <h3>Visión de Servicio</h3>
@@ -60,7 +77,8 @@
                     </div>
                     <div class="card">
                         <h3>Respaldo Académico</h3>
-                        <p>Ofrecemos una estructura educativa sólida que combina la libertad del homeschooling con la validez de una certificación internacional.</p>
+                        <img src="images/integrativelearning.png" alt="Integrative Learning Logo" style="max-height: 60px; width: auto; margin-bottom: 15px;">
+                        <p>Ofrecemos una estructura educativa sólida que combina la libertad del homeschooling con la validez de una certificación internacional respaldada por Integrative Learning.</p>
                     </div>
                 </div>
             </div>
@@ -72,9 +90,7 @@
             <div class="container">
                 <h3>Hola, soy Sofía</h3>
                 <div class="staff-content">
-                    <img src="images/retrato-sofi-circulo (2).jpg" alt="Retrato de Sofía" class="section-image" style="max-width: 300px; border-radius: 50%;">
-                    
-                    <div class="staff-description">
+                    <img src="images/foto-sofia-oficina.jpg" alt="Retrato de Sofía" class="section-image" style="max-width: 300px; border-radius: 15px;"> <div class="staff-description">
                         <p>Soy artista y educadora, pero sobre todo <strong>mamá que educa en casa</strong>. Luego de hacer mi carrera docente confirmé lo que sentía ya desde muy pequeña cuando iba a la escuela: el sistema educativo no está diseñado para impulsar a los alumnos para un futuro cimentado en la validación de sus dones y talentos, ni les brinda herramientas actualizadas para tener éxito en el mundo que les espera.</p>
                         
                         <p>Es por eso que desde antes de ser mamá tenía la convicción de que cuando tuviera hijos buscaría la manera de instruirlos de manera más orgánica, respetuosa, creativa y conforme a las necesidades de nuestra familia.</p>
@@ -93,18 +109,24 @@
                 <div class="grid-3-col">
                     
                     <div class="card testimonial-card">
+                        <div class="testimonial-header">
+                            <div class="placeholder-circle"></div> <span class="author" style="margin:0; text-align:left;">Kismalú, mamá de JJN (6 años)</span>
+                        </div>
                         <p>"He notado un avance significativo en mi hijo de 6 años: mayor concentración, atención a los detalles y entusiasmo por expresarse. Más que un taller, es una tribu llena de cariño, respeto y belleza."</p>
-                        <span class="author">- Kismalú, mamá de JJN (6 años)</span>
                     </div>
 
                     <div class="card testimonial-card">
+                        <div class="testimonial-header">
+                            <div class="placeholder-circle"></div> <span class="author" style="margin:0; text-align:left;">Virgina, mamá de dos peques (2 y 5 años)</span>
+                        </div>
                         <p>"Ella apareció: como cuando compras algo nuevo y viene con manual de uso. Ese manual era ella. Una facilitadora tan creativa, apasionada, amante del hogar que te conecta con tu propia esencia para que seas tu mejor versión."</p>
-                        <span class="author">- Virgina, mamá de dos peques (2 y 5 años)</span>
                     </div>
 
                     <div class="card testimonial-card">
+                        <div class="testimonial-header">
+                            <div class="placeholder-circle"></div> <span class="author" style="margin:0; text-align:left;">Mariana, mamá de Luz (10 años)</span>
+                        </div>
                         <p>"Su acompañamiento desinteresado, tanto en lo académico como en lo emocional, nos ha brindado fuerza y motivación para seguir adelante. Gracias a ella, ya no nos sentimos solas."</p>
-                        <span class="author">- Mariana, mamá de Luz (10 años)</span>
                     </div>
 
                 </div>
