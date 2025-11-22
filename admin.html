@@ -3,26 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel de Administración - Tamar</title>
+    <title>Panel de Administración PRO - Tamar</title>
     <link rel="stylesheet" href="CSS/style.css">
     <style>
-        .admin-container { max-width: 1000px; margin: 40px auto; padding: 20px; }
+        .admin-container { max-width: 1100px; margin: 40px auto; padding: 20px; }
+        .admin-header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        
+        /* Buscador */
+        .search-box {
+            position: relative; width: 300px;
+        }
+        .search-box input {
+            width: 100%; padding: 10px 15px 10px 40px; border-radius: 20px; border: 1px solid #ccc; outline: none;
+        }
+        .search-icon { position: absolute; left: 15px; top: 10px; color: #888; }
+
         .admin-section { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 40px; }
-        .admin-section h3 { border-bottom: 2px solid var(--color-gris-claro); padding-bottom: 15px; margin-bottom: 20px; }
+        .admin-section h3 { border-bottom: 2px solid var(--color-gris-claro); padding-bottom: 15px; margin-bottom: 20px; display: flex; justify-content: space-between; }
+        
         table { width: 100%; border-collapse: collapse; margin-top: 10px; }
         th, td { text-align: left; padding: 12px; border-bottom: 1px solid #eee; }
         th { background-color: var(--color-fondo); color: var(--color-azul-profundo); font-weight: 700; }
         tr:hover { background-color: #f9f9f9; }
+        
         .badge-pago { background-color: #d4edda; color: #155724; padding: 5px 10px; border-radius: 20px; font-size: 0.85rem; font-weight: 700; }
         .badge-pendiente { background-color: #f8d7da; color: #721c24; padding: 5px 10px; border-radius: 20px; font-size: 0.85rem; font-weight: 700; }
         
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px; }
         .stat-card { background: var(--color-azul-profundo); color: white; padding: 20px; border-radius: 10px; text-align: center; }
-        .stat-card h4 { color: white; margin-bottom: 10px; font-size: 2rem; }
-        .stat-card p { margin: 0; opacity: 0.9; }
-        
-        .btn-contact { padding: 5px 12px; font-size: 0.8rem; background-color: #333; color: white; text-decoration: none; border-radius: 4px; display: inline-block; }
+        .stat-card h4 { color: white; margin-bottom: 5px; font-size: 2rem; }
+        .stat-card p { margin: 0; opacity: 0.9; font-size: 0.9rem; }
+
+        /* Botones de Acción */
+        .btn-action { padding: 5px 10px; font-size: 0.8rem; border-radius: 4px; text-decoration: none; display: inline-block; margin-right: 5px; cursor: pointer; border: none; }
+        .btn-contact { background-color: #333; color: white; }
+        .btn-activate { background-color: #28a745; color: white; }
         .btn-contact:hover { background-color: #555; }
+        .btn-activate:hover { background-color: #218838; }
+
+        /* Gráficos Simples (Barras) */
+        .distribution-bar { display: flex; height: 10px; border-radius: 5px; overflow: hidden; margin-top: 10px; background: #eee; }
+        .bar-segment { height: 100%; }
+        .legend { display: flex; gap: 15px; font-size: 0.8rem; margin-top: 5px; color: #666; }
+        .dot { width: 10px; height: 10px; display: inline-block; border-radius: 50%; margin-right: 5px; }
     </style>
 </head>
 <body>
@@ -40,8 +63,17 @@
     </header>
 
     <div class="main-content admin-container">
-        <h2>Bienvenida, Sofía</h2>
-        <p style="margin-bottom: 30px;">Panel de Control y Gestión Educativa.</p>
+        
+        <div class="admin-header-row">
+            <div>
+                <h2>Bienvenida, Sofía</h2>
+                <p>Centro de Control</p>
+            </div>
+            <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="search-input" placeholder="Buscar alumno o email...">
+            </div>
+        </div>
 
         <div id="admin-message" class="message" style="display:none;"></div>
 
@@ -49,10 +81,24 @@
             <div class="stat-card">
                 <h4 id="total-alumnos">0</h4>
                 <p>Alumnos Activos</p>
+                <div class="distribution-bar">
+                    <div id="bar-kinder" class="bar-segment" style="width: 0%; background: #FF9F43;"></div>
+                    <div id="bar-primaria" class="bar-segment" style="width: 0%; background: #54a0ff;"></div>
+                    <div id="bar-secundaria" class="bar-segment" style="width: 0%; background: #5f27cd;"></div>
+                </div>
+                <div class="legend" style="justify-content: center;">
+                    <span><span class="dot" style="background: #FF9F43;"></span>K</span>
+                    <span><span class="dot" style="background: #54a0ff;"></span>P</span>
+                    <span><span class="dot" style="background: #5f27cd;"></span>S</span>
+                </div>
             </div>
             <div class="stat-card" style="background-color: var(--color-acento);">
                 <h4 id="total-leads">0</h4>
-                <p>Leads Pendientes</p>
+                <p>Oportunidades (Sin Pago)</p>
+            </div>
+            <div class="stat-card" style="background-color: #10ac84;">
+                <h4 id="total-ingresos">$0</h4>
+                <p>Ingresos Estimados</p>
             </div>
         </div>
 
@@ -61,12 +107,7 @@
             <div class="table-responsive">
                 <table id="tabla-alumnos">
                     <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Nombre</th>
-                            <th>Email</th>
-                            <th>Plan</th> <th>Estado</th>
-                        </tr>
+                        <tr><th>ID</th><th>Nombre</th><th>Email</th><th>Plan</th><th>Estado</th></tr>
                     </thead>
                     <tbody><tr><td colspan="5">Cargando...</td></tr></tbody>
                 </table>
@@ -74,80 +115,116 @@
         </div>
 
         <div class="admin-section">
-            <h3>⏳ Leads (Oportunidades)</h3>
+            <h3>⏳ Leads Pendientes <span style="font-size:0.8rem; font-weight:normal;">(Contactar o Activar Manualmente)</span></h3>
             <div class="table-responsive">
                 <table id="tabla-leads">
                     <thead>
-                        <tr><th>Nombre</th><th>Email</th><th>Fecha</th><th>Estado</th><th>Acciones</th></tr>
+                        <tr><th>Nombre</th><th>Email</th><th>Fecha</th><th>Acciones</th></tr>
                     </thead>
-                    <tbody><tr><td colspan="5">Cargando...</td></tr></tbody>
+                    <tbody><tr><td colspan="4">Cargando...</td></tr></tbody>
                 </table>
             </div>
         </div>
 
-        <div class="admin-section" style="border-top: 5px solid var(--color-acento);">
-            <h3>📅 Agendar Nueva Clase en Vivo</h3>
-            <form id="form-clase" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                <input type="text" id="clase-titulo" placeholder="Título de la Clase" required style="padding:10px; grid-column: span 2; border:1px solid #ccc; border-radius:5px;">
-                <input type="text" id="clase-materia" placeholder="Materia (ej. Finanzas)" required style="padding:10px; border:1px solid #ccc; border-radius:5px;">
-                <input type="text" id="clase-profesor" placeholder="Nombre del Profesor" required style="padding:10px; border:1px solid #ccc; border-radius:5px;">
-                <input type="date" id="clase-fecha" required style="padding:10px; border:1px solid #ccc; border-radius:5px;">
-                <input type="time" id="clase-hora" required style="padding:10px; border:1px solid #ccc; border-radius:5px;">
-                <input type="url" id="clase-zoom" placeholder="Link de Zoom" required style="padding:10px; border:1px solid #ccc; border-radius:5px;">
-                <input type="url" id="clase-recursos" placeholder="Link Drive Materiales (Opcional)" style="padding:10px; border:1px solid #ccc; border-radius:5px;">
-                <textarea id="clase-desc" placeholder="Descripción breve..." style="padding:10px; grid-column: span 2; border:1px solid #ccc; border-radius:5px;"></textarea>
-                <button type="submit" class="btn" style="grid-column: span 2; cursor: pointer;">Guardar Clase</button>
-            </form>
-        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+            <div class="admin-section" style="border-top: 5px solid var(--color-acento);">
+                <h3>📅 Agendar Clase</h3>
+                <form id="form-clase" style="display: flex; flex-direction: column; gap: 10px;">
+                    <input type="text" id="clase-titulo" placeholder="Título" required style="padding:8px; border:1px solid #ccc; border-radius:5px;">
+                    <div style="display:flex; gap:10px;">
+                        <input type="text" id="clase-materia" placeholder="Materia" required style="padding:8px; flex:1; border:1px solid #ccc; border-radius:5px;">
+                        <input type="text" id="clase-profesor" placeholder="Profe" required style="padding:8px; flex:1; border:1px solid #ccc; border-radius:5px;">
+                    </div>
+                    <div style="display:flex; gap:10px;">
+                        <input type="date" id="clase-fecha" required style="padding:8px; flex:1; border:1px solid #ccc; border-radius:5px;">
+                        <input type="time" id="clase-hora" required style="padding:8px; flex:1; border:1px solid #ccc; border-radius:5px;">
+                    </div>
+                    <input type="url" id="clase-zoom" placeholder="Link Zoom" required style="padding:8px; border:1px solid #ccc; border-radius:5px;">
+                    <input type="url" id="clase-recursos" placeholder="Link Drive (Opcional)" style="padding:8px; border:1px solid #ccc; border-radius:5px;">
+                    <button type="submit" class="btn" style="padding:10px; cursor: pointer;">Guardar</button>
+                </form>
+            </div>
 
-        <div class="admin-section">
-            <h3>🔑 Recuperar Contraseña de Alumno</h3>
-            <form id="form-reset" style="display: flex; gap: 10px;">
-                <input type="email" id="reset-email" placeholder="Email del Alumno" required style="padding:10px; flex:1; border:1px solid #ccc; border-radius:5px;">
-                <input type="text" id="reset-pass" placeholder="Nueva Contraseña" required style="padding:10px; flex:1; border:1px solid #ccc; border-radius:5px;">
-                <button type="submit" class="btn" style="background-color:#333; cursor: pointer;">Cambiar</button>
-            </form>
+            <div class="admin-section">
+                <h3>🔑 Reset Password</h3>
+                <form id="form-reset" style="display: flex; flex-direction: column; gap: 15px;">
+                    <p style="font-size:0.9rem;">Cambiar clave de alumno:</p>
+                    <input type="email" id="reset-email" placeholder="Email del Alumno" required style="padding:10px; border:1px solid #ccc; border-radius:5px;">
+                    <input type="text" id="reset-pass" placeholder="Nueva Contraseña" required style="padding:10px; border:1px solid #ccc; border-radius:5px;">
+                    <button type="submit" class="btn" style="background-color:#333; cursor: pointer;">Cambiar Clave</button>
+                </form>
+            </div>
         </div>
     </div>
-
-    <footer>
-        <div class="container">
-            <p>&copy; 2024 Tamar. Panel de Uso Interno.</p>
-        </div>
-    </footer>
 
     <script type="module" src="js/api.js"></script>
     <script type="module" src="js/main.js"></script>
     <script type="module">
-        import { getData, showMessage } from './js/main.js';
+        import { getData, postData, showMessage } from './js/main.js';
+
+        let globalAlumnos = [];
+        let globalLeads = [];
 
         document.addEventListener('DOMContentLoaded', async () => {
             const token = localStorage.getItem('token');
             if (!token) { window.location.href = 'login.html'; return; }
 
-            // LOAD DATA
             async function loadAdminData() {
                 try {
+                    // Alumnos
                     const resAlumnos = await getData('admin/usuarios-activos', token);
-                    if (resAlumnos.status === 403) {
-                        document.body.innerHTML = '<div style="text-align:center; padding:50px;"><h1>⛔ Acceso Denegado</h1></div>';
-                        return;
-                    }
+                    if (resAlumnos.status === 403) { document.body.innerHTML = '<h1>⛔ Acceso Denegado</h1>'; return; }
                     const dataAlumnos = await resAlumnos.json();
-                    renderAlumnos(dataAlumnos.alumnos || []);
-
+                    globalAlumnos = dataAlumnos.alumnos || [];
+                    
+                    // Leads
                     const resLeads = await getData('admin/leads-pendientes', token);
                     const dataLeads = await resLeads.json();
-                    renderLeads(dataLeads.leads || []);
+                    globalLeads = dataLeads.leads || [];
 
-                    document.getElementById('total-alumnos').textContent = (dataAlumnos.alumnos || []).length;
-                    document.getElementById('total-leads').textContent = (dataLeads.leads || []).length;
-                } catch (error) { showMessage('admin-message', 'Error al cargar panel.', 'error'); }
+                    // Render Inicial
+                    renderAlumnos(globalAlumnos);
+                    renderLeads(globalLeads);
+                    updateStats();
+
+                } catch (error) { showMessage('admin-message', 'Error al cargar datos.', 'error'); }
+            }
+
+            // BUSCADOR EN TIEMPO REAL
+            document.getElementById('search-input').addEventListener('keyup', (e) => {
+                const term = e.target.value.toLowerCase();
+                
+                const filteredAlumnos = globalAlumnos.filter(u => u.nombre.toLowerCase().includes(term) || u.email.toLowerCase().includes(term));
+                renderAlumnos(filteredAlumnos);
+
+                const filteredLeads = globalLeads.filter(u => u.nombre.toLowerCase().includes(term) || u.email.toLowerCase().includes(term));
+                renderLeads(filteredLeads);
+            });
+
+            function updateStats() {
+                const total = globalAlumnos.length;
+                document.getElementById('total-alumnos').textContent = total;
+                document.getElementById('total-leads').textContent = globalLeads.length;
+                
+                // Estimación de ingresos (Ejemplo $50k promedio)
+                document.getElementById('total-ingresos').textContent = `$${(total * 50000).toLocaleString()}`;
+
+                // Gráfico simple de distribución (Ejemplo básico por texto de plan)
+                // En producción deberías tener un campo 'nivel' en BD, aquí inferimos por texto
+                // Para demo, ponemos valores fijos visuales o calculados si el plan contiene palabras clave
+                const kinder = globalAlumnos.filter(u => u.plan_adquirido && u.plan_adquirido.toLowerCase().includes('básico')).length;
+                const otros = total - kinder;
+                
+                // Ajustar anchos de barra (Solo visual)
+                if(total > 0) {
+                    document.getElementById('bar-kinder').style.width = `${(kinder/total)*100}%`;
+                    document.getElementById('bar-primaria').style.width = `${(otros/total)*100}%`;
+                }
             }
 
             function renderAlumnos(lista) {
                 const tbody = document.querySelector('#tabla-alumnos tbody');
-                if (lista.length === 0) { tbody.innerHTML = '<tr><td colspan="5">Sin alumnos.</td></tr>'; return; }
+                if (lista.length === 0) { tbody.innerHTML = '<tr><td colspan="5">Sin resultados.</td></tr>'; return; }
                 tbody.innerHTML = lista.map(u => `
                     <tr>
                         <td>#${u.id}</td>
@@ -161,21 +238,46 @@
 
             function renderLeads(lista) {
                 const tbody = document.querySelector('#tabla-leads tbody');
-                if (lista.length === 0) { tbody.innerHTML = '<tr><td colspan="5">Sin leads.</td></tr>'; return; }
+                if (lista.length === 0) { tbody.innerHTML = '<tr><td colspan="4">Sin leads.</td></tr>'; return; }
                 tbody.innerHTML = lista.map(u => {
-                    const subject = "Hola " + u.nombre + " - Te escribo de Escuela Tamar";
-                    const body = "Hola " + u.nombre + ", vi que te registraste pero no completaste el proceso...";
+                    const mailLink = `mailto:${u.email}?subject=Hola ${u.nombre} - Escuela Tamar&body=Hola, te escribo para...`;
                     return `
                     <tr>
-                        <td>${u.nombre}</td><td>${u.email}</td>
+                        <td><strong>${u.nombre}</strong></td>
+                        <td>${u.email}</td>
                         <td>${u.fecha_registro ? new Date(u.fecha_registro).toLocaleDateString() : '-'}</td>
-                        <td><span class="badge-pendiente">Sin Pago</span></td>
-                        <td><a href="mailto:${u.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}" class="btn-contact">📩 Contactar</a></td>
+                        <td>
+                            <a href="${mailLink}" class="btn-action btn-contact">📩 Mail</a>
+                            <button class="btn-action btn-activate" onclick="window.activarManual(${u.id}, '${u.nombre}')">✅ Activar</button>
+                        </td>
                     </tr>
                 `}).join('');
             }
 
-            // NUEVA CLASE
+            // FUNCIÓN GLOBAL PARA ACTIVACIÓN MANUAL
+            window.activarManual = async (userId, nombre) => {
+                const plan = prompt(`¿Confirmas que ${nombre} pagó en efectivo/otro?\n\nEscribe el nombre del Plan (ej: Kinder, Primaria):`, "Plan Manual");
+                if (plan) {
+                    if(confirm(`¿Seguro que quieres activar a ${nombre} con el plan: ${plan}?`)) {
+                        try {
+                            // Usamos fetch directo porque postData está encapsulado en modules y necesitamos pasar token aquí
+                            const res = await fetch('https://tamar-backend-api-gqy9.onrender.com/api/admin/activar-manual', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                                body: JSON.stringify({ userId, plan })
+                            });
+                            if (res.ok) { 
+                                alert('¡Usuario Activado!'); 
+                                loadAdminData(); // Recargar tablas
+                            } else {
+                                alert('Error al activar.');
+                            }
+                        } catch(e) { alert('Error de conexión'); }
+                    }
+                }
+            };
+
+            // LOGICA DE FORMULARIOS (Clase y Pass)
             document.getElementById('form-clase').addEventListener('submit', async (e) => {
                 e.preventDefault();
                 const data = {
@@ -188,26 +290,20 @@
                     link_recursos: document.getElementById('clase-recursos').value,
                     descripcion: document.getElementById('clase-desc').value
                 };
-                if(confirm('¿Agendar clase?')) {
-                    const res = await fetch('https://tamar-backend-api-gqy9.onrender.com/api/admin/nueva-clase', {
-                        method: 'POST', headers: {'Content-Type':'application/json', 'Authorization': `Bearer ${token}`}, body: JSON.stringify(data)
-                    });
-                    if(res.ok) { alert('Clase creada!'); window.location.reload(); }
-                    else alert('Error.');
-                }
+                const res = await fetch('https://tamar-backend-api-gqy9.onrender.com/api/admin/nueva-clase', {
+                    method: 'POST', headers: {'Content-Type':'application/json', 'Authorization': `Bearer ${token}`}, body: JSON.stringify(data)
+                });
+                if(res.ok) { alert('Clase creada!'); window.location.reload(); }
             });
 
-            // RESET PASSWORD
             document.getElementById('form-reset').addEventListener('submit', async (e) => {
                 e.preventDefault();
                 const email = document.getElementById('reset-email').value;
                 const newPassword = document.getElementById('reset-pass').value;
-                
                 const res = await fetch('https://tamar-backend-api-gqy9.onrender.com/api/admin/reset-password', {
                     method: 'POST', headers: {'Content-Type':'application/json', 'Authorization': `Bearer ${token}`}, body: JSON.stringify({email, newPassword})
                 });
-                if(res.ok) { alert('Contraseña actualizada.'); document.getElementById('form-reset').reset(); }
-                else alert('Error: Usuario no encontrado.');
+                if(res.ok) alert('Contraseña cambiada.'); else alert('Error: Usuario no encontrado.');
             });
 
             document.getElementById('logout-btn').addEventListener('click', (e) => {
