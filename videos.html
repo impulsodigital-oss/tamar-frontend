@@ -10,6 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="CSS/style.css">
+    
     <style>
         body { background-color: #f8f9fa; }
         .classroom-container { display: grid; grid-template-columns: 350px 1fr; gap: 0; min-height: calc(100vh - 80px); margin-top: 0; }
@@ -80,13 +81,8 @@
             <div class="sidebar-header">
                 <h4>Tu Progreso</h4>
                 <div class="progress-container">
-                    <div class="progress-bar-bg">
-                        <div id="progress-fill" class="progress-bar-fill"></div>
-                    </div>
-                    <div class="progress-text">
-                        <span id="progress-percent">0% Completado</span>
-                        <span id="progress-count">0/0 Lecciones</span>
-                    </div>
+                    <div class="progress-bar-bg"><div id="progress-fill" class="progress-bar-fill"></div></div>
+                    <div class="progress-text"><span id="progress-percent">0%</span><span id="progress-count">0/0</span></div>
                 </div>
             </div>
             <ul id="lesson-list-ul" class="lesson-list"></ul>
@@ -94,9 +90,7 @@
 
         <main class="course-content">
             <div id="video-area">
-                <div class="video-wrapper">
-                    <iframe id="main-video-frame" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-                </div>
+                <div class="video-wrapper"><iframe id="main-video-frame" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe></div>
                 <div class="lesson-header">
                     <h2 id="main-video-title">Selecciona una lección</h2>
                     <p id="main-video-desc" style="color: #666;">...</p>
@@ -118,11 +112,7 @@
         </div>
     </div>
 
-    <footer>
-        <div class="container">
-            <p>&copy; 2024 Tamar. Plataforma Educativa.</p>
-        </div>
-    </footer>
+    <footer><div class="container"><p>&copy; 2024 Tamar. Plataforma Educativa.</p></div></footer>
 
     <a href="https://wa.me/5493412757827?text=Hola%20Tamar,%20tengo%20una%20consulta%20sobre%20la%20plataforma." class="support-btn" target="_blank" title="Contactar Soporte">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3 18.6-68.1-4.4-6.9c-18.3-29.1-28-63-28-97.6 0-101.6 82.9-184.3 184.6-184.3 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/></svg>
@@ -153,7 +143,7 @@
             if (urlParams.get('status') === 'paypal_success' && urlParams.get('token')) {
                 showMessage('video-message', 'Procesando PayPal...', 'success');
                 try {
-                    const response = await postData('capturar-pago-paypal', { orderID: urlParams.get('token') }, token);
+                    const response = await postData('capturar-pago-paypal', { orderID: urlParams.get('token'), planId: urlParams.get('plan') }, token);
                     if(response.ok) setTimeout(() => window.location.href = 'videos.html', 3000);
                 } catch(e) { console.error(e); }
             }
@@ -175,22 +165,46 @@
                         document.querySelector('.main-content').innerHTML = '<div style="padding:50px; text-align:center;"><h3>¡Bienvenido!</h3><p>Aún no hay lecciones publicadas.</p></div>';
                     }
                 } else if (response.status === 403 && data.requierePago) {
+                    // HTML DE BLOQUEO CON SELECTOR DE PLANES
                     document.querySelector('.main-content').innerHTML = `
-                        <div style="text-align: center; padding: 60px; max-width: 800px; margin: 0 auto;">
-                            <h1 style="color: var(--color-azul-profundo); margin-bottom: 20px;">🔒 Acceso Exclusivo para Alumnos</h1>
-                            <p style="font-size: 1.2rem; margin-bottom: 40px;">Elige tu método de pago para comenzar.</p>
-                            <div style="display: grid; gap: 30px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
-                                <div class="card" style="text-align: center; align-items: center;">
-                                    <h3>🇦🇷 Argentina</h3><p>Mercado Pago</p><h2 style="color: var(--color-acento);">$50.000 ARS</h2>
-                                    <button onclick="window.pagarMP()" class="btn" style="width:100%; background: #009ee3;">Pagar Ahora</button>
+                        <div style="text-align: center; padding: 40px; max-width: 900px; margin: 0 auto;">
+                            <h1 style="color: var(--color-azul-profundo); margin-bottom: 10px;">🔒 Inscripción a Tamar</h1>
+                            <p style="font-size: 1.1rem; margin-bottom: 30px; color:#666;">Selecciona el plan educativo para continuar.</p>
+                            
+                            <div style="background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+                                <div style="margin-bottom: 30px; text-align: left;">
+                                    <label style="display:block; font-weight:bold; margin-bottom:10px; color: var(--color-azul-profundo);">Elige tu Plan:</label>
+                                    <select id="plan-selector" style="width:100%; padding:15px; border-radius:8px; border:2px solid #eee; font-size:1.1rem; font-family: 'Lato', sans-serif;">
+                                        <option value="basico" data-ars="46800" data-usd="39">Plan Básico ($46.800 ARS / $39 USD)</option>
+                                        <option value="core" data-ars="70800" data-usd="59">Plan Core ($70.800 ARS / $59 USD)</option>
+                                        <option value="plus" data-ars="154800" data-usd="129">Plan Plus ($154.800 ARS / $129 USD)</option>
+                                        <option value="selecto" data-ars="130800" data-usd="109">Plan Selecto ($130.800 ARS / $109 USD)</option>
+                                        <option value="completo" data-ars="274800" data-usd="229">Plan Completo ($274.800 ARS / $229 USD)</option>
+                                        <option value="certificacion" data-ars="240000" data-usd="200">Certificación Anual ($240.000 ARS / $200 USD)</option>
+                                    </select>
                                 </div>
-                                <div class="card" style="text-align: center; align-items: center;">
-                                    <h3>🌍 Internacional</h3><p>PayPal (USD)</p><h2 style="color: var(--color-acento);">$50 USD</h2>
-                                    <button onclick="window.pagarPayPal()" class="btn" style="width:100%; background: #ffc439; color: #003087;">Pay with PayPal</button>
+                                <div style="display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
+                                    <div style="border: 1px solid #eee; padding: 20px; border-radius: 8px;">
+                                        <h4>🇦🇷 Argentina</h4>
+                                        <p id="price-display-ars" style="font-size: 1.5rem; color: var(--color-acento); font-weight:bold; margin: 10px 0;">$46.800 ARS</p>
+                                        <button onclick="window.pagarMP()" class="btn" style="width:100%; background: #009ee3;">Pagar con Mercado Pago</button>
+                                    </div>
+                                    <div style="border: 1px solid #eee; padding: 20px; border-radius: 8px;">
+                                        <h4>🌍 Internacional</h4>
+                                        <p id="price-display-usd" style="font-size: 1.5rem; color: var(--color-acento); font-weight:bold; margin: 10px 0;">$39 USD</p>
+                                        <button onclick="window.pagarPayPal()" class="btn" style="width:100%; background: #ffc439; color: #003087;">Pagar con PayPal</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     `;
+                    
+                    // Lógica Select
+                    document.getElementById('plan-selector').addEventListener('change', (e) => {
+                        const opt = e.target.options[e.target.selectedIndex];
+                        document.getElementById('price-display-ars').textContent = `$${new Intl.NumberFormat('es-AR').format(opt.getAttribute('data-ars'))} ARS`;
+                        document.getElementById('price-display-usd').textContent = `$${opt.getAttribute('data-usd')} USD`;
+                    });
                 }
             } catch (error) { showMessage('video-message', 'Error de conexión.', 'error'); }
         });
@@ -249,11 +263,13 @@
 
         window.pagarMP = async () => {
             const token = getAuthToken();
-            try { const res = await postData('crear-pago', {}, token); const data = await res.json(); if (data.init_point) window.location.href = data.init_point; } catch (e) { alert('Error MP'); }
+            const planId = document.getElementById('plan-selector').value;
+            try { const res = await postData('crear-pago', { planId }, token); const data = await res.json(); if (data.init_point) window.location.href = data.init_point; } catch (e) { alert('Error MP'); }
         };
         window.pagarPayPal = async () => {
             const token = getAuthToken();
-            try { const res = await postData('crear-pago-paypal', {}, token); const data = await res.json(); const link = data.links.find(l => l.rel === 'approve'); if (link) window.location.href = link.href; } catch (e) { alert('Error PayPal'); }
+            const planId = document.getElementById('plan-selector').value;
+            try { const res = await postData('crear-pago-paypal', { planId }, token); const data = await res.json(); const link = data.links.find(l => l.rel === 'approve'); if (link) window.location.href = link.href; } catch (e) { alert('Error PayPal'); }
         };
         window.mostrarClasesVivo = async () => {
              const token = getAuthToken();
