@@ -10,12 +10,8 @@
         .admin-header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
         
         /* Buscador */
-        .search-box {
-            position: relative; width: 300px;
-        }
-        .search-box input {
-            width: 100%; padding: 10px 15px 10px 40px; border-radius: 20px; border: 1px solid #ccc; outline: none;
-        }
+        .search-box { position: relative; width: 300px; }
+        .search-box input { width: 100%; padding: 10px 15px 10px 40px; border-radius: 20px; border: 1px solid #ccc; outline: none; }
         .search-icon { position: absolute; left: 15px; top: 10px; color: #888; }
 
         .admin-section { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 40px; }
@@ -34,14 +30,13 @@
         .stat-card h4 { color: white; margin-bottom: 5px; font-size: 2rem; }
         .stat-card p { margin: 0; opacity: 0.9; font-size: 0.9rem; }
 
-        /* Botones de Acción */
         .btn-action { padding: 5px 10px; font-size: 0.8rem; border-radius: 4px; text-decoration: none; display: inline-block; margin-right: 5px; cursor: pointer; border: none; }
         .btn-contact { background-color: #333; color: white; }
         .btn-activate { background-color: #28a745; color: white; }
         .btn-contact:hover { background-color: #555; }
         .btn-activate:hover { background-color: #218838; }
 
-        /* Gráficos Simples (Barras) */
+        /* Gráficos Simples */
         .distribution-bar { display: flex; height: 10px; border-radius: 5px; overflow: hidden; margin-top: 10px; background: #eee; }
         .bar-segment { height: 100%; }
         .legend { display: flex; gap: 15px; font-size: 0.8rem; margin-top: 5px; color: #666; }
@@ -65,10 +60,7 @@
     <div class="main-content admin-container">
         
         <div class="admin-header-row">
-            <div>
-                <h2>Bienvenida, Sofía</h2>
-                <p>Centro de Control</p>
-            </div>
+            <div><h2>Bienvenida, Sofía</h2><p>Centro de Control</p></div>
             <div class="search-box">
                 <span class="search-icon">🔍</span>
                 <input type="text" id="search-input" placeholder="Buscar alumno o email...">
@@ -87,9 +79,9 @@
                     <div id="bar-secundaria" class="bar-segment" style="width: 0%; background: #5f27cd;"></div>
                 </div>
                 <div class="legend" style="justify-content: center;">
-                    <span><span class="dot" style="background: #FF9F43;"></span>K</span>
-                    <span><span class="dot" style="background: #54a0ff;"></span>P</span>
-                    <span><span class="dot" style="background: #5f27cd;"></span>S</span>
+                    <span><span class="dot" style="background: #FF9F43;"></span>Básico</span>
+                    <span><span class="dot" style="background: #54a0ff;"></span>Plus</span>
+                    <span><span class="dot" style="background: #5f27cd;"></span>Completo</span>
                 </div>
             </div>
             <div class="stat-card" style="background-color: var(--color-acento);">
@@ -98,7 +90,7 @@
             </div>
             <div class="stat-card" style="background-color: #10ac84;">
                 <h4 id="total-ingresos">$0</h4>
-                <p>Ingresos Estimados</p>
+                <p>Ingresos Estimados (Mensual)</p>
             </div>
         </div>
 
@@ -106,9 +98,7 @@
             <h3>🎓 Alumnos Matriculados</h3>
             <div class="table-responsive">
                 <table id="tabla-alumnos">
-                    <thead>
-                        <tr><th>ID</th><th>Nombre</th><th>Email</th><th>Plan</th><th>Estado</th></tr>
-                    </thead>
+                    <thead><tr><th>ID</th><th>Nombre</th><th>Email</th><th>Plan</th><th>Estado</th></tr></thead>
                     <tbody><tr><td colspan="5">Cargando...</td></tr></tbody>
                 </table>
             </div>
@@ -118,9 +108,7 @@
             <h3>⏳ Leads Pendientes <span style="font-size:0.8rem; font-weight:normal;">(Contactar o Activar Manualmente)</span></h3>
             <div class="table-responsive">
                 <table id="tabla-leads">
-                    <thead>
-                        <tr><th>Nombre</th><th>Email</th><th>Fecha</th><th>Acciones</th></tr>
-                    </thead>
+                    <thead><tr><th>Nombre</th><th>Email</th><th>Fecha</th><th>Acciones</th></tr></thead>
                     <tbody><tr><td colspan="4">Cargando...</td></tr></tbody>
                 </table>
             </div>
@@ -171,18 +159,15 @@
 
             async function loadAdminData() {
                 try {
-                    // Alumnos
                     const resAlumnos = await getData('admin/usuarios-activos', token);
                     if (resAlumnos.status === 403) { document.body.innerHTML = '<h1>⛔ Acceso Denegado</h1>'; return; }
                     const dataAlumnos = await resAlumnos.json();
                     globalAlumnos = dataAlumnos.alumnos || [];
                     
-                    // Leads
                     const resLeads = await getData('admin/leads-pendientes', token);
                     const dataLeads = await resLeads.json();
                     globalLeads = dataLeads.leads || [];
 
-                    // Render Inicial
                     renderAlumnos(globalAlumnos);
                     renderLeads(globalLeads);
                     updateStats();
@@ -190,13 +175,10 @@
                 } catch (error) { showMessage('admin-message', 'Error al cargar datos.', 'error'); }
             }
 
-            // BUSCADOR EN TIEMPO REAL
             document.getElementById('search-input').addEventListener('keyup', (e) => {
                 const term = e.target.value.toLowerCase();
-                
                 const filteredAlumnos = globalAlumnos.filter(u => u.nombre.toLowerCase().includes(term) || u.email.toLowerCase().includes(term));
                 renderAlumnos(filteredAlumnos);
-
                 const filteredLeads = globalLeads.filter(u => u.nombre.toLowerCase().includes(term) || u.email.toLowerCase().includes(term));
                 renderLeads(filteredLeads);
             });
@@ -206,20 +188,19 @@
                 document.getElementById('total-alumnos').textContent = total;
                 document.getElementById('total-leads').textContent = globalLeads.length;
                 
-                // Estimación de ingresos (Ejemplo $50k promedio)
-                document.getElementById('total-ingresos').textContent = `$${(total * 50000).toLocaleString()}`;
-
-                // Gráfico simple de distribución (Ejemplo básico por texto de plan)
-                // En producción deberías tener un campo 'nivel' en BD, aquí inferimos por texto
-                // Para demo, ponemos valores fijos visuales o calculados si el plan contiene palabras clave
-                const kinder = globalAlumnos.filter(u => u.plan_adquirido && u.plan_adquirido.toLowerCase().includes('básico')).length;
-                const otros = total - kinder;
+                // Estimación visual de distribución
+                const basico = globalAlumnos.filter(u => u.plan_adquirido && u.plan_adquirido.toLowerCase().includes('básico')).length;
+                const plus = globalAlumnos.filter(u => u.plan_adquirido && u.plan_adquirido.toLowerCase().includes('plus')).length;
+                const otros = total - basico - plus;
                 
-                // Ajustar anchos de barra (Solo visual)
                 if(total > 0) {
-                    document.getElementById('bar-kinder').style.width = `${(kinder/total)*100}%`;
-                    document.getElementById('bar-primaria').style.width = `${(otros/total)*100}%`;
+                    document.getElementById('bar-kinder').style.width = `${(basico/total)*100}%`;
+                    document.getElementById('bar-primaria').style.width = `${(plus/total)*100}%`;
+                    document.getElementById('bar-secundaria').style.width = `${(otros/total)*100}%`;
                 }
+                
+                // Ingresos estimados (suma simple basada en plan básico para no complicar JS)
+                document.getElementById('total-ingresos').textContent = `$${(total * 46800).toLocaleString()}`;
             }
 
             function renderAlumnos(lista) {
@@ -254,30 +235,21 @@
                 `}).join('');
             }
 
-            // FUNCIÓN GLOBAL PARA ACTIVACIÓN MANUAL
             window.activarManual = async (userId, nombre) => {
-                const plan = prompt(`¿Confirmas que ${nombre} pagó en efectivo/otro?\n\nEscribe el nombre del Plan (ej: Kinder, Primaria):`, "Plan Manual");
+                const plan = prompt(`¿Activar a ${nombre} manualmente?\n\nEscribe el plan (ej: Plan Básico):`, "Plan Manual");
                 if (plan) {
-                    if(confirm(`¿Seguro que quieres activar a ${nombre} con el plan: ${plan}?`)) {
+                    if(confirm(`¿Confirmar activación?`)) {
                         try {
-                            // Usamos fetch directo porque postData está encapsulado en modules y necesitamos pasar token aquí
                             const res = await fetch('https://tamar-backend-api-gqy9.onrender.com/api/admin/activar-manual', {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                                method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
                                 body: JSON.stringify({ userId, plan })
                             });
-                            if (res.ok) { 
-                                alert('¡Usuario Activado!'); 
-                                loadAdminData(); // Recargar tablas
-                            } else {
-                                alert('Error al activar.');
-                            }
+                            if (res.ok) { alert('¡Activado!'); loadAdminData(); } else { alert('Error.'); }
                         } catch(e) { alert('Error de conexión'); }
                     }
                 }
             };
 
-            // LOGICA DE FORMULARIOS (Clase y Pass)
             document.getElementById('form-clase').addEventListener('submit', async (e) => {
                 e.preventDefault();
                 const data = {
@@ -288,7 +260,7 @@
                     hora: document.getElementById('clase-hora').value,
                     link_zoom: document.getElementById('clase-zoom').value,
                     link_recursos: document.getElementById('clase-recursos').value,
-                    descripcion: document.getElementById('clase-desc').value
+                    descripcion: 'Clase en vivo'
                 };
                 const res = await fetch('https://tamar-backend-api-gqy9.onrender.com/api/admin/nueva-clase', {
                     method: 'POST', headers: {'Content-Type':'application/json', 'Authorization': `Bearer ${token}`}, body: JSON.stringify(data)
