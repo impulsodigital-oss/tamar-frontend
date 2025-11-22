@@ -63,8 +63,8 @@
             <h3>🎓 Alumnos Matriculados</h3>
             <div class="table-responsive">
                 <table id="tabla-alumnos">
-                    <thead><tr><th>ID</th><th>Nombre</th><th>Email</th><th>Plan</th><th>Estado</th></tr></thead>
-                    <tbody><tr><td colspan="5">Cargando...</td></tr></tbody>
+                    <thead><tr><th>ID</th><th>Nombre</th><th>Email</th><th>Plan</th><th>Estado</th><th>Acciones</th></tr></thead>
+                    <tbody><tr><td colspan="6">Cargando...</td></tr></tbody>
                 </table>
             </div>
         </div>
@@ -131,6 +131,12 @@
         </div>
     </div>
 
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Tamar. Panel de Uso Interno.</p>
+        </div>
+    </footer>
+
     <script type="module" src="js/api.js"></script>
     <script type="module" src="js/main.js"></script>
     <script type="module">
@@ -145,44 +151,63 @@
 
             async function loadAdminData() {
                 try {
-                    // Alumnos
                     const resAlumnos = await getData('admin/usuarios-activos', token);
                     if (resAlumnos.status === 403) { document.body.innerHTML = '<h1>⛔ Acceso Denegado</h1>'; return; }
                     const dataAlumnos = await resAlumnos.json();
                     globalAlumnos = dataAlumnos.alumnos || [];
                     renderAlumnos(globalAlumnos);
 
-                    // Leads
                     const resLeads = await getData('admin/leads-pendientes', token);
                     const dataLeads = await resLeads.json();
                     globalLeads = dataLeads.leads || [];
                     renderLeads(globalLeads);
 
-                    // Stats
                     document.getElementById('total-alumnos').textContent = globalAlumnos.length;
                     document.getElementById('total-leads').textContent = globalLeads.length;
                     document.getElementById('total-ingresos').textContent = `$${(globalAlumnos.length * 46800).toLocaleString()}`;
-
-                    // Cargar Videos
+                    
                     loadVideosLibrary();
 
-                } catch (error) { showMessage('admin-message', 'Error de conexión.', 'error'); }
+                } catch (error) { showMessage('admin-message', 'Error al cargar panel.', 'error'); }
             }
 
             // Render Functions
             function renderAlumnos(lista) {
                 const tbody = document.querySelector('#tabla-alumnos tbody');
-                tbody.innerHTML = lista.length ? lista.map(u => `<tr><td>#${u.id}</td><td><strong>${u.nombre}</strong></td><td>${u.email}</td><td style="color:var(--color-acento); font-weight:bold;">${u.plan_adquirido || '-'}</td><td><span class="badge-pago">Activo</span></td></tr>`).join('') : '<tr><td colspan="5">Sin alumnos.</td></tr>';
+                const colSpan = 6; // Incluye la columna de Acciones
+                if (lista.length === 0) { tbody.innerHTML = `<tr><td colspan="${colSpan}">Sin alumnos.</td></tr>`; return; }
+                tbody.innerHTML = lista.map(u => `
+                    <tr>
+                        <td>#${u.id}</td>
+                        <td><strong>${u.nombre}</strong></td>
+                        <td>${u.email}</td>
+                        <td style="color:var(--color-acento); font-weight:bold;">${u.plan_adquirido || '-'}</td>
+                        <td><span class="badge-pago">Activo</span></td>
+                        <td>
+                             <button class="btn-action btn-delete" style="background:red;" onclick="window.eliminarUsuario(${u.id}, '${u.nombre}')">🗑️</button>
+                        </td>
+                    </tr>
+                `).join('');
             }
 
             function renderLeads(lista) {
                 const tbody = document.querySelector('#tabla-leads tbody');
-                tbody.innerHTML = lista.length ? lista.map(u => {
+                if (lista.length === 0) { tbody.innerHTML = '<tr><td colspan="4">Sin leads.</td></tr>'; return; }
+                tbody.innerHTML = lista.map(u => {
                     const mailLink = `mailto:${u.email}?subject=Hola ${u.nombre} - Escuela Tamar&body=Hola...`;
-                    return `<tr><td><strong>${u.nombre}</strong></td><td>${u.email}</td><td>${u.fecha_registro ? new Date(u.fecha_registro).toLocaleDateString() : '-'}</td><td><a href="${mailLink}" class="btn-action btn-contact">📩</a> <button class="btn-action btn-activate" onclick="window.activarManual(${u.id}, '${u.nombre}')">✅</button></td></tr>`;
-                }).join('') : '<tr><td colspan="4">Sin leads.</td></tr>';
+                    return `
+                    <tr>
+                        <td><strong>${u.nombre}</strong></td><td>${u.email}</td>
+                        <td>${u.fecha_registro ? new Date(u.fecha_registro).toLocaleDateString() : '-'}</td>
+                        <td>
+                            <a href="${mailLink}" class="btn-action btn-contact">📩</a> 
+                            <button class="btn-action btn-activate" onclick="window.activarManual(${u.id}, '${u.nombre}')">✅</button>
+                            <button class="btn-action btn-delete" style="background:red;" onclick="window.eliminarUsuario(${u.id}, '${u.nombre}')">🗑️</button>
+                        </td>
+                    </tr>
+                `}).join('');
             }
-
+            
             // --- GESTIÓN DE VIDEOS ---
             async function loadVideosLibrary() {
                 try {
@@ -195,27 +220,7 @@
                 } catch (e) { console.error(e); }
             }
 
-            document.getElementById('form-video').addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const data = {
-                    titulo: document.getElementById('vid-titulo').value, corto: document.getElementById('vid-corto').value,
-                    modulo: document.getElementById('vid-modulo').value, orden: document.getElementById('vid-orden').value,
-                    url: document.getElementById('vid-url').value, desc: document.getElementById('vid-desc').value
-                };
-                if(confirm('¿Agregar video?')) {
-                    const res = await fetch('https://tamar-backend-api-gqy9.onrender.com/api/admin/videos', { method: 'POST', headers: {'Content-Type':'application/json', 'Authorization': `Bearer ${token}`}, body: JSON.stringify(data) });
-                    if(res.ok) { alert('Video agregado.'); document.getElementById('form-video').reset(); loadVideosLibrary(); }
-                }
-            });
-
-            window.deleteVideo = async (id) => {
-                if(confirm('¿Borrar video?')) {
-                    const res = await fetch(`https://tamar-backend-api-gqy9.onrender.com/api/admin/videos/${id}`, { method: 'DELETE', headers: {'Authorization': `Bearer ${token}`} });
-                    if(res.ok) loadVideosLibrary();
-                }
-            };
-
-            // --- OTRAS FUNCIONES ---
+            // --- FUNCIONES GLOBALES ---
             window.activarManual = async (userId, nombre) => {
                 const plan = prompt(`¿Activar a ${nombre}? Escribe el Plan:`, "Plan Manual");
                 if (plan && confirm('¿Confirmar?')) {
@@ -224,6 +229,31 @@
                 }
             };
 
+            window.eliminarUsuario = async (id, nombre) => {
+                if(confirm(`⚠️ ¿Estás SEGURA de eliminar a ${nombre}? Se borrará su acceso, progreso y datos.`)) {
+                    try {
+                        const res = await fetch(`https://tamar-backend-api-gqy9.onrender.com/api/admin/usuarios/${id}`, { method: 'DELETE', headers: {'Authorization': `Bearer ${token}`} });
+                        if(res.ok) { alert('Usuario eliminado.'); loadAdminData(); }
+                    } catch (error) { alert('Error al eliminar.'); }
+                }
+            };
+            
+            window.deleteVideo = async (id) => {
+                if(confirm('¿Borrar video?')) {
+                    const res = await fetch(`https://tamar-backend-api-gqy9.onrender.com/api/admin/videos/${id}`, { method: 'DELETE', headers: {'Authorization': `Bearer ${token}`} });
+                    if(res.ok) loadVideosLibrary();
+                }
+            };
+
+            document.getElementById('form-video').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const data = { titulo: document.getElementById('vid-titulo').value, corto: document.getElementById('vid-corto').value, modulo: document.getElementById('vid-modulo').value, orden: document.getElementById('vid-orden').value, url: document.getElementById('vid-url').value, desc: document.getElementById('vid-desc').value };
+                if(confirm('¿Agregar video?')) {
+                    const res = await fetch('https://tamar-backend-api-gqy9.onrender.com/api/admin/videos', { method: 'POST', headers: {'Content-Type':'application/json', 'Authorization': `Bearer ${token}`}, body: JSON.stringify(data) });
+                    if(res.ok) { alert('Video agregado.'); document.getElementById('form-video').reset(); loadVideosLibrary(); }
+                }
+            });
+            
             document.getElementById('form-clase').addEventListener('submit', async (e) => {
                 e.preventDefault();
                 const data = { titulo: document.getElementById('clase-titulo').value, materia: document.getElementById('clase-materia').value, profesor: document.getElementById('clase-profesor').value, fecha: document.getElementById('clase-fecha').value, hora: document.getElementById('clase-hora').value, link_zoom: document.getElementById('clase-zoom').value, link_recursos: document.getElementById('clase-recursos').value, descripcion: 'Clase' };
