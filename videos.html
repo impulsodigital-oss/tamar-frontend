@@ -4,80 +4,52 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aula Virtual - Tamar</title>
-    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
-    
     <link rel="stylesheet" href="CSS/style.css">
     
     <style>
         body { background-color: #f4f6f9; font-family: 'Lato', sans-serif; }
         
-        /* Layout Principal */
         .classroom-container { display: grid; grid-template-columns: 320px 1fr; gap: 0; min-height: calc(100vh - 80px); }
-        
-        /* Sidebar (Lista de Videos) */
         .course-sidebar { background: white; border-right: 1px solid #e0e0e0; height: calc(100vh - 80px); overflow-y: auto; position: sticky; top: 80px; }
         .sidebar-header { padding: 25px; background: var(--color-azul-profundo); color: white; }
-        .sidebar-header h4 { margin: 0 0 10px 0; font-family: 'Playfair Display', serif; }
-        
-        /* Barra de Progreso */
         .progress-container { margin-top: 15px; }
         .progress-bar-bg { background: rgba(255,255,255,0.2); height: 8px; border-radius: 4px; overflow: hidden; }
-        .progress-bar-fill { background: var(--color-acento); height: 100%; width: 0%; transition: width 0.6s ease; box-shadow: 0 0 10px rgba(239, 184, 16, 0.5); }
+        .progress-bar-fill { background: var(--color-acento); height: 100%; width: 0%; transition: width 0.6s ease; }
         .progress-text { font-size: 0.85rem; margin-top: 8px; display: flex; justify-content: space-between; font-weight: bold; color: rgba(255,255,255,0.9); }
         
-        /* Lista de Lecciones */
         .lesson-list { list-style: none; padding: 0; margin: 0; }
         .lesson-item { border-bottom: 1px solid #f0f0f0; cursor: pointer; transition: all 0.2s; padding: 18px 25px; display: flex; align-items: flex-start; gap: 12px; }
-        .lesson-item:hover { background-color: #f8f9fa; transform: translateX(5px); }
+        .lesson-item:hover { background-color: #f8f9fa; }
         .lesson-item.active { background-color: #eef1f4; border-left: 5px solid var(--color-acento); }
         .lesson-item.completed .lesson-title { color: #888; text-decoration: line-through; }
-        
-        .check-icon { width: 22px; height: 22px; border: 2px solid #ccc; border-radius: 50%; flex-shrink: 0; margin-top: 2px; display: flex; align-items: center; justify-content: center; font-size: 12px; color: transparent; transition: all 0.3s; }
-        .lesson-item.completed .check-icon { background-color: #27ae60; border-color: #27ae60; color: white; transform: scale(1.1); }
-        
-        .lesson-title { font-size: 0.95rem; font-weight: 700; color: #2c3e50; margin-bottom: 4px; display: block; line-height: 1.4; }
-        .lesson-meta { font-size: 0.8rem; color: #7f8c8d; text-transform: uppercase; letter-spacing: 0.5px; }
+        .check-icon { width: 22px; height: 22px; border: 2px solid #ccc; border-radius: 50%; flex-shrink: 0; margin-top: 2px; display: flex; align-items: center; justify-content: center; font-size: 12px; color: transparent; }
+        .lesson-item.completed .check-icon { background-color: #27ae60; border-color: #27ae60; color: white; }
+        .lesson-title { font-size: 0.95rem; font-weight: 700; color: #2c3e50; margin-bottom: 4px; display: block; }
+        .lesson-meta { font-size: 0.8rem; color: #7f8c8d; text-transform: uppercase; }
 
-        /* Área Principal de Contenido */
         .course-content { padding: 40px 60px; max-width: 1200px; margin: 0 auto; }
 
-        /* TARJETA PRÓXIMA CLASE (Nuevo Diseño Premium) */
-        .next-class-card {
+        /* HUB DE ACCESO (CLASES EN VIVO) */
+        .hub-card {
             background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
-            border-radius: 15px;
-            padding: 25px;
-            color: white;
-            margin-bottom: 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            border-radius: 15px; padding: 25px; color: white; margin-bottom: 40px;
+            display: flex; justify-content: space-between; align-items: center;
             box-shadow: 0 10px 25px rgba(52, 152, 219, 0.3);
-            position: relative;
-            overflow: hidden;
         }
-        .next-class-card::before {
-            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
-            pointer-events: none;
-        }
-        .nc-info h3 { margin: 0 0 5px 0; font-size: 1.5rem; font-family: 'Playfair Display', serif; }
-        .nc-meta { font-size: 1rem; opacity: 0.9; margin-bottom: 15px; display: flex; gap: 15px; align-items: center; }
-        .nc-badge { background: rgba(255,255,255,0.2); padding: 4px 10px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; }
-        
-        .nc-actions { display: flex; gap: 10px; z-index: 2; }
-        .btn-zoom-main { background: var(--color-acento); color: var(--color-azul-profundo); border: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; text-decoration: none; display: flex; align-items: center; gap: 8px; transition: transform 0.2s; }
-        .btn-zoom-main:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
-        .btn-material-main { background: rgba(255,255,255,0.15); color: white; border: 1px solid rgba(255,255,255,0.5); padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; text-decoration: none; display: flex; align-items: center; gap: 8px; transition: background 0.2s; }
-        .btn-material-main:hover { background: rgba(255,255,255,0.3); }
+        .hub-info h3 { margin: 0 0 5px 0; font-size: 1.5rem; font-family: 'Playfair Display', serif; }
+        .hub-info p { margin: 0; opacity: 0.9; font-size: 1rem; }
+        .hub-actions { display: flex; gap: 10px; }
+        .btn-hub { background: var(--color-acento); color: var(--color-azul-profundo); border: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; text-decoration: none; display: flex; align-items: center; gap: 8px; transition: transform 0.2s; }
+        .btn-hub:hover { transform: translateY(-3px); }
+        .btn-hub-sec { background: rgba(255,255,255,0.2); color: white; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: bold; border: 1px solid rgba(255,255,255,0.4); }
 
-        /* Reproductor de Video */
+        /* VIDEO Y TABS */
         .video-wrapper { position: relative; padding-bottom: 56.25%; height: 0; background: black; border-radius: 12px; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.2); margin-bottom: 30px; }
         .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
         
-        /* Pestañas (Tabs) debajo del video */
         .tabs-container { background: white; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); padding: 25px; }
         .tabs-header { display: flex; border-bottom: 2px solid #f0f0f0; margin-bottom: 20px; }
         .tab-btn { background: none; border: none; padding: 10px 20px; font-size: 1rem; font-weight: bold; color: #7f8c8d; cursor: pointer; position: relative; }
@@ -87,26 +59,20 @@
         .tab-content { display: none; animation: fadeIn 0.3s ease; }
         .tab-content.active { display: block; }
         
-        .action-bar { display: flex; justify-content: space-between; align-items: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; }
-        .btn-complete { background-color: #e0e0e0; color: #555; padding: 12px 25px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; transition: all 0.3s; }
-        .btn-complete:hover { background-color: #d0d0d0; }
+        .btn-complete { background-color: #e0e0e0; color: #555; padding: 12px 25px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; float: right; }
         .btn-complete.completed { background-color: #27ae60; color: white; }
 
-        /* Estilos de Plan de Pagos */
+        /* Planes */
         .plan-features { background-color: #f1f8ff; padding: 20px; border-radius: 8px; margin-bottom: 25px; border-left: 5px solid var(--color-acento); }
         .plan-features ul { margin: 10px 0 0 20px; padding: 0; }
         .plan-features li { margin-bottom: 8px; color: #555; }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
         @media (max-width: 900px) {
             .classroom-container { display: block; }
             .course-sidebar { position: relative; width: 100%; height: auto; top: 0; border-right: none; z-index: 100; }
             .course-content { padding: 20px; }
-            .next-class-card { flex-direction: column; text-align: center; gap: 20px; }
-            .nc-meta { justify-content: center; flex-wrap: wrap; }
-            .nc-actions { width: 100%; flex-direction: column; }
-            .btn-zoom-main, .btn-material-main { justify-content: center; }
+            .hub-card { flex-direction: column; text-align: center; gap: 20px; }
         }
     </style>
 </head>
@@ -117,7 +83,6 @@
             <nav class="nav">
                 <ul>
                     <li><a href="index.html">Inicio</a></li>
-                    <li><a href="#" id="btn-ver-calendario" style="color: var(--color-acento); font-weight: bold;">📅 Calendario Completo</a></li>
                     <li><a href="#" id="logout-btn">Cerrar Sesión</a></li>
                 </ul>
             </nav>
@@ -126,7 +91,7 @@
 
     <div id="loading-screen" style="text-align: center; padding: 100px;">
         <div style="font-size: 2rem; margin-bottom: 20px;">🎓</div>
-        <p>Preparando tu aula virtual...</p>
+        <p>Cargando plataforma...</p>
     </div>
 
     <div id="classroom-ui" class="classroom-container" style="display: none;">
@@ -135,7 +100,7 @@
                 <h4>Tu Progreso</h4>
                 <div class="progress-container">
                     <div class="progress-bar-bg"><div id="progress-fill" class="progress-bar-fill"></div></div>
-                    <div class="progress-text"><span id="progress-percent">0%</span><span id="progress-count">0/0 Lecciones</span></div>
+                    <div class="progress-text"><span id="progress-percent">0%</span><span id="progress-count">0/0</span></div>
                 </div>
             </div>
             <ul id="lesson-list-ul" class="lesson-list"></ul>
@@ -143,7 +108,16 @@
 
         <main class="course-content">
             
-            <div id="next-class-widget" style="display: none;"></div>
+            <div class="hub-card">
+                <div class="hub-info">
+                    <h3>🔴 Aula Virtual en Vivo</h3>
+                    <p>Acceso directo a tus clases con profesores.</p>
+                </div>
+                <div class="hub-actions">
+                    <a href="#" id="btn-zoom-fixed" target="_blank" class="btn-hub">🎥 Entrar a Clase</a>
+                    <a href="#" class="btn-hub-sec" onclick="alert('Los horarios se envían al grupo de WhatsApp.')">📅 Ver Horarios</a>
+                </div>
+            </div>
 
             <div id="video-area">
                 <div class="video-wrapper"><iframe id="main-video-frame" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe></div>
@@ -156,45 +130,32 @@
                     </div>
 
                     <div id="tab-desc" class="tab-content active">
-                        <h2 id="main-video-title" style="margin-top: 0; color: var(--color-azul-profundo);">Selecciona una lección</h2>
-                        <p id="main-video-desc" style="color: #555; line-height: 1.6;">...</p>
-                        
-                        <div class="action-bar">
-                            <button id="btn-mark-complete" class="btn-complete">Marcar como Vista</button>
-                            <button id="btn-next-lesson" class="btn" style="display:none; background: var(--color-azul-profundo);">Siguiente Lección →</button>
+                        <div style="overflow: hidden;"> <button id="btn-mark-complete" class="btn-complete">Marcar como Vista</button>
+                            <button id="btn-next-lesson" class="btn-complete" style="float:left; display:none; background:var(--color-azul-profundo); color:white; margin-right:10px;">Siguiente →</button>
                         </div>
+                        <h2 id="main-video-title" style="margin-top: 15px; color: var(--color-azul-profundo);">...</h2>
+                        <p id="main-video-desc" style="color: #555; line-height: 1.6;">...</p>
                     </div>
 
                     <div id="tab-resources" class="tab-content">
-                        <h3>Materiales de la Clase</h3>
-                        <p>Aquí encontrarás los recursos adicionales para esta lección.</p>
-                        <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; border: 1px dashed #ccc; text-align: center; margin-top: 15px;">
-                            <p style="color: #666;">No hay archivos adjuntos específicos para este video grabado.</p>
-                            <p style="font-size: 0.9rem;">Recuerda revisar la sección de <strong>Clases en Vivo</strong> arriba para descargar los materiales de la semana.</p>
-                        </div>
+                        <h3>Materiales de esta Lección</h3>
+                        <p>Recursos seleccionados para trabajar este tema:</p>
+                        <div id="resources-container" style="margin-top: 20px;">
+                            </div>
                     </div>
 
                     <div id="tab-support" class="tab-content">
-                        <h3>¿Necesitas ayuda?</h3>
-                        <p>La comunidad Tamar está para apoyarte.</p>
+                        <h3>¿Dudas sobre este tema?</h3>
+                        <p>Contacta a tu tutor o soporte técnico.</p>
                         <div style="display: flex; gap: 15px; margin-top: 20px;">
-                            <a href="https://wa.me/5493412757827" target="_blank" class="btn" style="background: #25D366; display: flex; align-items: center; gap: 8px;">📱 Contactar Tutor</a>
-                            <a href="mailto:educaciontamar@gmail.com" class="btn" style="background: #333; display: flex; align-items: center; gap: 8px;">📧 Soporte Técnico</a>
+                            <a href="https://wa.me/5493412757827" target="_blank" class="btn-hub" style="background: #25D366;">📱 WhatsApp Profesores</a>
+                            <a href="mailto:educaciontamar@gmail.com" class="btn-hub" style="background: #333;">📧 Soporte Técnico</a>
                         </div>
                     </div>
                 </div>
             </div>
-            
             <div id="video-message" class="message" style="display:none;"></div>
         </main>
-    </div>
-
-    <div id="live-modal" class="modal-overlay">
-        <div class="modal-content">
-            <span class="close-modal" onclick="document.getElementById('live-modal').style.display='none'">&times;</span>
-            <h2 style="color: var(--color-azul-profundo); border-bottom: 2px solid #eee; padding-bottom: 15px; margin-bottom: 20px;">📅 Calendario Completo</h2>
-            <div id="live-classes-list"><p>Cargando clases...</p></div>
-        </div>
     </div>
 
     <footer><div class="container"><p>&copy; 2024 Tamar. Plataforma Educativa.</p></div></footer>
@@ -205,7 +166,6 @@
         import { getData, postData, getAuthToken } from './js/api.js';
         import { showMessage } from './js/main.js';
 
-        // --- DATOS DE PLANES ---
         const PLAN_DETAILS = {
             'basico': { features: ['Acceso a videos cortos', 'Comunidad en línea', 'Grupo de estudio', 'Clases de ARTE gratis', 'Asesoramiento carpeta', 'Descuento SKEPSI'] },
             'core': { features: ['Todo lo del Plan Básico', '3 Clases grupales mensuales', 'Elección de 3 docentes', 'Comunidad con docentes', 'Descuento clases extras'] },
@@ -218,20 +178,13 @@
         let allVideos = [];
         let currentVideoIndex = 0;
 
-        // --- CORRECCIÓN CLAVE: Función Global para Tabs Segura ---
+        // --- TABS LOGIC ---
         window.switchTab = (tabName) => {
-            // 1. Ocultar todos los contenidos
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-            // 2. Desactivar todos los botones
             document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
-            
-            // 3. Activar el contenido deseado
-            const content = document.getElementById(`tab-${tabName}`);
-            if (content) content.classList.add('active');
-            
-            // 4. Activar el botón correspondiente (POR ID, no por event.target)
+            document.getElementById(`tab-${tabName}`).classList.add('active');
             const btn = document.getElementById(`btn-tab-${tabName}`);
-            if (btn) btn.classList.add('active');
+            if(btn) btn.classList.add('active');
         };
 
         document.addEventListener('DOMContentLoaded', async () => {
@@ -241,33 +194,24 @@
             document.getElementById('logout-btn').addEventListener('click', (e) => {
                 e.preventDefault(); localStorage.removeItem('token'); window.location.href = 'index.html';
             });
-            
-            document.getElementById('btn-ver-calendario').addEventListener('click', (e) => {
-                e.preventDefault(); window.mostrarCalendarioCompleto();
-            });
 
-            // Lógica de Pagos (MP/PayPal)
+            // Pagos (Igual que antes)
             const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.get('status') === 'success') {
-                showMessage('video-message', '¡Pago exitoso! Activando...', 'success');
+                showMessage('video-message', '¡Pago exitoso!', 'success');
                 setTimeout(() => window.location.href = 'videos.html', 3000);
             }
             if (urlParams.get('status') === 'paypal_success' && urlParams.get('token')) {
-                try {
-                    const response = await postData('capturar-pago-paypal', { orderID: urlParams.get('token'), planId: urlParams.get('plan') }, token);
-                    if(response.ok) setTimeout(() => window.location.href = 'videos.html', 3000);
-                } catch(e) { console.error(e); }
+                try { await postData('capturar-pago-paypal', { orderID: urlParams.get('token'), planId: urlParams.get('plan') }, token); setTimeout(() => window.location.href = 'videos.html', 3000); } catch(e) {}
             }
 
-            // CARGAR DATOS
+            // CARGAR CONTENIDO
             try {
-                // 1. Cargar Videos Grabados
                 const response = await getData('videos', token);
                 const data = await response.json();
                 document.getElementById('loading-screen').style.display = 'none';
 
                 if (response.ok) {
-                    // ALUMNO ACTIVO
                     if (data.videos && data.videos.length > 0) {
                         allVideos = data.videos;
                         document.getElementById('classroom-ui').style.display = 'grid';
@@ -275,24 +219,18 @@
                         const firstUnwatched = allVideos.findIndex(v => !v.completado);
                         loadVideo(firstUnwatched !== -1 ? firstUnwatched : 0);
                         
-                        // 2. Cargar Próxima Clase en Vivo (WIDGET PREMIUM)
-                        loadNextClassWidget(token);
-
+                        // CARGAR LINK FIJO (Del último evento creado por Sofía)
+                        loadFixedZoomLink(token);
                     } else {
                         document.getElementById('classroom-ui').style.display = 'grid';
                         document.querySelector('.course-content').innerHTML = '<div style="padding:50px; text-align:center;"><h3>¡Bienvenido!</h3><p>Aún no hay lecciones publicadas.</p></div>';
                     }
                 } else if (response.status === 403 && data.requierePago) {
-                    // NUEVO ALUMNO (Bloque de Pago)
                     renderPaymentWall();
                 }
-            } catch (error) { 
-                console.error(error);
-                showMessage('video-message', 'Error de conexión.', 'error'); 
-            }
+            } catch (error) { showMessage('video-message', 'Error de conexión.', 'error'); }
         });
 
-        // --- LÓGICA DE VIDEOS ---
         function renderSidebar(videos) {
             const ul = document.getElementById('lesson-list-ul');
             ul.innerHTML = videos.map((video, index) => `
@@ -313,9 +251,34 @@
             if(url.includes('watch?v=')) url = url.replace('watch?v=', 'embed/');
             document.getElementById('main-video-frame').src = url;
             document.getElementById('main-video-title').textContent = video.titulo_completo;
-            document.getElementById('main-video-desc').textContent = video.descripcion || '';
             
-            // Reset Tabs (Llamada segura ahora)
+            // --- LÓGICA INTELIGENTE DE RECURSOS ---
+            // Extraemos el link de la descripción si existe
+            const desc = video.descripcion || '';
+            // Regex simple para encontrar URLs
+            const urlRegex = /(https?:\/\/[^\s]+)/g;
+            const links = desc.match(urlRegex);
+            
+            // Limpiamos la descripción de links feos para mostrar texto limpio
+            const cleanDesc = desc.replace(urlRegex, '').trim() || 'Sin descripción adicional.';
+            document.getElementById('main-video-desc').textContent = cleanDesc;
+
+            const resContainer = document.getElementById('resources-container');
+            if (links && links.length > 0) {
+                resContainer.innerHTML = links.map(link => `
+                    <a href="${link}" target="_blank" class="btn-hub" style="background: #fff; color: #333; border: 1px solid #ccc; margin-bottom: 10px; justify-content: center;">
+                        📂 Descargar Material Adjunto
+                    </a>
+                `).join('');
+            } else {
+                resContainer.innerHTML = `
+                    <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; border: 1px dashed #ccc; text-align: center;">
+                        <p style="color: #666; margin:0;">No hay material específico adjunto.</p>
+                        <small>Consulta la carpeta general de tu grado.</small>
+                    </div>
+                `;
+            }
+
             switchTab('desc');
 
             const btnComplete = document.getElementById('btn-mark-complete');
@@ -334,45 +297,20 @@
             }
         };
 
-        // --- WIDGET PRÓXIMA CLASE ---
-        async function loadNextClassWidget(token) {
+        // --- BUSCA EL ÚLTIMO LINK DE ZOOM CARGADO ---
+        async function loadFixedZoomLink(token) {
             try {
                 const res = await getData('clases-en-vivo', token);
-                if (res.ok) {
-                    const data = await res.json();
-                    const now = new Date();
-                    const upcoming = data.clases
-                        .filter(c => new Date(c.fecha_hora) > now)
-                        .sort((a,b) => new Date(a.fecha_hora) - new Date(b.fecha_hora));
-                    
-                    if (upcoming.length > 0) {
-                        const next = upcoming[0];
-                        const dateObj = new Date(next.fecha_hora);
-                        const dateStr = dateObj.toLocaleDateString('es-AR', { weekday: 'long', day: 'numeric', month: 'long' });
-                        const timeStr = dateObj.toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' });
-                        
-                        const widget = document.getElementById('next-class-widget');
-                        widget.style.display = 'block';
-                        widget.innerHTML = `
-                            <div class="next-class-card">
-                                <div class="nc-info">
-                                    <h3>🚀 Próxima Clase en Vivo</h3>
-                                    <div class="nc-meta">
-                                        <span class="nc-badge">📅 ${dateStr}</span>
-                                        <span class="nc-badge">⏰ ${timeStr} HS</span>
-                                        <span class="nc-badge">👨‍🏫 ${next.profesor}</span>
-                                    </div>
-                                    <p style="margin:0; font-size: 1.1rem;">${next.titulo}</p>
-                                </div>
-                                <div class="nc-actions">
-                                    <a href="${next.link_zoom}" target="_blank" class="btn-zoom-main">🎥 Entrar al Zoom</a>
-                                    ${next.link_recursos ? `<a href="${next.link_recursos}" target="_blank" class="btn-material-main">📂 Descargar Materiales</a>` : ''}
-                                </div>
-                            </div>
-                        `;
+                const data = await res.json();
+                // Buscamos cualquier clase que tenga link, asumimos que es el fijo
+                if (data.clases && data.clases.length > 0) {
+                    // Tomamos el último link cargado
+                    const ultimo = data.clases[data.clases.length - 1]; 
+                    if (ultimo.link_zoom) {
+                        document.getElementById('btn-zoom-fixed').href = ultimo.link_zoom;
                     }
                 }
-            } catch (e) { console.error("Error cargando clases", e); }
+            } catch (e) { console.error(e); }
         }
 
         document.getElementById('btn-mark-complete').addEventListener('click', async () => {
@@ -380,20 +318,12 @@
             const originalText = btn.textContent;
             btn.textContent = 'Guardando...';
             btn.disabled = true;
-
-            const video = allVideos[currentVideoIndex];
-            const token = getAuthToken();
-            
             try {
-                const res = await postData('progreso', { videoId: video.id }, token);
+                const res = await postData('progreso', { videoId: allVideos[currentVideoIndex].id }, getAuthToken());
                 if (res.ok) { 
                     allVideos[currentVideoIndex].completado = true; 
                     renderSidebar(allVideos); 
                     loadVideo(currentVideoIndex); 
-                } else {
-                    btn.textContent = originalText;
-                    btn.disabled = false;
-                    alert('Error al guardar.');
                 }
             } catch (e) { btn.textContent = originalText; btn.disabled = false; }
         });
@@ -402,52 +332,27 @@
 
         function updateProgress(videos) {
             const completedCount = videos.filter(v => v.completado).length;
-            const total = videos.length;
-            const percent = total === 0 ? 0 : Math.round((completedCount / total) * 100);
+            const percent = Math.round((completedCount / videos.length) * 100);
             document.getElementById('progress-fill').style.width = `${percent}%`;
             document.getElementById('progress-percent').textContent = `${percent}%`;
-            document.getElementById('progress-count').textContent = `${completedCount}/${total} Lecciones`;
-        }
-
-        window.mostrarCalendarioCompleto = async () => {
-             const token = getAuthToken();
-             document.getElementById('live-modal').style.display = 'flex';
-             try {
-                 const res = await getData('clases-en-vivo', token);
-                 const data = await res.json();
-                 if(!data.clases || data.clases.length === 0) { document.getElementById('live-classes-list').innerHTML = '<p>No hay clases programadas.</p>'; return; }
-                 
-                 document.getElementById('live-classes-list').innerHTML = data.clases.map(c => `
-                    <div class="live-class-card" style="display:flex; gap:15px; border-bottom:1px solid #eee; padding:15px 0; align-items:center;">
-                        <div style="background:#eee; padding:10px; border-radius:8px; text-align:center; min-width:60px;">
-                            <strong>${new Date(c.fecha_hora).getDate()}</strong><br><small>${new Date(c.fecha_hora).toLocaleDateString('es-AR',{month:'short'})}</small>
-                        </div>
-                        <div style="flex-grow:1;">
-                            <h4 style="margin:0;">${c.titulo}</h4>
-                            <small>${c.materia} - ${c.profesor}</small>
-                        </div>
-                        <div>
-                            <a href="${c.link_zoom}" target="_blank" style="text-decoration:none; background:#2D8CFF; color:white; padding:5px 10px; border-radius:5px; font-size:0.8rem;">Zoom</a>
-                            ${c.link_recursos ? `<a href="${c.link_recursos}" target="_blank" style="text-decoration:none; background:#666; color:white; padding:5px 10px; border-radius:5px; font-size:0.8rem;">PDF</a>` : ''}
-                        </div>
-                    </div>
-                 `).join('');
-             } catch(e) { console.error(e); }
+            document.getElementById('progress-count').textContent = `${completedCount}/${videos.length}`;
         }
 
         function renderPaymentWall() {
             const container = document.getElementById('classroom-ui');
             container.style.display = 'block';
-            const sidebar = document.querySelector('.course-sidebar');
-            if(sidebar) sidebar.style.display = 'none';
-            const content = document.querySelector('.course-content');
-            content.style.marginLeft = '0'; content.style.maxWidth = '100%';
-
-            content.innerHTML = `
+            document.querySelector('.course-sidebar').style.display = 'none';
+            document.querySelector('.course-content').style.marginLeft = '0';
+            document.querySelector('.course-content').style.maxWidth = '100%';
+            
+            // (Aquí va el mismo HTML del Payment Wall que ya tenías)
+            // Para ahorrar espacio en el chat, asumo que ya lo tienes del mensaje anterior
+            // Si lo necesitas de nuevo, avísame. 
+            // IMPORTANTE: COPIA EL BLOQUE content.innerHTML = `...` DEL CÓDIGO ANTERIOR AQUÍ.
+             document.querySelector('.course-content').innerHTML = `
                 <div style="text-align: center; padding: 40px; max-width: 900px; margin: 0 auto;">
                     <h1 style="color: var(--color-azul-profundo); margin-bottom: 10px;">🔒 Inscripción a Tamar</h1>
                     <p style="font-size: 1.1rem; margin-bottom: 30px; color:#666;">Selecciona el plan educativo para ver sus beneficios.</p>
-                    
                     <div style="background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
                         <div style="margin-bottom: 20px; text-align: left;">
                             <label style="display:block; font-weight:bold; margin-bottom:10px; color: var(--color-azul-profundo);">Elige tu Plan:</label>
@@ -460,9 +365,7 @@
                                 <option value="certificacion" data-ars="240000" data-usd="200">Certificación Anual ($240.000 ARS / $200 USD)</option>
                             </select>
                         </div>
-                        <div id="plan-features-container" class="plan-features">
-                            <h4>✨ Incluye:</h4><ul id="features-list"></ul>
-                        </div>
+                        <div id="plan-features-container" class="plan-features"><h4>✨ Incluye:</h4><ul id="features-list"></ul></div>
                         <div style="display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
                             <div style="border: 1px solid #eee; padding: 20px; border-radius: 8px;">
                                 <h4>🇦🇷 Argentina</h4>
@@ -478,7 +381,6 @@
                     </div>
                 </div>
             `;
-            
             const updatePlanInfo = () => {
                 const selector = document.getElementById('plan-selector');
                 const opt = selector.options[selector.selectedIndex];
@@ -489,8 +391,7 @@
             };
             document.getElementById('plan-selector').addEventListener('change', updatePlanInfo);
             updatePlanInfo();
-
-            // Funciones globales de pago
+            
             window.pagarMP = async () => {
                 const token = getAuthToken();
                 const planId = document.getElementById('plan-selector').value;
