@@ -32,19 +32,59 @@
 
         .course-content { padding: 40px 60px; max-width: 1200px; margin: 0 auto; }
 
-        /* HUB DE ACCESO (CLASES EN VIVO) */
-        .hub-card {
-            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
-            border-radius: 15px; padding: 25px; color: white; margin-bottom: 40px;
-            display: flex; justify-content: space-between; align-items: center;
-            box-shadow: 0 10px 25px rgba(52, 152, 219, 0.3);
+        /* HUB DE AULAS (GRID DE TARJETAS) */
+        .hub-section { margin-bottom: 40px; }
+        .hub-title { font-family: 'Playfair Display', serif; color: var(--color-azul-profundo); font-size: 1.8rem; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+        
+        .hub-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); 
+            gap: 20px; 
         }
-        .hub-info h3 { margin: 0 0 5px 0; font-size: 1.5rem; font-family: 'Playfair Display', serif; }
-        .hub-info p { margin: 0; opacity: 0.9; font-size: 1rem; }
-        .hub-actions { display: flex; gap: 10px; }
-        .btn-hub { background: var(--color-acento); color: var(--color-azul-profundo); border: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; text-decoration: none; display: flex; align-items: center; gap: 8px; transition: transform 0.2s; }
-        .btn-hub:hover { transform: translateY(-3px); }
-        .btn-hub-sec { background: rgba(255,255,255,0.2); color: white; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: bold; border: 1px solid rgba(255,255,255,0.4); }
+        
+        .hub-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.2s, box-shadow 0.2s;
+            border-top: 4px solid var(--color-acento);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .hub-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        
+        .hub-card h4 { margin: 0 0 5px 0; font-size: 1.1rem; color: #2c3e50; }
+        .hub-card span { font-size: 0.85rem; color: #7f8c8d; margin-bottom: 15px; display: block; }
+        
+        .btn-zoom-card { 
+            background: var(--color-azul-profundo); 
+            color: white; 
+            text-decoration: none; 
+            padding: 10px; 
+            border-radius: 6px; 
+            text-align: center; 
+            font-weight: bold; 
+            font-size: 0.9rem; 
+            display: block;
+            transition: background 0.2s;
+        }
+        .btn-zoom-card:hover { background: #1a252f; }
+        
+        .btn-materials-card {
+            background: #f1f2f6;
+            color: #555;
+            text-decoration: none;
+            padding: 8px;
+            border-radius: 6px;
+            text-align: center;
+            font-size: 0.85rem;
+            margin-top: 8px;
+            display: block;
+            border: 1px solid #ddd;
+        }
+        .btn-materials-card:hover { background: #e1e2e6; }
 
         /* VIDEO Y TABS */
         .video-wrapper { position: relative; padding-bottom: 56.25%; height: 0; background: black; border-radius: 12px; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.2); margin-bottom: 30px; }
@@ -72,7 +112,7 @@
             .classroom-container { display: block; }
             .course-sidebar { position: relative; width: 100%; height: auto; top: 0; border-right: none; z-index: 100; }
             .course-content { padding: 20px; }
-            .hub-card { flex-direction: column; text-align: center; gap: 20px; }
+            .hub-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -108,18 +148,19 @@
 
         <main class="course-content">
             
-            <div class="hub-card">
-                <div class="hub-info">
-                    <h3>🔴 Aula Virtual en Vivo</h3>
-                    <p>Acceso directo a tus clases con profesores.</p>
-                </div>
-                <div class="hub-actions">
-                    <a href="#" id="btn-zoom-fixed" target="_blank" class="btn-hub">🎥 Entrar a Clase</a>
-                    <a href="#" class="btn-hub-sec" onclick="alert('Los horarios se envían al grupo de WhatsApp.')">📅 Ver Horarios</a>
+            <div class="hub-section">
+                <div class="hub-title">🔴 Aulas en Vivo y Tutorías</div>
+                <div id="hub-grid" class="hub-grid">
+                    <div style="grid-column: 1/-1; padding: 20px; background: white; border-radius: 8px; text-align: center; color: #666;">
+                        Cargando accesos...
+                    </div>
                 </div>
             </div>
 
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 40px 0;">
+
             <div id="video-area">
+                <div class="hub-title" style="font-size: 1.5rem;">📚 Lecciones Grabadas</div>
                 <div class="video-wrapper"><iframe id="main-video-frame" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe></div>
                 
                 <div class="tabs-container">
@@ -130,8 +171,8 @@
                     </div>
 
                     <div id="tab-desc" class="tab-content active">
-                        <div style="overflow: hidden;"> <button id="btn-mark-complete" class="btn-complete">Marcar como Vista</button>
-                            <button id="btn-next-lesson" class="btn-complete" style="float:left; display:none; background:var(--color-azul-profundo); color:white; margin-right:10px;">Siguiente →</button>
+                        <div style="overflow: hidden;"> 
+                            <button id="btn-mark-complete" class="btn-complete">Marcar como Vista</button>
                         </div>
                         <h2 id="main-video-title" style="margin-top: 15px; color: var(--color-azul-profundo);">...</h2>
                         <p id="main-video-desc" style="color: #555; line-height: 1.6;">...</p>
@@ -139,17 +180,14 @@
 
                     <div id="tab-resources" class="tab-content">
                         <h3>Materiales de esta Lección</h3>
-                        <p>Recursos seleccionados para trabajar este tema:</p>
-                        <div id="resources-container" style="margin-top: 20px;">
-                            </div>
+                        <div id="resources-container" style="margin-top: 20px;"></div>
                     </div>
 
                     <div id="tab-support" class="tab-content">
                         <h3>¿Dudas sobre este tema?</h3>
-                        <p>Contacta a tu tutor o soporte técnico.</p>
                         <div style="display: flex; gap: 15px; margin-top: 20px;">
-                            <a href="https://wa.me/5493412757827" target="_blank" class="btn-hub" style="background: #25D366;">📱 WhatsApp Profesores</a>
-                            <a href="mailto:educaciontamar@gmail.com" class="btn-hub" style="background: #333;">📧 Soporte Técnico</a>
+                            <a href="https://wa.me/5493412757827" target="_blank" class="btn-zoom-card" style="background: #25D366;">WhatsApp Profesores</a>
+                            <a href="mailto:educaciontamar@gmail.com" class="btn-zoom-card" style="background: #333;">Soporte Técnico</a>
                         </div>
                     </div>
                 </div>
@@ -178,7 +216,6 @@
         let allVideos = [];
         let currentVideoIndex = 0;
 
-        // --- TABS LOGIC ---
         window.switchTab = (tabName) => {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
@@ -195,7 +232,6 @@
                 e.preventDefault(); localStorage.removeItem('token'); window.location.href = 'index.html';
             });
 
-            // Pagos (Igual que antes)
             const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.get('status') === 'success') {
                 showMessage('video-message', '¡Pago exitoso!', 'success');
@@ -205,7 +241,6 @@
                 try { await postData('capturar-pago-paypal', { orderID: urlParams.get('token'), planId: urlParams.get('plan') }, token); setTimeout(() => window.location.href = 'videos.html', 3000); } catch(e) {}
             }
 
-            // CARGAR CONTENIDO
             try {
                 const response = await getData('videos', token);
                 const data = await response.json();
@@ -219,8 +254,8 @@
                         const firstUnwatched = allVideos.findIndex(v => !v.completado);
                         loadVideo(firstUnwatched !== -1 ? firstUnwatched : 0);
                         
-                        // CARGAR LINK FIJO (Del último evento creado por Sofía)
-                        loadFixedZoomLink(token);
+                        // CARGAR GRID DE AULAS
+                        loadClassroomsGrid(token);
                     } else {
                         document.getElementById('classroom-ui').style.display = 'grid';
                         document.querySelector('.course-content').innerHTML = '<div style="padding:50px; text-align:center;"><h3>¡Bienvenido!</h3><p>Aún no hay lecciones publicadas.</p></div>';
@@ -252,65 +287,62 @@
             document.getElementById('main-video-frame').src = url;
             document.getElementById('main-video-title').textContent = video.titulo_completo;
             
-            // --- LÓGICA INTELIGENTE DE RECURSOS ---
-            // Extraemos el link de la descripción si existe
             const desc = video.descripcion || '';
-            // Regex simple para encontrar URLs
             const urlRegex = /(https?:\/\/[^\s]+)/g;
             const links = desc.match(urlRegex);
-            
-            // Limpiamos la descripción de links feos para mostrar texto limpio
             const cleanDesc = desc.replace(urlRegex, '').trim() || 'Sin descripción adicional.';
             document.getElementById('main-video-desc').textContent = cleanDesc;
 
             const resContainer = document.getElementById('resources-container');
             if (links && links.length > 0) {
                 resContainer.innerHTML = links.map(link => `
-                    <a href="${link}" target="_blank" class="btn-hub" style="background: #fff; color: #333; border: 1px solid #ccc; margin-bottom: 10px; justify-content: center;">
-                        📂 Descargar Material Adjunto
+                    <a href="${link}" target="_blank" class="btn-zoom-card" style="background: #fff; color: #333; border: 1px solid #ccc; margin-bottom: 10px; justify-content: center;">
+                        📂 Descargar Material
                     </a>
                 `).join('');
             } else {
-                resContainer.innerHTML = `
-                    <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; border: 1px dashed #ccc; text-align: center;">
-                        <p style="color: #666; margin:0;">No hay material específico adjunto.</p>
-                        <small>Consulta la carpeta general de tu grado.</small>
-                    </div>
-                `;
+                resContainer.innerHTML = `<div style="background:#f8f9fa; padding:20px; border:1px dashed #ccc; text-align:center; color:#666;">No hay adjuntos.</div>`;
             }
 
             switchTab('desc');
 
             const btnComplete = document.getElementById('btn-mark-complete');
-            const btnNext = document.getElementById('btn-next-lesson');
-            
             if (video.completado) {
-                btnComplete.textContent = '✅ Completada'; 
-                btnComplete.classList.add('completed');
-                btnComplete.disabled = true;
-                if (index < allVideos.length - 1) btnNext.style.display = 'inline-block';
+                btnComplete.textContent = '✅ Completada'; btnComplete.classList.add('completed'); btnComplete.disabled = true;
             } else {
-                btnComplete.textContent = 'Marcar como Vista'; 
-                btnComplete.classList.remove('completed');
-                btnComplete.disabled = false; 
-                btnNext.style.display = 'none';
+                btnComplete.textContent = 'Marcar como Vista'; btnComplete.classList.remove('completed'); btnComplete.disabled = false;
             }
         };
 
-        // --- BUSCA EL ÚLTIMO LINK DE ZOOM CARGADO ---
-        async function loadFixedZoomLink(token) {
+        // --- NUEVA LÓGICA: GRID DE AULAS ---
+        async function loadClassroomsGrid(token) {
             try {
                 const res = await getData('clases-en-vivo', token);
-                const data = await res.json();
-                // Buscamos cualquier clase que tenga link, asumimos que es el fijo
-                if (data.clases && data.clases.length > 0) {
-                    // Tomamos el último link cargado
-                    const ultimo = data.clases[data.clases.length - 1]; 
-                    if (ultimo.link_zoom) {
-                        document.getElementById('btn-zoom-fixed').href = ultimo.link_zoom;
+                if (res.ok) {
+                    const data = await res.json();
+                    const grid = document.getElementById('hub-grid');
+                    
+                    if (data.clases && data.clases.length > 0) {
+                        grid.innerHTML = data.clases.map(c => `
+                            <div class="hub-card">
+                                <div>
+                                    <h4>${c.titulo}</h4>
+                                    <span>${c.materia ? c.materia : 'Aula General'} ${c.profesor ? '- ' + c.profesor : ''}</span>
+                                </div>
+                                <div>
+                                    <a href="${c.link_zoom}" target="_blank" class="btn-zoom-card">🎥 Entrar al Aula</a>
+                                    ${c.link_recursos ? `<a href="${c.link_recursos}" target="_blank" class="btn-materials-card">📂 Carpeta Drive</a>` : ''}
+                                </div>
+                            </div>
+                        `).join('');
+                    } else {
+                        grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 30px; background: white; border-radius: 8px; color: #777;">
+                            <p>👋 ¡Hola! Aún no hay aulas fijas configuradas.</p>
+                            <small>Los accesos aparecerán aquí cuando se carguen en el panel.</small>
+                        </div>`;
                     }
                 }
-            } catch (e) { console.error(e); }
+            } catch (e) { console.error("Error cargando aulas", e); }
         }
 
         document.getElementById('btn-mark-complete').addEventListener('click', async () => {
@@ -324,11 +356,9 @@
                     allVideos[currentVideoIndex].completado = true; 
                     renderSidebar(allVideos); 
                     loadVideo(currentVideoIndex); 
-                }
+                } else { btn.textContent = originalText; btn.disabled = false; }
             } catch (e) { btn.textContent = originalText; btn.disabled = false; }
         });
-
-        document.getElementById('btn-next-lesson').addEventListener('click', () => { if (currentVideoIndex < allVideos.length - 1) loadVideo(currentVideoIndex + 1); });
 
         function updateProgress(videos) {
             const completedCount = videos.filter(v => v.completado).length;
@@ -345,11 +375,7 @@
             document.querySelector('.course-content').style.marginLeft = '0';
             document.querySelector('.course-content').style.maxWidth = '100%';
             
-            // (Aquí va el mismo HTML del Payment Wall que ya tenías)
-            // Para ahorrar espacio en el chat, asumo que ya lo tienes del mensaje anterior
-            // Si lo necesitas de nuevo, avísame. 
-            // IMPORTANTE: COPIA EL BLOQUE content.innerHTML = `...` DEL CÓDIGO ANTERIOR AQUÍ.
-             document.querySelector('.course-content').innerHTML = `
+            document.querySelector('.course-content').innerHTML = `
                 <div style="text-align: center; padding: 40px; max-width: 900px; margin: 0 auto;">
                     <h1 style="color: var(--color-azul-profundo); margin-bottom: 10px;">🔒 Inscripción a Tamar</h1>
                     <p style="font-size: 1.1rem; margin-bottom: 30px; color:#666;">Selecciona el plan educativo para ver sus beneficios.</p>
@@ -406,3 +432,4 @@
     </script>
 </body>
 </html>
+
