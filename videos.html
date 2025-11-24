@@ -254,7 +254,6 @@
                         const firstUnwatched = allVideos.findIndex(v => !v.completado);
                         loadVideo(firstUnwatched !== -1 ? firstUnwatched : 0);
                         
-                        // CARGAR GRID DE AULAS
                         loadClassroomsGrid(token);
                     } else {
                         document.getElementById('classroom-ui').style.display = 'grid';
@@ -314,7 +313,6 @@
             }
         };
 
-        // --- NUEVA LÓGICA: GRID DE AULAS ---
         async function loadClassroomsGrid(token) {
             try {
                 const res = await getData('clases-en-vivo', token);
@@ -378,10 +376,22 @@
             document.querySelector('.course-content').innerHTML = `
                 <div style="text-align: center; padding: 40px; max-width: 900px; margin: 0 auto;">
                     <h1 style="color: var(--color-azul-profundo); margin-bottom: 10px;">🔒 Inscripción a Tamar</h1>
-                    <p style="font-size: 1.1rem; margin-bottom: 30px; color:#666;">Selecciona el plan educativo para ver sus beneficios.</p>
-                    <div style="background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
-                        <div style="margin-bottom: 20px; text-align: left;">
-                            <label style="display:block; font-weight:bold; margin-bottom:10px; color: var(--color-azul-profundo);">Elige tu Plan:</label>
+                    <p style="font-size: 1.1rem; margin-bottom: 30px; color:#666;">Personaliza tu plan de estudios.</p>
+                    
+                    <div style="background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: left;">
+                        
+                        <div style="margin-bottom: 20px;">
+                            <label style="display:block; font-weight:bold; margin-bottom:10px; color: var(--color-azul-profundo);">1. Selecciona el Nivel Educativo:</label>
+                            <select id="level-selector" style="width:100%; padding:15px; border-radius:8px; border:2px solid #2D8CFF; font-size:1.1rem; font-family: 'Lato', sans-serif; background-color: #f0f7ff;">
+                                <option value="kinder">Kinder (Jardín)</option>
+                                <option value="primaria">Elementary (Primaria)</option>
+                                <option value="secundaria_middle">Middle School (Secundaria Ciclo Básico)</option>
+                                <option value="secundaria_high">High School (Secundaria Superior)</option>
+                            </select>
+                        </div>
+
+                        <div style="margin-bottom: 20px;">
+                            <label style="display:block; font-weight:bold; margin-bottom:10px; color: var(--color-azul-profundo);">2. Elige tu Plan:</label>
                             <select id="plan-selector" style="width:100%; padding:15px; border-radius:8px; border:2px solid #eee; font-size:1.1rem; font-family: 'Lato', sans-serif;">
                                 <option value="basico" data-ars="46800" data-usd="39">Plan Básico ($46.800 ARS / $39 USD)</option>
                                 <option value="core" data-ars="70800" data-usd="59">Plan Core ($70.800 ARS / $59 USD)</option>
@@ -391,14 +401,16 @@
                                 <option value="certificacion" data-ars="240000" data-usd="200">Certificación Anual ($240.000 ARS / $200 USD)</option>
                             </select>
                         </div>
+
                         <div id="plan-features-container" class="plan-features"><h4>✨ Incluye:</h4><ul id="features-list"></ul></div>
+                        
                         <div style="display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
-                            <div style="border: 1px solid #eee; padding: 20px; border-radius: 8px;">
+                            <div style="border: 1px solid #eee; padding: 20px; border-radius: 8px; text-align:center;">
                                 <h4>🇦🇷 Argentina</h4>
                                 <p id="price-display-ars" style="font-size: 1.5rem; color: var(--color-acento); font-weight:bold; margin: 10px 0;">$46.800 ARS</p>
                                 <button onclick="window.pagarMP()" class="btn" style="width:100%; background: #009ee3;">Pagar con Mercado Pago</button>
                             </div>
-                            <div style="border: 1px solid #eee; padding: 20px; border-radius: 8px;">
+                            <div style="border: 1px solid #eee; padding: 20px; border-radius: 8px; text-align:center;">
                                 <h4>🌍 Internacional</h4>
                                 <p id="price-display-usd" style="font-size: 1.5rem; color: var(--color-acento); font-weight:bold; margin: 10px 0;">$39 USD</p>
                                 <button onclick="window.pagarPayPal()" class="btn" style="width:100%; background: #ffc439; color: #003087;">Pagar con PayPal</button>
@@ -407,6 +419,7 @@
                     </div>
                 </div>
             `;
+            
             const updatePlanInfo = () => {
                 const selector = document.getElementById('plan-selector');
                 const opt = selector.options[selector.selectedIndex];
@@ -421,15 +434,26 @@
             window.pagarMP = async () => {
                 const token = getAuthToken();
                 const planId = document.getElementById('plan-selector').value;
-                try { const res = await postData('crear-pago', { planId }, token); const data = await res.json(); if (data.init_point) window.location.href = data.init_point; } catch (e) { alert('Error MP'); }
+                const nivel = document.getElementById('level-selector').value;
+                try { 
+                    const res = await postData('crear-pago', { planId, nivel }, token); 
+                    const data = await res.json(); 
+                    if (data.init_point) window.location.href = data.init_point; 
+                } catch (e) { alert('Error MP'); }
             };
+            
             window.pagarPayPal = async () => {
                 const token = getAuthToken();
                 const planId = document.getElementById('plan-selector').value;
-                try { const res = await postData('crear-pago-paypal', { planId }, token); const data = await res.json(); const link = data.links.find(l => l.rel === 'approve'); if (link) window.location.href = link.href; } catch (e) { alert('Error PayPal'); }
+                const nivel = document.getElementById('level-selector').value;
+                try { 
+                    const res = await postData('crear-pago-paypal', { planId, nivel }, token); 
+                    const data = await res.json(); 
+                    const link = data.links.find(l => l.rel === 'approve'); 
+                    if (link) window.location.href = link.href; 
+                } catch (e) { alert('Error PayPal'); }
             };
         }
     </script>
 </body>
 </html>
-
