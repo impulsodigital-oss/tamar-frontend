@@ -130,7 +130,7 @@
         import { getData, postData, getAuthToken } from './js/api.js';
         import { showMessage, hideMessage } from './js/main.js';
 
-        // --- DATOS DE LOS PLANES (Extraídos del PDF) ---
+        // --- DATOS DE LOS PLANES ---
         const PLAN_DETAILS = {
             'basico': {
                 features: [
@@ -171,7 +171,7 @@
             },
             'completo': {
                 features: [
-                    'Todo lo del Plan Básico [cite: 166]',
+                    'Todo lo del Plan Básico',
                     '10 Clases SEMANALES (40 al mes aprox) ',
                     'Incluye las 10 materias básicas ',
                     '40 minutos mínimo por clase ',
@@ -181,7 +181,7 @@
             'certificacion': {
                 features: [
                     'Matrícula con Integrative Learning (USA) ',
-                    'Constancia de inscripción y Credencial : 208, 211]',
+                    'Constancia de inscripción y Credencial',
                     'Acreditación académica (Boletín de notas) ',
                     'Gestión de Transcript y Diploma (12° año)',
                     'Asesoramiento para desescolarización '
@@ -266,7 +266,7 @@
                                 <div id="plan-features-container" class="plan-features">
                                     <h4>✨ Incluye:</h4>
                                     <ul id="features-list">
-                                        </ul>
+                                    </ul>
                                 </div>
 
                                 <div style="display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
@@ -420,4 +420,3 @@
     </script>
 </body>
 </html>
-
