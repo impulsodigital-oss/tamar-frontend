@@ -121,7 +121,6 @@
     <script type="module" src="js/api.js"></script>
     <script type="module" src="js/main.js"></script>
     <script type="module">
-        // Importamos directamente desde api.js para asegurar que use la versión segura
         import { getData, postData, getAuthToken } from './js/api.js';
         import { showMessage, hideMessage } from './js/main.js';
 
@@ -157,18 +156,32 @@
                 document.getElementById('loading-screen').style.display = 'none';
 
                 if (response.ok) {
+                    // CASO 1: USUARIO PAGO O ADMIN
                     if (data.videos && data.videos.length > 0) {
                         allVideos = data.videos;
-                        document.getElementById('classroom-ui').style.display = 'grid';
+                        document.getElementById('classroom-ui').style.display = 'grid'; // Hacemos visible el aula
                         renderSidebar(allVideos);
                         const firstUnwatched = allVideos.findIndex(v => !v.completado);
                         loadVideo(firstUnwatched !== -1 ? firstUnwatched : 0);
                     } else {
+                         document.getElementById('classroom-ui').style.display = 'grid';
                         document.querySelector('.course-content').innerHTML = '<div style="padding:50px; text-align:center;"><h3>¡Bienvenido!</h3><p>Aún no hay lecciones publicadas.</p></div>';
                     }
                 } else if (response.status === 403 && data.requierePago) {
-                    // HTML DE BLOQUEO CON SELECTOR DE PLANES
-                    document.querySelector('.course-content').innerHTML = `
+                    // CASO 2: USUARIO GRATIS (Debe Pagar)
+                    // CORRECCIÓN AQUÍ: Hacemos visible el contenedor y ocultamos sidebar
+                    const container = document.getElementById('classroom-ui');
+                    container.style.display = 'block'; // Usamos block para ocupar todo el ancho
+                    
+                    const sidebar = document.querySelector('.course-sidebar');
+                    if(sidebar) sidebar.style.display = 'none'; // Ocultamos barra lateral
+
+                    const content = document.querySelector('.course-content');
+                    content.style.marginLeft = '0'; // Quitamos margen
+                    content.style.maxWidth = '100%'; // Full ancho
+                    
+                    // Inyectamos HTML de Pagos
+                    content.innerHTML = `
                         <div style="text-align: center; padding: 40px; max-width: 900px; margin: 0 auto;">
                             <h1 style="color: var(--color-azul-profundo); margin-bottom: 10px;">🔒 Inscripción a Tamar</h1>
                             <p style="font-size: 1.1rem; margin-bottom: 30px; color:#666;">Selecciona el plan educativo para continuar.</p>
@@ -252,12 +265,9 @@
             }
         };
 
-        // --- CORRECCIÓN AQUÍ: Guardar Progreso con Token ---
         document.getElementById('btn-mark-complete').addEventListener('click', async () => {
             const btn = document.getElementById('btn-mark-complete');
             const originalText = btn.textContent;
-            
-            // UX: Mostrar que está trabajando
             btn.textContent = 'Guardando...';
             btn.disabled = true;
 
@@ -265,18 +275,15 @@
             const token = getAuthToken();
             
             try {
-                // Enviamos el token en la llamada
                 const res = await postData('progreso', { videoId: video.id }, token);
-                
                 if (res.ok) { 
                     allVideos[currentVideoIndex].completado = true; 
                     renderSidebar(allVideos); 
                     loadVideo(currentVideoIndex); 
                 } else {
-                    // Si falla, revertimos el botón
                     btn.textContent = originalText;
                     btn.disabled = false;
-                    alert('No se pudo guardar. Verifica tu conexión.');
+                    alert('No se pudo guardar.');
                 }
             } catch (e) { 
                 console.error(e);
