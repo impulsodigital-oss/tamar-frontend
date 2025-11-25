@@ -63,9 +63,20 @@
             </div>
         </div>
 
+        <div class="admin-section">
+            <h3>⏳ Leads (Oportunidades)</h3>
+            <p>Interesados registrados desde el formulario web.</p>
+            <div class="table-responsive">
+                <table id="tabla-leads">
+                    <thead><tr><th>Nombre</th><th>Email</th><th>Fecha</th><th>Acciones</th></tr></thead>
+                    <tbody><tr><td colspan="4">Cargando...</td></tr></tbody>
+                </table>
+            </div>
+        </div>
+
         <div class="admin-section" style="border-top: 5px solid var(--color-acento);">
             <h3>🔴 Gestión de Aulas (Hub)</h3>
-            <p>Carga aquí los accesos a Zoom. <strong>Selecciona correctamente el nivel</strong>.</p>
+            <p>Carga aquí los accesos a Zoom. <strong>Selecciona correctamente el nivel</strong> para que solo lo vean los alumnos correspondientes.</p>
             
             <form id="form-clase" style="display: flex; flex-direction: column; gap: 15px; background: #fff8e1; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
                 <div>
@@ -111,7 +122,7 @@
         </div>
 
         <div class="admin-section" style="border-top: 5px solid #9b59b6;">
-            <h3>🎬 Videos Grabados</h3>
+            <h3>🎬 Biblioteca de Videos Grabados</h3>
             <form id="form-video" style="background:#f8f9fa; padding:20px; border-radius:8px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-bottom:30px;">
                 <input type="text" id="vid-titulo" placeholder="Título Completo" required style="padding:8px; grid-column: span 2; border:1px solid #ccc; border-radius:5px;">
                 <input type="text" id="vid-corto" placeholder="Título Corto" required style="padding:8px; border:1px solid #ccc; border-radius:5px;">
@@ -138,6 +149,7 @@
         import { getData, showMessage } from './js/main.js';
 
         let globalAlumnos = [];
+        let globalLeads = [];
 
         document.addEventListener('DOMContentLoaded', async () => {
             const token = localStorage.getItem('token');
@@ -151,8 +163,14 @@
                     globalAlumnos = dataAlumnos.alumnos || [];
                     renderAlumnos(globalAlumnos);
 
+                    const resLeads = await getData('admin/leads-pendientes', token);
+                    const dataLeads = await resLeads.json();
+                    globalLeads = dataLeads.leads || [];
+                    renderLeads(globalLeads);
+
                     // Stats
                     document.getElementById('total-alumnos').textContent = globalAlumnos.length;
+                    document.getElementById('total-leads').textContent = globalLeads.length;
                     document.getElementById('total-ingresos').textContent = `$${(globalAlumnos.length * 46800).toLocaleString()}`;
                     
                     loadVideosLibrary();
@@ -161,6 +179,7 @@
                 } catch (error) { showMessage('admin-message', 'Error al cargar panel.', 'error'); }
             }
 
+            // RENDERIZADO ALUMNOS
             function renderAlumnos(lista) {
                 const tbody = document.querySelector('#tabla-alumnos tbody');
                 if (lista.length === 0) { tbody.innerHTML = `<tr><td colspan="6">Sin alumnos.</td></tr>`; return; }
@@ -172,6 +191,26 @@
                     </tr>`).join('');
             }
 
+            // RENDERIZADO LEADS (RECUPERADO)
+            function renderLeads(lista) {
+                const tbody = document.querySelector('#tabla-leads tbody');
+                if (lista.length === 0) { tbody.innerHTML = '<tr><td colspan="4">Sin leads.</td></tr>'; return; }
+                tbody.innerHTML = lista.map(u => {
+                    const mailLink = `mailto:${u.email}?subject=Hola ${u.nombre} - Escuela Tamar&body=Hola...`;
+                    return `
+                    <tr>
+                        <td><strong>${u.nombre}</strong></td><td>${u.email}</td>
+                        <td>${u.fecha_registro ? new Date(u.fecha_registro).toLocaleDateString() : '-'}</td>
+                        <td>
+                            <a href="${mailLink}" class="btn-action btn-contact">📩</a> 
+                            <button class="btn-action btn-activate" onclick="window.activarManual(${u.id}, '${u.nombre}')">✅</button>
+                            <button class="btn-action btn-delete" style="background:red;" onclick="window.eliminarUsuario(${u.id}, '${u.nombre}')">🗑️</button>
+                        </td>
+                    </tr>
+                `}).join('');
+            }
+
+            // RENDERIZADO AULAS ACTIVAS
             async function loadActiveClasses() {
                 try {
                     const res = await getData('clases-en-vivo', token);
@@ -191,6 +230,15 @@
                     }
                 } catch (e) { console.error(e); }
             }
+
+            // ACTIONS
+            window.activarManual = async (userId, nombre) => {
+                const plan = prompt(`¿Activar a ${nombre}? Escribe el Plan:`, "Plan Manual");
+                if (plan && confirm('¿Confirmar?')) {
+                    const res = await fetch('https://tamar-backend-api-gqy9.onrender.com/api/admin/activar-manual', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }, body: JSON.stringify({ userId, plan }) });
+                    if (res.ok) { alert('¡Activado!'); loadAdminData(); }
+                }
+            };
 
             window.eliminarUsuario = async (id, nombre) => {
                 if(confirm(`⚠️ ¿Borrar a ${nombre}?`)) {
@@ -223,6 +271,7 @@
                 } catch (e) { console.error(e); }
             }
 
+            // SUBMIT CLASE
             document.getElementById('form-clase').addEventListener('submit', async (e) => {
                 e.preventDefault();
                 const data = { 
@@ -233,7 +282,7 @@
                     hora: document.getElementById('clase-fecha').value.split('T')[1], 
                     link_zoom: document.getElementById('clase-zoom').value, 
                     link_recursos: document.getElementById('clase-recursos').value,
-                    link_grabaciones: document.getElementById('clase-grabaciones').value, // <--- NUEVO CAMPO
+                    link_grabaciones: document.getElementById('clase-grabaciones').value, 
                     nivel: document.getElementById('clase-nivel').value, 
                     descripcion: 'Clase Hub' 
                 };
@@ -246,6 +295,12 @@
                 const data = { titulo: document.getElementById('vid-titulo').value, corto: document.getElementById('vid-corto').value, modulo: document.getElementById('vid-modulo').value, orden: document.getElementById('vid-orden').value, url: document.getElementById('vid-url').value, desc: document.getElementById('vid-desc').value };
                 const res = await fetch('https://tamar-backend-api-gqy9.onrender.com/api/admin/videos', { method: 'POST', headers: {'Content-Type':'application/json', 'Authorization': `Bearer ${token}`}, body: JSON.stringify(data) });
                 if(res.ok) { alert('Video agregado.'); document.getElementById('form-video').reset(); loadVideosLibrary(); }
+            });
+
+            document.getElementById('search-input').addEventListener('keyup', (e) => {
+                const term = e.target.value.toLowerCase();
+                renderAlumnos(globalAlumnos.filter(u => u.nombre.toLowerCase().includes(term) || u.email.toLowerCase().includes(term)));
+                renderLeads(globalLeads.filter(u => u.nombre.toLowerCase().includes(term) || u.email.toLowerCase().includes(term)));
             });
 
             document.getElementById('logout-btn').addEventListener('click', (e) => { e.preventDefault(); localStorage.removeItem('token'); window.location.href = 'login.html'; });
