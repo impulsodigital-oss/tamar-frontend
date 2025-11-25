@@ -6,7 +6,6 @@
     <title>Panel de Administración - Tamar</title>
     <link rel="stylesheet" href="CSS/style.css">
     <style>
-        /* (Estilos iguales, agregué tabla clases) */
         .admin-container { max-width: 1100px; margin: 40px auto; padding: 20px; }
         .admin-header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
         .search-box input { width: 300px; padding: 10px; border-radius: 20px; border: 1px solid #ccc; }
@@ -58,25 +57,38 @@
             <h3>🎓 Alumnos Matriculados</h3>
             <div class="table-responsive">
                 <table id="tabla-alumnos">
-                    <thead><tr><th>ID</th><th>Nombre</th><th>Email</th><th>Plan</th><th>Estado</th><th>Acciones</th></tr></thead>
+                    <thead><tr><th>ID</th><th>Nombre</th><th>Email</th><th>Nivel</th><th>Plan</th><th>Acciones</th></tr></thead>
                     <tbody><tr><td colspan="6">Cargando...</td></tr></tbody>
                 </table>
             </div>
         </div>
 
         <div class="admin-section" style="border-top: 5px solid var(--color-acento);">
-            <h3>🔴 Gestión de Aulas / Clases en Vivo</h3>
-            <p>Carga aquí las tarjetas de acceso a Zoom (Materias). Aparecerán en el Hub del alumno.</p>
+            <h3>🔴 Gestión de Aulas (Hub)</h3>
+            <p>Carga aquí los accesos a Zoom. <strong>Selecciona correctamente el nivel</strong> para que solo lo vean los alumnos correspondientes.</p>
             
-            <form id="form-clase" style="display: flex; flex-direction: column; gap: 10px; background: #fff8e1; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+            <form id="form-clase" style="display: flex; flex-direction: column; gap: 15px; background: #fff8e1; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+                <div>
+                    <label style="font-weight:bold;">¿Para qué nivel es esta clase?</label>
+                    <select id="clase-nivel" required style="width:100%; padding:10px; border-radius:5px; border:1px solid #aaa; margin-top:5px;">
+                        <option value="general">🏫 Para Todos (General)</option>
+                        <option value="kinder">🧸 Kinder (Jardín)</option>
+                        <option value="primaria">✏️ Elementary (Primaria)</option>
+                        <option value="secundaria_middle">📚 Middle School</option>
+                        <option value="secundaria_high">🎓 High School</option>
+                    </select>
+                </div>
+
                 <div style="display:flex; gap:10px;">
-                    <input type="text" id="clase-titulo" placeholder="Título (Ej: Matemática 5to Grado)" required style="padding:8px; flex:2; border:1px solid #ccc; border-radius:5px;">
+                    <input type="text" id="clase-titulo" placeholder="Título (Ej: Matemática)" required style="padding:8px; flex:2; border:1px solid #ccc; border-radius:5px;">
                     <input type="text" id="clase-profesor" placeholder="Profesor" required style="padding:8px; flex:1; border:1px solid #ccc; border-radius:5px;">
                 </div>
+                
                 <div style="display:flex; gap:10px;">
-                    <input type="text" id="clase-materia" placeholder="Nivel/Materia (Ej: Primaria)" style="padding:8px; flex:1; border:1px solid #ccc; border-radius:5px;">
+                    <input type="text" id="clase-materia" placeholder="Detalle extra" style="padding:8px; flex:1; border:1px solid #ccc; border-radius:5px;">
                     <input type="datetime-local" id="clase-fecha" required style="padding:8px; flex:1; border:1px solid #ccc; border-radius:5px;">
                 </div>
+
                 <div style="display:flex; gap:10px;">
                     <input type="url" id="clase-zoom" placeholder="Link Zoom Fijo" required style="padding:8px; flex:1; border:1px solid #ccc; border-radius:5px;">
                     <input type="url" id="clase-recursos" placeholder="Link Carpeta Drive (Materiales)" style="padding:8px; flex:1; border:1px solid #ccc; border-radius:5px;">
@@ -84,41 +96,36 @@
                 <button type="submit" class="btn" style="padding:10px; cursor: pointer; background-color: var(--color-acento); color: var(--color-azul-profundo);">➕ Publicar Aula</button>
             </form>
 
-            <h4>Aulas Activas Actualmente:</h4>
+            <h4>Aulas Activas:</h4>
             <div class="table-responsive">
                 <table id="tabla-clases">
-                    <thead><tr><th>Materia/Título</th><th>Profesor</th><th>Zoom</th><th>Acciones</th></tr></thead>
+                    <thead><tr><th>Nivel</th><th>Título</th><th>Zoom</th><th>Acciones</th></tr></thead>
                     <tbody><tr><td colspan="4">Cargando...</td></tr></tbody>
                 </table>
             </div>
         </div>
 
         <div class="admin-section" style="border-top: 5px solid #9b59b6;">
-            <h3>🎬 Biblioteca de Videos Grabados (30 Videos)</h3>
+            <h3>🎬 Videos Grabados</h3>
             <form id="form-video" style="background:#f8f9fa; padding:20px; border-radius:8px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-bottom:30px;">
                 <input type="text" id="vid-titulo" placeholder="Título Completo" required style="padding:8px; grid-column: span 2; border:1px solid #ccc; border-radius:5px;">
-                <input type="text" id="vid-corto" placeholder="Título Corto (Menú)" required style="padding:8px; border:1px solid #ccc; border-radius:5px;">
-                <input type="number" id="vid-modulo" placeholder="Nro Módulo" required style="padding:8px; border:1px solid #ccc; border-radius:5px;">
+                <input type="text" id="vid-corto" placeholder="Título Corto" required style="padding:8px; border:1px solid #ccc; border-radius:5px;">
+                <input type="number" id="vid-modulo" placeholder="Módulo" required style="padding:8px; border:1px solid #ccc; border-radius:5px;">
                 <input type="number" id="vid-orden" placeholder="Orden" required style="padding:8px; border:1px solid #ccc; border-radius:5px;">
                 <input type="url" id="vid-url" placeholder="Link YouTube" required style="padding:8px; border:1px solid #ccc; border-radius:5px;">
-                <input type="text" id="vid-desc" placeholder="Descripción (Pega aquí el Link de Drive si hay materiales)" style="padding:8px; grid-column: span 3; border:1px solid #ccc; border-radius:5px;">
+                <input type="text" id="vid-desc" placeholder="Descripción (Link Drive aquí)" style="padding:8px; grid-column: span 3; border:1px solid #ccc; border-radius:5px;">
                 <button type="submit" class="btn" style="grid-column: span 3; background-color:#9b59b6; cursor: pointer;">➕ Agregar Video</button>
             </form>
             <div class="table-responsive">
                 <table id="tabla-videos">
-                    <thead><tr><th>Mód</th><th>Orden</th><th>Título</th><th>Acciones</th></tr></thead>
-                    <tbody><tr><td colspan="4">Cargando...</td></tr></tbody>
+                    <thead><tr><th>Mód</th><th>Título</th><th>Acciones</th></tr></thead>
+                    <tbody><tr><td colspan="3">Cargando...</td></tr></tbody>
                 </table>
             </div>
         </div>
-
-        <div class="admin-section">
-            <h3>⏳ Leads Pendientes</h3>
-            <table id="tabla-leads"><thead><tr><th>Nombre</th><th>Email</th><th>Fecha</th><th>Acciones</th></tr></thead><tbody></tbody></table>
-        </div>
     </div>
 
-    <footer><div class="container"><p>&copy; 2024 Tamar. Panel de Uso Interno.</p></div></footer>
+    <footer><div class="container"><p>&copy; 2024 Tamar. Panel Admin.</p></div></footer>
 
     <script type="module" src="js/api.js"></script>
     <script type="module" src="js/main.js"></script>
@@ -126,7 +133,6 @@
         import { getData, showMessage } from './js/main.js';
 
         let globalAlumnos = [];
-        let globalLeads = [];
 
         document.addEventListener('DOMContentLoaded', async () => {
             const token = localStorage.getItem('token');
@@ -134,74 +140,43 @@
 
             async function loadAdminData() {
                 try {
-                    // Cargar Usuarios
                     const resAlumnos = await getData('admin/usuarios-activos', token);
                     if (resAlumnos.status === 403) { document.body.innerHTML = '<h1>⛔ Acceso Denegado</h1>'; return; }
                     const dataAlumnos = await resAlumnos.json();
                     globalAlumnos = dataAlumnos.alumnos || [];
                     renderAlumnos(globalAlumnos);
 
-                    const resLeads = await getData('admin/leads-pendientes', token);
-                    const dataLeads = await resLeads.json();
-                    globalLeads = dataLeads.leads || [];
-                    renderLeads(globalLeads);
-
                     // Stats
                     document.getElementById('total-alumnos').textContent = globalAlumnos.length;
-                    document.getElementById('total-leads').textContent = globalLeads.length;
                     document.getElementById('total-ingresos').textContent = `$${(globalAlumnos.length * 46800).toLocaleString()}`;
                     
                     loadVideosLibrary();
-                    loadActiveClasses(); // Nueva función
+                    loadActiveClasses();
 
                 } catch (error) { showMessage('admin-message', 'Error al cargar panel.', 'error'); }
             }
 
-            // --- RENDERERS ---
             function renderAlumnos(lista) {
                 const tbody = document.querySelector('#tabla-alumnos tbody');
                 if (lista.length === 0) { tbody.innerHTML = `<tr><td colspan="6">Sin alumnos.</td></tr>`; return; }
                 tbody.innerHTML = lista.map(u => `
                     <tr><td>#${u.id}</td><td><strong>${u.nombre}</strong></td><td>${u.email}</td>
-                        <td style="color:var(--color-acento); font-weight:bold;">${u.plan_adquirido || '-'}</td>
-                        <td><span class="badge-pago">Activo</span></td>
+                        <td>${u.nivel_educativo || '-'}</td>
+                        <td style="color:var(--color-acento);">${u.plan_adquirido || '-'}</td>
                         <td><button class="btn-action btn-delete" style="background:red;" onclick="window.eliminarUsuario(${u.id}, '${u.nombre}')">🗑️</button></td>
                     </tr>`).join('');
             }
 
-            function renderLeads(lista) {
-                const tbody = document.querySelector('#tabla-leads tbody');
-                if (lista.length === 0) { tbody.innerHTML = '<tr><td colspan="4">Sin leads.</td></tr>'; return; }
-                tbody.innerHTML = lista.map(u => `
-                    <tr><td><strong>${u.nombre}</strong></td><td>${u.email}</td>
-                        <td>${u.fecha_registro ? new Date(u.fecha_registro).toLocaleDateString() : '-'}</td>
-                        <td><button class="btn-action btn-activate" onclick="window.activarManual(${u.id}, '${u.nombre}')">✅</button></td>
-                    </tr>`).join('');
-            }
-            
-            // --- GESTIÓN DE VIDEOS ---
-            async function loadVideosLibrary() {
-                try {
-                    const res = await getData('admin/videos', token);
-                    const data = await res.json();
-                    const tbody = document.querySelector('#tabla-videos tbody');
-                    tbody.innerHTML = (data.videos && data.videos.length) ? data.videos.map(v => `
-                        <tr><td>${v.modulo}</td><td>${v.orden}</td><td>${v.titulo_completo}</td><td><button class="btn-action btn-delete" onclick="window.deleteVideo(${v.id})">🗑️</button></td></tr>
-                    `).join('') : '<tr><td colspan="4">Sin videos.</td></tr>';
-                } catch (e) { console.error(e); }
-            }
-
-            // --- NUEVO: GESTIÓN DE CLASES EN VIVO ---
             async function loadActiveClasses() {
                 try {
-                    const res = await getData('clases-en-vivo', token); // Usamos el endpoint público
+                    const res = await getData('clases-en-vivo', token);
                     const data = await res.json();
                     const tbody = document.querySelector('#tabla-clases tbody');
                     if (data.clases && data.clases.length > 0) {
                         tbody.innerHTML = data.clases.map(c => `
                             <tr>
-                                <td><strong>${c.titulo}</strong><br><small>${c.materia || ''}</small></td>
-                                <td>${c.profesor || '-'}</td>
+                                <td><span class="badge-pago">${c.nivel_objetivo || 'General'}</span></td>
+                                <td><strong>${c.titulo}</strong></td>
                                 <td><a href="${c.link_zoom}" target="_blank">Link</a></td>
                                 <td><button class="btn-action btn-delete" onclick="window.deleteClass(${c.id})">🗑️</button></td>
                             </tr>
@@ -212,18 +187,16 @@
                 } catch (e) { console.error(e); }
             }
 
-            // --- ACTIONS ---
-            window.activarManual = async (userId, nombre) => {
-                const plan = prompt(`¿Activar a ${nombre}? Escribe el Plan:`, "Plan Manual");
-                if (plan && confirm('¿Confirmar?')) {
-                    const res = await fetch('https://tamar-backend-api-gqy9.onrender.com/api/admin/activar-manual', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }, body: JSON.stringify({ userId, plan }) });
-                    if (res.ok) { alert('¡Activado!'); loadAdminData(); }
+            window.eliminarUsuario = async (id, nombre) => {
+                if(confirm(`⚠️ ¿Borrar a ${nombre}?`)) {
+                    try { await fetch(`https://tamar-backend-api-gqy9.onrender.com/api/admin/usuarios/${id}`, { method: 'DELETE', headers: {'Authorization': `Bearer ${token}`} }); loadAdminData(); } catch (error) { alert('Error.'); }
                 }
             };
-
-            window.eliminarUsuario = async (id, nombre) => {
-                if(confirm(`⚠️ ¿Estás SEGURA de eliminar a ${nombre}?`)) {
-                    try { await fetch(`https://tamar-backend-api-gqy9.onrender.com/api/admin/usuarios/${id}`, { method: 'DELETE', headers: {'Authorization': `Bearer ${token}`} }); loadAdminData(); } catch (error) { alert('Error.'); }
+            
+            window.deleteClass = async (id) => {
+                if(confirm('¿Borrar esta Aula?')) {
+                    const res = await fetch(`https://tamar-backend-api-gqy9.onrender.com/api/admin/clases/${id}`, { method: 'DELETE', headers: {'Authorization': `Bearer ${token}`} });
+                    if(res.ok) loadActiveClasses();
                 }
             };
             
@@ -234,16 +207,17 @@
                 }
             };
 
-            // NUEVA FUNCIÓN: BORRAR CLASE
-            window.deleteClass = async (id) => {
-                if(confirm('¿Borrar esta Aula/Clase? Desaparecerá del Hub del alumno.')) {
-                    const res = await fetch(`https://tamar-backend-api-gqy9.onrender.com/api/admin/clases/${id}`, { method: 'DELETE', headers: {'Authorization': `Bearer ${token}`} });
-                    if(res.ok) loadActiveClasses();
-                    else alert('Error: Asegúrate de haber actualizado server.js con la ruta DELETE');
-                }
-            };
+            async function loadVideosLibrary() {
+                try {
+                    const res = await getData('admin/videos', token);
+                    const data = await res.json();
+                    const tbody = document.querySelector('#tabla-videos tbody');
+                    tbody.innerHTML = (data.videos && data.videos.length) ? data.videos.map(v => `
+                        <tr><td>${v.modulo}</td><td>${v.titulo_completo}</td><td><button class="btn-action btn-delete" onclick="window.deleteVideo(${v.id})">🗑️</button></td></tr>
+                    `).join('') : '<tr><td colspan="3">Sin videos.</td></tr>';
+                } catch (e) { console.error(e); }
+            }
 
-            // SUBMIT CLASE
             document.getElementById('form-clase').addEventListener('submit', async (e) => {
                 e.preventDefault();
                 const data = { 
@@ -254,6 +228,7 @@
                     hora: document.getElementById('clase-fecha').value.split('T')[1], 
                     link_zoom: document.getElementById('clase-zoom').value, 
                     link_recursos: document.getElementById('clase-recursos').value, 
+                    nivel: document.getElementById('clase-nivel').value, // Enviamos el nivel seleccionado
                     descripcion: 'Clase Hub' 
                 };
                 const res = await fetch('https://tamar-backend-api-gqy9.onrender.com/api/admin/nueva-clase', { method: 'POST', headers: {'Content-Type':'application/json', 'Authorization': `Bearer ${token}`}, body: JSON.stringify(data) });
@@ -265,11 +240,6 @@
                 const data = { titulo: document.getElementById('vid-titulo').value, corto: document.getElementById('vid-corto').value, modulo: document.getElementById('vid-modulo').value, orden: document.getElementById('vid-orden').value, url: document.getElementById('vid-url').value, desc: document.getElementById('vid-desc').value };
                 const res = await fetch('https://tamar-backend-api-gqy9.onrender.com/api/admin/videos', { method: 'POST', headers: {'Content-Type':'application/json', 'Authorization': `Bearer ${token}`}, body: JSON.stringify(data) });
                 if(res.ok) { alert('Video agregado.'); document.getElementById('form-video').reset(); loadVideosLibrary(); }
-            });
-
-            document.getElementById('search-input').addEventListener('keyup', (e) => {
-                const term = e.target.value.toLowerCase();
-                renderAlumnos(globalAlumnos.filter(u => u.nombre.toLowerCase().includes(term) || u.email.toLowerCase().includes(term)));
             });
 
             document.getElementById('logout-btn').addEventListener('click', (e) => { e.preventDefault(); localStorage.removeItem('token'); window.location.href = 'login.html'; });
