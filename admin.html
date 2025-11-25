@@ -65,7 +65,7 @@
 
         <div class="admin-section" style="border-top: 5px solid var(--color-acento);">
             <h3>🔴 Gestión de Aulas (Hub)</h3>
-            <p>Carga aquí los accesos a Zoom. <strong>Selecciona correctamente el nivel</strong> para que solo lo vean los alumnos correspondientes.</p>
+            <p>Carga aquí los accesos a Zoom. <strong>Selecciona correctamente el nivel</strong>.</p>
             
             <form id="form-clase" style="display: flex; flex-direction: column; gap: 15px; background: #fff8e1; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
                 <div>
@@ -93,6 +93,11 @@
                     <input type="url" id="clase-zoom" placeholder="Link Zoom Fijo" required style="padding:8px; flex:1; border:1px solid #ccc; border-radius:5px;">
                     <input type="url" id="clase-recursos" placeholder="Link Carpeta Drive (Materiales)" style="padding:8px; flex:1; border:1px solid #ccc; border-radius:5px;">
                 </div>
+                
+                <div style="display:flex; gap:10px;">
+                    <input type="url" id="clase-grabaciones" placeholder="Link Carpeta Grabaciones (Drive)" style="padding:8px; flex:1; border:1px solid #ccc; border-radius:5px;">
+                </div>
+
                 <button type="submit" class="btn" style="padding:10px; cursor: pointer; background-color: var(--color-acento); color: var(--color-azul-profundo);">➕ Publicar Aula</button>
             </form>
 
@@ -227,8 +232,9 @@
                     fecha: document.getElementById('clase-fecha').value.split('T')[0], 
                     hora: document.getElementById('clase-fecha').value.split('T')[1], 
                     link_zoom: document.getElementById('clase-zoom').value, 
-                    link_recursos: document.getElementById('clase-recursos').value, 
-                    nivel: document.getElementById('clase-nivel').value, // Enviamos el nivel seleccionado
+                    link_recursos: document.getElementById('clase-recursos').value,
+                    link_grabaciones: document.getElementById('clase-grabaciones').value, // <--- NUEVO CAMPO
+                    nivel: document.getElementById('clase-nivel').value, 
                     descripcion: 'Clase Hub' 
                 };
                 const res = await fetch('https://tamar-backend-api-gqy9.onrender.com/api/admin/nueva-clase', { method: 'POST', headers: {'Content-Type':'application/json', 'Authorization': `Bearer ${token}`}, body: JSON.stringify(data) });
