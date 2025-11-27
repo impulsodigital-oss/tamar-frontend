@@ -4,26 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aula Virtual - Tamar</title>
-    
     <link rel="icon" type="image/png" href="images/favicon.png">
-
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="CSS/style.css">
     
     <style>
+        /* Estilos anteriores + Novedades */
         body { background-color: #f4f6f9; font-family: 'Lato', sans-serif; }
-        
         .classroom-container { display: grid; grid-template-columns: 320px 1fr; gap: 0; min-height: calc(100vh - 80px); }
         .course-sidebar { background: white; border-right: 1px solid #e0e0e0; height: calc(100vh - 80px); overflow-y: auto; position: sticky; top: 80px; }
         .sidebar-header { padding: 25px; background: var(--color-azul-profundo); color: white; }
-        
         .progress-container { margin-top: 15px; }
         .progress-bar-bg { background: rgba(255,255,255,0.2); height: 8px; border-radius: 4px; overflow: hidden; }
         .progress-bar-fill { background: var(--color-acento); height: 100%; width: 0%; transition: width 0.6s ease; }
         .progress-text { font-size: 0.85rem; margin-top: 8px; display: flex; justify-content: space-between; font-weight: bold; color: rgba(255,255,255,0.9); }
         
+        /* NEWS BOX */
+        .news-box { background: #fff8e1; border-left: 5px solid #e67e22; padding: 15px; margin-bottom: 30px; border-radius: 4px; display:none; }
+        .news-title { color: #d35400; font-weight: bold; margin-bottom: 5px; display:block; font-size:0.9rem; text-transform: uppercase; }
+        
+        /* DIPLOMA BUTTON */
+        #btn-diploma { display:none; margin-top:10px; width:100%; background:gold; color:#333; border:none; padding:10px; border-radius:5px; cursor:pointer; font-weight:bold; }
+        
+        /* Estilos generales */
         .lesson-list { list-style: none; padding: 0; margin: 0; }
         .lesson-item { border-bottom: 1px solid #f0f0f0; cursor: pointer; transition: all 0.2s; padding: 18px 25px; display: flex; align-items: flex-start; gap: 12px; }
         .lesson-item:hover { background-color: #f8f9fa; }
@@ -33,102 +38,47 @@
         .lesson-item.completed .check-icon { background-color: #27ae60; border-color: #27ae60; color: white; }
         .lesson-title { font-size: 0.95rem; font-weight: 700; color: #2c3e50; margin-bottom: 4px; display: block; }
         .lesson-meta { font-size: 0.8rem; color: #7f8c8d; text-transform: uppercase; }
-
         .course-content { padding: 40px 60px; max-width: 1200px; margin: 0 auto; }
-
-        /* HUB DE AULAS */
         .hub-section { margin-bottom: 40px; }
         .hub-title { font-family: 'Playfair Display', serif; color: var(--color-azul-profundo); font-size: 1.8rem; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
         .hub-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
-        
-        .hub-card {
-            background: white; border-radius: 12px; padding: 20px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            transition: transform 0.2s, box-shadow 0.2s;
-            border-top: 4px solid var(--color-acento);
-            display: flex; flex-direction: column; justify-content: space-between;
-        }
+        .hub-card { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); transition: transform 0.2s, box-shadow 0.2s; border-top: 4px solid var(--color-acento); display: flex; flex-direction: column; justify-content: space-between; }
         .hub-card.personal { border-top: 4px solid #9b59b6; background: #fbfaff; }
-        
         .hub-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
         .hub-card h4 { margin: 0 0 5px 0; font-size: 1.1rem; color: #2c3e50; }
         .hub-card span { font-size: 0.85rem; color: #7f8c8d; margin-bottom: 15px; display: block; }
-        
         .btn-zoom-card { background: var(--color-azul-profundo); color: white; text-decoration: none; padding: 10px; border-radius: 6px; text-align: center; font-weight: bold; font-size: 0.9rem; display: block; transition: background 0.2s; }
         .btn-zoom-card:hover { background: #1a252f; }
         .btn-materials-card { background: #f1f2f6; color: #555; text-decoration: none; padding: 8px; border-radius: 6px; text-align: center; font-size: 0.85rem; display: block; border: 1px solid #ddd; margin-top: 5px; }
         .btn-materials-card:hover { background: #e1e2e6; }
-
-        /* VIDEO Y TABS */
         .video-wrapper { position: relative; padding-bottom: 56.25%; height: 0; background: black; border-radius: 12px; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.2); margin-bottom: 30px; }
         .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
-        
         .tabs-container { background: white; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); padding: 25px; }
         .tabs-header { display: flex; border-bottom: 2px solid #f0f0f0; margin-bottom: 20px; }
         .tab-btn { background: none; border: none; padding: 10px 20px; font-size: 1rem; font-weight: bold; color: #7f8c8d; cursor: pointer; position: relative; }
         .tab-btn.active { color: var(--color-azul-profundo); }
         .tab-btn.active::after { content: ''; position: absolute; bottom: -2px; left: 0; width: 100%; height: 3px; background: var(--color-acento); }
-        
         .tab-content { display: none; animation: fadeIn 0.3s ease; }
         .tab-content.active { display: block; }
-        
         .btn-complete { background-color: #e0e0e0; color: #555; padding: 12px 25px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; float: right; }
         .btn-complete.completed { background-color: #27ae60; color: white; }
-
-        /* Planes */
         .plan-features { background-color: #f1f8ff; padding: 20px; border-radius: 8px; margin-bottom: 25px; border-left: 5px solid var(--color-acento); }
         .plan-features ul { margin: 10px 0 0 20px; padding: 0; }
         .plan-features li { margin-bottom: 8px; color: #555; }
-
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         
-        /* --- MEJORAS VISUALES PRO --- */
+        /* PRO: LOADER Y SCROLL */
+        @keyframes pulse { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.2); opacity: 0.7; } 100% { transform: scale(1); opacity: 1; } }
+        ::-webkit-scrollbar { width: 8px; height: 8px; } ::-webkit-scrollbar-track { background: #f1f1f1; } ::-webkit-scrollbar-thumb { background: #ccc; border-radius: 4px; }
         
-        /* 1. Loader Animado */
-        @keyframes pulse {
-            0% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.2); opacity: 0.7; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-        
-        /* 2. Scrollbar Moderna */
-        ::-webkit-scrollbar { width: 8px; height: 8px; }
-        ::-webkit-scrollbar-track { background: #f1f1f1; }
-        ::-webkit-scrollbar-thumb { background: #ccc; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--color-azul-profundo); }
-
-        /* 3. Efectos Suaves en Tarjetas */
-        .hub-card {
-            border: 1px solid rgba(0,0,0,0.05);
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-        }
-        .hub-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-            border-color: var(--color-acento);
-        }
-        .lesson-item { border-radius: 8px; margin: 5px 10px; border-bottom: 1px solid rgba(0,0,0,0.03); }
-        .lesson-item:hover { background-color: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.05); transform: translateX(5px); }
-        .lesson-item.active { background: linear-gradient(90deg, #eef1f4 0%, #ffffff 100%); border-left: 4px solid var(--color-azul-profundo); color: var(--color-azul-profundo); }
-        
-        @media (max-width: 900px) {
-            .classroom-container { display: block; }
-            .course-sidebar { position: relative; width: 100%; height: auto; top: 0; border-right: none; z-index: 100; }
-            .course-content { padding: 20px; }
-            .hub-grid { grid-template-columns: 1fr; }
-        }
+        @media (max-width: 900px) { .classroom-container { display: block; } .course-sidebar { width: 100%; height: auto; } .course-content { padding: 20px; } .hub-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
     <header class="header">
         <div class="container">
             <img src="images/logo-tamar.png" alt="Logo Tamar" class="logo">
-            <nav class="nav">
-                <ul>
-                    <li><a href="index.html">Inicio</a></li>
-                    <li><a href="#" id="logout-btn">Cerrar Sesión</a></li>
-                </ul>
-            </nav>
+            <nav class="nav"><ul><li><a href="index.html">Inicio</a></li><li><a href="#" id="logout-btn">Cerrar Sesión</a></li></ul></nav>
         </div>
     </header>
 
@@ -142,33 +92,30 @@
             <div class="sidebar-header">
                 <h4>Tu Progreso</h4>
                 <div id="user-badge" style="background: rgba(255,255,255,0.2); padding: 5px 10px; border-radius: 4px; font-size: 0.8rem; margin-top: 5px; display:inline-block;">Alumno</div>
-                
                 <div class="progress-container">
                     <div class="progress-bar-bg"><div id="progress-fill" class="progress-bar-fill"></div></div>
                     <div class="progress-text"><span id="progress-percent">0%</span><span id="progress-count">0/0</span></div>
                 </div>
+                
+                <button id="btn-diploma" onclick="window.open('https://wa.me/5493412757827?text=Hola%20Sofi!%20Termin%C3%A9%20mis%20videos%20al%20100%25%20%F0%9F%8F%86%20Solicito%20mi%20Diploma.')">🏆 Solicitar Diploma</button>
 
-                <div id="sub-info" class="subscription-card" style="display:none; background: rgba(0,0,0,0.2); padding: 15px; border-radius: 8px; margin-top: 20px; color: white; font-size: 0.9rem;">
-                    <p style="margin:0 0 5px 0; color:#ccc;">Tu Plan:</p>
-                    <strong id="user-plan-name" style="display:block; margin-bottom:10px;">-</strong>
-                    <p style="margin:0 0 5px 0; color:#ccc;">Vencimiento:</p>
-                    <strong id="user-expiry-date" style="display:block; margin-bottom:10px;">-</strong>
-                    <button onclick="renderPaymentWall()" class="btn-zoom-card" style="background:var(--color-acento); color:var(--color-azul-profundo); border:none; width:100%; cursor:pointer;">↻ Renovar Cuota</button>
+                <div id="sub-info" style="display:none; background: rgba(0,0,0,0.2); padding: 15px; border-radius: 8px; margin-top: 20px; color: white; font-size: 0.9rem;">
+                    <p style="margin:0; color:#ccc;">Vence:</p><strong id="user-expiry-date">-</strong>
+                    <button onclick="renderPaymentWall()" class="btn-zoom-card" style="background:var(--color-acento); color:var(--color-azul-profundo); border:none; width:100%; cursor:pointer; margin-top:10px;">↻ Renovar</button>
                 </div>
-
             </div>
             <ul id="lesson-list-ul" class="lesson-list"></ul>
         </aside>
 
         <main class="course-content">
+            <div id="news-area" class="news-box">
+                <span class="news-title">📢 Novedades de la Tribu:</span>
+                <p id="news-content" style="margin:0; color:#555;"></p>
+            </div>
+
             <div class="hub-section">
-                <div class="hub-title">🔴 Aulas en Vivo y Tutorías</div>
-                <p id="nivel-info" style="color:#666; margin-bottom: 20px;">Tus clases en vivo:</p>
-                <div id="hub-grid" class="hub-grid">
-                    <div style="grid-column: 1/-1; padding: 20px; background: white; border-radius: 8px; text-align: center; color: #666;">
-                        Cargando accesos...
-                    </div>
-                </div>
+                <div class="hub-title">🔴 Aulas en Vivo</div>
+                <div id="hub-grid" class="hub-grid"><div style="grid-column: 1/-1; padding: 20px; background: white; border-radius: 8px; text-align: center; color: #666;">Cargando...</div></div>
             </div>
 
             <hr style="border: 0; border-top: 1px solid #eee; margin: 40px 0;">
@@ -176,29 +123,20 @@
             <div id="video-area">
                 <div class="hub-title" style="font-size: 1.5rem;">📚 Lecciones Grabadas</div>
                 <div class="video-wrapper"><iframe id="main-video-frame" src="" allow="autoplay; encrypted-media" allowfullscreen loading="lazy"></iframe></div>
-                
                 <div class="tabs-container">
                     <div class="tabs-header">
                         <button id="btn-tab-desc" class="tab-btn active" onclick="switchTab('desc')">📖 Descripción</button>
                         <button id="btn-tab-resources" class="tab-btn" onclick="switchTab('resources')">📂 Recursos</button>
                         <button id="btn-tab-support" class="tab-btn" onclick="switchTab('support')">💬 Soporte</button>
                     </div>
-
                     <div id="tab-desc" class="tab-content active">
-                        <div style="overflow: hidden;"> 
-                            <button id="btn-mark-complete" class="btn-complete">Marcar como Vista</button>
-                        </div>
+                        <div style="overflow: hidden;"> <button id="btn-mark-complete" class="btn-complete">Marcar como Vista</button> </div>
                         <h2 id="main-video-title" style="margin-top: 15px; color: var(--color-azul-profundo);">...</h2>
                         <p id="main-video-desc" style="color: #555; line-height: 1.6;">...</p>
                     </div>
-
-                    <div id="tab-resources" class="tab-content">
-                        <h3>Materiales de esta Lección</h3>
-                        <div id="resources-container" style="margin-top: 20px;"></div>
-                    </div>
-
+                    <div id="tab-resources" class="tab-content"><div id="resources-container"></div></div>
                     <div id="tab-support" class="tab-content">
-                        <h3>¿Dudas sobre este tema?</h3>
+                        <h3>¿Dudas?</h3>
                         <div style="display: flex; gap: 15px; margin-top: 20px;">
                             <a href="https://wa.me/5493412757827" target="_blank" class="btn-zoom-card" style="background: #25D366;">WhatsApp Profesores</a>
                             <a href="mailto:educaciontamar@gmail.com" class="btn-zoom-card" style="background: #333;">Soporte Técnico</a>
@@ -245,19 +183,11 @@
         document.addEventListener('DOMContentLoaded', async () => {
             const token = getAuthToken();
             if (!token) { window.location.href = 'login.html'; return; }
-
-            document.getElementById('logout-btn').addEventListener('click', (e) => {
-                e.preventDefault(); localStorage.removeItem('token'); window.location.href = 'index.html';
-            });
+            document.getElementById('logout-btn').addEventListener('click', () => { localStorage.removeItem('token'); window.location.href = 'index.html'; });
 
             const urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.get('status') === 'success') {
-                showMessage('video-message', '¡Pago exitoso!', 'success');
-                setTimeout(() => window.location.href = 'videos.html', 3000);
-            }
-            if (urlParams.get('status') === 'paypal_success' && urlParams.get('token')) {
-                try { await postData('capturar-pago-paypal', { orderID: urlParams.get('token'), planId: urlParams.get('plan') }, token); setTimeout(() => window.location.href = 'videos.html', 3000); } catch(e) {}
-            }
+            if (urlParams.get('status') === 'success') { showMessage('video-message', '¡Pago exitoso!', 'success'); setTimeout(() => window.location.href = 'videos.html', 3000); }
+            if (urlParams.get('status') === 'paypal_success' && urlParams.get('token')) { try { await postData('capturar-pago-paypal', { orderID: urlParams.get('token'), planId: urlParams.get('plan') }, token); setTimeout(() => window.location.href = 'videos.html', 3000); } catch(e) {} }
 
             try {
                 const response = await getData('videos', token);
@@ -269,20 +199,20 @@
                         allVideos = data.videos;
                         userLevel = data.userLevel || 'general';
                         userId = data.userId;
-                        
                         document.getElementById('user-badge').textContent = `Nivel: ${userLevel.toUpperCase()}`;
-                        // Mensaje de Bienvenida Dinámico
+                        
+                        // SALUDO Y NOVEDADES
                         const hora = new Date().getHours();
-                        let saludo = "Hola";
-                        if (hora < 12) saludo = "Buenos días"; else if (hora < 19) saludo = "Buenas tardes"; else saludo = "Buenas noches";
+                        let saludo = "Hola"; if (hora < 12) saludo = "Buenos días"; else if (hora < 19) saludo = "Buenas tardes"; else saludo = "Buenas noches";
                         document.querySelector('.hub-title').innerHTML = `${saludo} 👋 <br><span style="font-size:1.2rem; opacity:0.8; font-family:'Lato'">Tus clases de hoy:</span>`;
                         
-                        // Info Vencimiento
+                        if(data.novedades) {
+                            document.getElementById('news-content').textContent = data.novedades;
+                            document.getElementById('news-area').style.display = 'block';
+                        }
+
                         if (data.fechaInicio) {
-                            const registro = new Date(data.fechaInicio);
-                            const vencimiento = new Date(registro);
-                            vencimiento.setDate(registro.getDate() + 30);
-                            document.getElementById('user-plan-name').textContent = data.plan || 'Plan Básico';
+                            const vencimiento = new Date(new Date(data.fechaInicio).setDate(new Date(data.fechaInicio).getDate() + 30));
                             document.getElementById('user-expiry-date').textContent = vencimiento.toLocaleDateString('es-AR');
                             document.getElementById('sub-info').style.display = 'block';
                         }
@@ -292,20 +222,13 @@
                         loadVideo(0);
                         loadClassroomsGrid(token);
                     }
-                } else if (response.status === 403) {
-                    renderPaymentWall();
-                }
+                } else if (response.status === 403) { renderPaymentWall(); }
             } catch (e) { showMessage('video-message', 'Error de conexión.', 'error'); }
         });
 
         function renderSidebar(videos) {
             const ul = document.getElementById('lesson-list-ul');
-            ul.innerHTML = videos.map((video, index) => `
-                <li class="lesson-item ${video.completado ? 'completed' : ''}" onclick="window.loadVideo(${index})">
-                    <div class="check-icon">✔</div>
-                    <div class="lesson-info"><span class="lesson-title">${video.titulo_corto || video.titulo_completo}</span><span class="lesson-meta">Módulo ${video.modulo}</span></div>
-                </li>
-            `).join('');
+            ul.innerHTML = videos.map((video, index) => `<li class="lesson-item ${video.completado ? 'completed' : ''}" onclick="window.loadVideo(${index})"><div class="check-icon">✔</div><div class="lesson-info"><span class="lesson-title">${video.titulo_corto || video.titulo_completo}</span><span class="lesson-meta">Módulo ${video.modulo}</span></div></li>`).join('');
             updateProgress(videos);
         }
 
@@ -313,22 +236,16 @@
             currentVideoIndex = index;
             const video = allVideos[index];
             document.querySelectorAll('.lesson-item').forEach((el, i) => el.classList.toggle('active', i === index));
-            let url = video.url_video || '';
-            if(url.includes('watch?v=')) url = url.replace('watch?v=', 'embed/');
+            let url = video.url_video || ''; if(url.includes('watch?v=')) url = url.replace('watch?v=', 'embed/');
             document.getElementById('main-video-frame').src = url;
             document.getElementById('main-video-title').textContent = video.titulo_completo;
-            const desc = video.descripcion || '';
-            const urlRegex = /(https?:\/\/[^\s]+)/g;
-            const links = desc.match(urlRegex);
-            const cleanDesc = desc.replace(urlRegex, '').trim() || 'Disfruta de esta lección.';
+            const cleanDesc = (video.descripcion || '').replace(/(https?:\/\/[^\s]+)/g, '').trim() || 'Disfruta de esta lección.';
             document.getElementById('main-video-desc').textContent = cleanDesc;
-            const resContainer = document.getElementById('resources-container');
-            if (links && links.length > 0) {
-                resContainer.innerHTML = links.map(link => `<a href="${link}" target="_blank" class="btn-zoom-card" style="background: #fff; color: #333; border: 1px solid #ccc; margin-bottom: 10px; justify-content: center;">📂 Descargar Material</a>`).join('');
-            } else { resContainer.innerHTML = `<div style="background:#f8f9fa; padding:20px; border:1px dashed #ccc; text-align:center; color:#666;">No hay adjuntos.</div>`; }
+            const links = (video.descripcion || '').match(/(https?:\/\/[^\s]+)/g);
+            document.getElementById('resources-container').innerHTML = links ? links.map(l => `<a href="${l}" target="_blank" class="btn-zoom-card" style="background:#fff;color:#333;border:1px solid #ccc;">📂 Descargar</a>`).join('') : '<div style="padding:20px;color:#666;text-align:center;">Sin adjuntos</div>';
             switchTab('desc');
-            const btnComplete = document.getElementById('btn-mark-complete');
-            if (video.completado) { btnComplete.textContent = '✅ Completada'; btnComplete.classList.add('completed'); btnComplete.disabled = true; } else { btnComplete.textContent = 'Marcar como Vista'; btnComplete.classList.remove('completed'); btnComplete.disabled = false; }
+            const btn = document.getElementById('btn-mark-complete');
+            if (video.completado) { btn.textContent = '✅ Completada'; btn.classList.add('completed'); btn.disabled = true; } else { btn.textContent = 'Marcar como Vista'; btn.classList.remove('completed'); btn.disabled = false; }
         };
 
         async function loadClassroomsGrid(token) {
@@ -336,27 +253,14 @@
                 const res = await getData('clases-en-vivo', token);
                 const data = await res.json();
                 const grid = document.getElementById('hub-grid');
-                const filteredClasses = data.clases.filter(c => {
-                    const nivelClase = c.nivel_objetivo || 'general';
-                    return nivelClase === userLevel || nivelClase === 'general' || nivelClase === `id:${userId}`;
-                });
+                const filteredClasses = data.clases.filter(c => { const lvl = c.nivel_objetivo || 'general'; return lvl === userLevel || lvl === 'general' || lvl === `id:${userId}`; });
                 if (filteredClasses.length > 0) {
                     grid.innerHTML = filteredClasses.map(c => {
                         const isPersonal = (c.nivel_objetivo || '').startsWith('id:');
-                        return `
-                        <div class="hub-card ${isPersonal ? 'personal' : ''}">
-                            <div><h4>${c.titulo}</h4><span>${c.materia ? c.materia : 'Aula General'} ${c.profesor ? '- ' + c.profesor : ''}</span></div>
-                            <div>
-                                <a href="${c.link_zoom}" target="_blank" class="btn-zoom-card">🎥 Entrar al Aula</a>
-                                <div style="display:flex; gap:5px; margin-top:8px;">
-                                    ${c.link_recursos ? `<a href="${c.link_recursos}" target="_blank" class="btn-materials-card" style="flex:1;">📂 Materiales</a>` : ''}
-                                    ${c.link_grabaciones ? `<a href="${c.link_grabaciones}" target="_blank" class="btn-materials-card" style="flex:1; background:#fff0f0; color:#c0392b; border-color:#e74c3c;">⏪ Grabaciones</a>` : ''}
-                                </div>
-                            </div>
-                        </div>
-                    `}).join('');
-                } else { grid.innerHTML = '<div style="grid-column: 1/-1; text-align:center; padding:20px; color:#666;">No hay aulas activas para tu nivel.</div>'; }
-            } catch (e) { console.error("Error cargando aulas", e); }
+                        return `<div class="hub-card ${isPersonal ? 'personal' : ''}"><div><h4>${c.titulo}</h4><span>${c.materia || 'General'} ${c.profesor ? '- ' + c.profesor : ''}</span></div><div><a href="${c.link_zoom}" target="_blank" class="btn-zoom-card">🎥 Entrar</a><div style="display:flex;gap:5px;margin-top:8px;">${c.link_recursos ? `<a href="${c.link_recursos}" target="_blank" class="btn-materials-card" style="flex:1;">📂 Material</a>` : ''}${c.link_grabaciones ? `<a href="${c.link_grabaciones}" target="_blank" class="btn-materials-card" style="flex:1;background:#fff0f0;color:#c0392b;border-color:#e74c3c;">⏪ Grabaciones</a>` : ''}</div></div></div>`;
+                    }).join('');
+                } else { grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:20px;color:#666;">No hay aulas activas.</div>'; }
+            } catch (e) { console.error(e); }
         }
 
         document.getElementById('btn-mark-complete').addEventListener('click', async () => {
@@ -372,108 +276,37 @@
             document.getElementById('progress-fill').style.width = `${percent}%`;
             document.getElementById('progress-percent').textContent = `${percent}%`;
             document.getElementById('progress-count').textContent = `${completedCount}/${videos.length}`;
+            document.getElementById('btn-diploma').style.display = percent === 100 ? 'block' : 'none';
         }
 
-        // --- PAYMENT WALL ---
         window.renderPaymentWall = () => {
-            const container = document.getElementById('classroom-ui');
-            container.style.display = 'block';
+            document.getElementById('classroom-ui').style.display = 'block';
             document.querySelector('.course-sidebar').style.display = 'none';
-            document.querySelector('.course-content').style.marginLeft = '0';
-            document.querySelector('.course-content').style.maxWidth = '100%';
+            document.querySelector('.course-content').innerHTML = `<div style="text-align:center;padding:40px;"><h1 style="color:var(--color-azul-profundo);">🔒 Inscripción / Renovación</h1><div style="background:white;padding:30px;border-radius:15px;box-shadow:0 10px 30px rgba(0,0,0,0.1);text-align:left;"><div style="margin-bottom:20px;"><label>1. Nivel:</label><select id="level-selector" style="width:100%;padding:15px;margin-bottom:20px;"><option value="kinder">Kinder</option><option value="primaria">Primaria</option><option value="secundaria_middle">Secundaria (Middle)</option><option value="secundaria_high">Secundaria (High)</option></select><label>2. Plan:</label><select id="plan-selector" style="width:100%;padding:15px;"><option value="kinder_mensual" data-target="kinder" data-ars="58800" data-usd="49">Kinder Mensual ($58.800)</option><option value="kinder_semanal" data-target="kinder" data-ars="70800" data-usd="59">Kinder Semanal ($70.800)</option><option value="basico" data-target="school" data-ars="46800" data-usd="39">Plan Básico ($46.800)</option><option value="core" data-target="school" data-ars="70800" data-usd="59">Plan Core ($70.800)</option><option value="plus" data-target="school" data-ars="154800" data-usd="129">Plan Plus ($154.800)</option><option value="selecto" data-target="school" data-ars="130800" data-usd="109">Plan Selecto ($130.800)</option><option value="prestige" data-target="school" data-ars="274800" data-usd="229">Plan Prestige ($274.800)</option><option value="certificacion" data-target="school" data-ars="240000" data-usd="200">Certificación ($240.000)</option></select></div><div style="margin-bottom:20px;"><label>🎟️ Cupón:</label><input type="text" id="coupon-code" placeholder="Código" style="width:100%;padding:10px;"></div><div id="plan-features-container" class="plan-features"><ul></ul></div><button onclick="window.pagarMP()" class="btn" style="width:100%;background:#009ee3;margin-bottom:10px;">Pagar Mercado Pago <span id="price-display-ars"></span></button><button onclick="window.pagarPayPal()" class="btn" style="width:100%;background:#ffc439;color:#003087;">Pagar PayPal <span id="price-display-usd"></span></button></div></div>`;
             
-            document.querySelector('.course-content').innerHTML = `
-                <div style="text-align: center; padding: 40px; max-width: 900px; margin: 0 auto;">
-                    <h1 style="color: var(--color-azul-profundo); margin-bottom: 10px;">🔒 Inscripción / Renovación</h1>
-                    <p style="font-size: 1.1rem; margin-bottom: 30px; color:#666;">Selecciona nivel y plan.</p>
-                    <div style="background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: left;">
-                        <div style="margin-bottom: 20px;">
-                            <label style="display:block; font-weight:bold; margin-bottom:10px; color: var(--color-azul-profundo);">1. Nivel Educativo:</label>
-                            <select id="level-selector" style="width:100%; padding:15px; border-radius:8px; border:2px solid #2D8CFF; font-size:1.1rem; background-color: #f0f7ff;">
-                                <option value="kinder">Kinder (Jardín)</option>
-                                <option value="primaria">Primaria (Elementary)</option>
-                                <option value="secundaria_middle">Secundaria (Middle)</option>
-                                <option value="secundaria_high">Secundaria (High)</option>
-                            </select>
-                        </div>
-                        <div style="margin-bottom: 20px;">
-                            <label style="display:block; font-weight:bold; margin-bottom:10px; color: var(--color-azul-profundo);">2. Elige tu Plan:</label>
-                            <select id="plan-selector" style="width:100%; padding:15px; border-radius:8px; border:2px solid #eee; font-size:1.1rem;">
-                                <option value="kinder_mensual" data-target="kinder" data-ars="58800" data-usd="49">Kinder Mensual ($58.800 / $49 USD)</option>
-                                <option value="kinder_semanal" data-target="kinder" data-ars="70800" data-usd="59">Kinder Semanal ($70.800 / $59 USD)</option>
-                                <option value="basico" data-target="school" data-ars="46800" data-usd="39">Plan Básico ($46.800 / $39 USD)</option>
-                                <option value="core" data-target="school" data-ars="70800" data-usd="59">Plan Core (3 Materias - $59 USD)</option>
-                                <option value="plus" data-target="school" data-ars="154800" data-usd="129">Plan Plus (10 Materias - $129 USD)</option>
-                                <option value="selecto" data-target="school" data-ars="130800" data-usd="109">Plan Selecto (4 Mat. Semanal - $109 USD)</option>
-                                <option value="prestige" data-target="school" data-ars="274800" data-usd="229">Plan Prestige (10 Mat. Semanal - $229 USD)</option>
-                                <option value="certificacion" data-target="school" data-ars="240000" data-usd="200">Certificación Anual ($200 USD)</option>
-                            </select>
-                        </div>
-                        <div style="margin-bottom: 20px;">
-                            <label style="display:block; font-weight:bold; margin-bottom:10px; color: #555;">🎟️ ¿Tenés Cupón? (Santa Fe / Hermanos)</label>
-                            <input type="text" id="coupon-code" placeholder="Ingresa tu código aquí" style="width:100%; padding:10px; border:1px dashed #aaa; border-radius:5px;">
-                        </div>
-                        <div id="plan-features-container" class="plan-features"><h4>✨ Incluye:</h4><ul id="features-list"></ul></div>
-                        <div style="display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
-                            <div style="border: 1px solid #eee; padding: 20px; border-radius: 8px; text-align:center;">
-                                <h4>🇦🇷 Argentina</h4>
-                                <p id="price-display-ars" style="font-size: 1.5rem; color: var(--color-acento); font-weight:bold; margin: 10px 0;">$46.800 ARS</p>
-                                <button onclick="window.pagarMP()" class="btn" style="width:100%; background: #009ee3;">Pagar con Mercado Pago</button>
-                            </div>
-                            <div style="border: 1px solid #eee; padding: 20px; border-radius: 8px; text-align:center;">
-                                <h4>🌍 Internacional</h4>
-                                <p id="price-display-usd" style="font-size: 1.5rem; color: var(--color-acento); font-weight:bold; margin: 10px 0;">$39 USD</p>
-                                <button onclick="window.pagarPayPal()" class="btn" style="width:100%; background: #ffc439; color: #003087;">Pagar con PayPal</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
-
-            const filterPlansByLevel = () => {
-                const levelSelect = document.getElementById('level-selector');
-                const planSelect = document.getElementById('plan-selector');
-                const isKinder = (levelSelect.value === 'kinder');
-                let firstVisible = null;
-                Array.from(planSelect.options).forEach(opt => {
+            const filter = () => {
+                const isKinder = document.getElementById('level-selector').value === 'kinder';
+                let first = null;
+                Array.from(document.getElementById('plan-selector').options).forEach(opt => {
                     const target = opt.getAttribute('data-target');
-                    if ((isKinder && target === 'kinder') || (!isKinder && target === 'school')) {
-                        opt.hidden = false;
-                        if(!firstVisible) firstVisible = opt;
-                    } else { opt.hidden = true; }
+                    if((isKinder && target==='kinder') || (!isKinder && target==='school')) { opt.hidden=false; if(!first) first=opt; } else { opt.hidden=true; }
                 });
-                if (planSelect.selectedOptions[0].hidden && firstVisible) planSelect.value = firstVisible.value;
-                updatePlanInfo();
+                if(document.getElementById('plan-selector').selectedOptions[0].hidden && first) document.getElementById('plan-selector').value = first.value;
+                updateInfo();
             };
-
-            const updatePlanInfo = () => {
-                const selector = document.getElementById('plan-selector');
-                const opt = selector.options[selector.selectedIndex];
-                const list = document.getElementById('features-list');
-                document.getElementById('price-display-ars').textContent = `$${new Intl.NumberFormat('es-AR').format(opt.getAttribute('data-ars'))} ARS`;
-                document.getElementById('price-display-usd').textContent = `$${opt.getAttribute('data-usd')} USD`;
-                list.innerHTML = PLAN_DETAILS[opt.value] ? PLAN_DETAILS[opt.value].features.map(f => `<li>${f}</li>`).join('') : '';
+            const updateInfo = () => {
+                const opt = document.getElementById('plan-selector').selectedOptions[0];
+                document.getElementById('price-display-ars').textContent = `$${new Intl.NumberFormat('es-AR').format(opt.getAttribute('data-ars'))}`;
+                document.getElementById('price-display-usd').textContent = `$${opt.getAttribute('data-usd')}`;
+                document.querySelector('#plan-features-container ul').innerHTML = PLAN_DETAILS[opt.value].features.map(f=>`<li>${f}</li>`).join('');
             };
-
-            document.getElementById('plan-selector').addEventListener('change', updatePlanInfo);
-            document.getElementById('level-selector').addEventListener('change', filterPlansByLevel);
-            filterPlansByLevel();
+            document.getElementById('level-selector').addEventListener('change', filter);
+            document.getElementById('plan-selector').addEventListener('change', updateInfo);
+            filter();
             
-            window.pagarMP = async () => {
-                const token = getAuthToken();
-                const planId = document.getElementById('plan-selector').value;
-                const nivel = document.getElementById('level-selector').value;
-                const cupon = document.getElementById('coupon-code').value.trim();
-                try { const res = await postData('crear-pago', { planId, nivel, cupon }, token); const data = await res.json(); if (data.init_point) window.location.href = data.init_point; } catch (e) { alert('Error MP'); }
-            };
-            window.pagarPayPal = async () => {
-                const token = getAuthToken();
-                const planId = document.getElementById('plan-selector').value;
-                const nivel = document.getElementById('level-selector').value;
-                const cupon = document.getElementById('coupon-code').value.trim();
-                try { const res = await postData('crear-pago-paypal', { planId, nivel, cupon }, token); const data = await res.json(); const link = data.links.find(l => l.rel === 'approve'); if (link) window.location.href = link.href; } catch (e) { alert('Error PayPal'); }
-            };
-        }
+            window.pagarMP = async () => { try { const res = await postData('crear-pago', { planId: document.getElementById('plan-selector').value, nivel: document.getElementById('level-selector').value, cupon: document.getElementById('coupon-code').value.trim() }, getAuthToken()); const data = await res.json(); if (data.init_point) window.location.href = data.init_point; } catch(e) { alert('Error MP'); } };
+            window.pagarPayPal = async () => { try { const res = await postData('crear-pago-paypal', { planId: document.getElementById('plan-selector').value, nivel: document.getElementById('level-selector').value, cupon: document.getElementById('coupon-code').value.trim() }, getAuthToken()); const data = await res.json(); if (data.links) window.location.href = data.links.find(l => l.rel === 'approve').href; } catch(e) { alert('Error PayPal'); } };
+        };
     </script>
 </body>
 </html>
