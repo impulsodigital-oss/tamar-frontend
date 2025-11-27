@@ -10,15 +10,22 @@
     <link rel="stylesheet" href="CSS/style.css">
     
     <style>
-        /* ... (ESTILOS IGUALES) ... */
         body { background-color: #f4f6f9; font-family: 'Lato', sans-serif; }
+        
         .classroom-container { display: grid; grid-template-columns: 320px 1fr; gap: 0; min-height: calc(100vh - 80px); }
         .course-sidebar { background: white; border-right: 1px solid #e0e0e0; height: calc(100vh - 80px); overflow-y: auto; position: sticky; top: 80px; }
         .sidebar-header { padding: 25px; background: var(--color-azul-profundo); color: white; }
+        
         .progress-container { margin-top: 15px; }
         .progress-bar-bg { background: rgba(255,255,255,0.2); height: 8px; border-radius: 4px; overflow: hidden; }
         .progress-bar-fill { background: var(--color-acento); height: 100%; width: 0%; transition: width 0.6s ease; }
         .progress-text { font-size: 0.85rem; margin-top: 8px; display: flex; justify-content: space-between; font-weight: bold; color: rgba(255,255,255,0.9); }
+        
+        /* ESTILO NUEVO: TARJETA DE SUSCRIPCIÓN */
+        .subscription-card { background: rgba(0,0,0,0.2); padding: 15px; border-radius: 8px; margin-top: 20px; color: white; font-size: 0.9rem; }
+        .btn-renew { background: var(--color-acento); color: var(--color-azul-profundo); border: none; padding: 8px 15px; border-radius: 4px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; display: block; text-align: center; text-decoration: none; }
+        .btn-renew:hover { background: #fff; }
+
         .lesson-list { list-style: none; padding: 0; margin: 0; }
         .lesson-item { border-bottom: 1px solid #f0f0f0; cursor: pointer; transition: all 0.2s; padding: 18px 25px; display: flex; align-items: flex-start; gap: 12px; }
         .lesson-item:hover { background-color: #f8f9fa; }
@@ -28,33 +35,53 @@
         .lesson-item.completed .check-icon { background-color: #27ae60; border-color: #27ae60; color: white; }
         .lesson-title { font-size: 0.95rem; font-weight: 700; color: #2c3e50; margin-bottom: 4px; display: block; }
         .lesson-meta { font-size: 0.8rem; color: #7f8c8d; text-transform: uppercase; }
+
         .course-content { padding: 40px 60px; max-width: 1200px; margin: 0 auto; }
+
+        /* HUB DE AULAS */
         .hub-section { margin-bottom: 40px; }
         .hub-title { font-family: 'Playfair Display', serif; color: var(--color-azul-profundo); font-size: 1.8rem; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
         .hub-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
-        .hub-card { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); transition: transform 0.2s, box-shadow 0.2s; border-top: 4px solid var(--color-acento); display: flex; flex-direction: column; justify-content: space-between; }
+        
+        .hub-card {
+            background: white; border-radius: 12px; padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.2s, box-shadow 0.2s;
+            border-top: 4px solid var(--color-acento);
+            display: flex; flex-direction: column; justify-content: space-between;
+        }
         .hub-card.personal { border-top: 4px solid #9b59b6; background: #fbfaff; }
+        
         .hub-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
         .hub-card h4 { margin: 0 0 5px 0; font-size: 1.1rem; color: #2c3e50; }
         .hub-card span { font-size: 0.85rem; color: #7f8c8d; margin-bottom: 15px; display: block; }
+        
         .btn-zoom-card { background: var(--color-azul-profundo); color: white; text-decoration: none; padding: 10px; border-radius: 6px; text-align: center; font-weight: bold; font-size: 0.9rem; display: block; transition: background 0.2s; }
         .btn-zoom-card:hover { background: #1a252f; }
         .btn-materials-card { background: #f1f2f6; color: #555; text-decoration: none; padding: 8px; border-radius: 6px; text-align: center; font-size: 0.85rem; display: block; border: 1px solid #ddd; margin-top: 5px; }
         .btn-materials-card:hover { background: #e1e2e6; }
+
+        /* VIDEO Y TABS */
         .video-wrapper { position: relative; padding-bottom: 56.25%; height: 0; background: black; border-radius: 12px; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.2); margin-bottom: 30px; }
         .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+        
         .tabs-container { background: white; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); padding: 25px; }
         .tabs-header { display: flex; border-bottom: 2px solid #f0f0f0; margin-bottom: 20px; }
         .tab-btn { background: none; border: none; padding: 10px 20px; font-size: 1rem; font-weight: bold; color: #7f8c8d; cursor: pointer; position: relative; }
         .tab-btn.active { color: var(--color-azul-profundo); }
         .tab-btn.active::after { content: ''; position: absolute; bottom: -2px; left: 0; width: 100%; height: 3px; background: var(--color-acento); }
+        
         .tab-content { display: none; animation: fadeIn 0.3s ease; }
         .tab-content.active { display: block; }
+        
         .btn-complete { background-color: #e0e0e0; color: #555; padding: 12px 25px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; float: right; }
         .btn-complete.completed { background-color: #27ae60; color: white; }
+
+        /* Planes */
         .plan-features { background-color: #f1f8ff; padding: 20px; border-radius: 8px; margin-bottom: 25px; border-left: 5px solid var(--color-acento); }
         .plan-features ul { margin: 10px 0 0 20px; padding: 0; }
         .plan-features li { margin-bottom: 8px; color: #555; }
+
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         @media (max-width: 900px) {
             .classroom-container { display: block; }
@@ -87,10 +114,20 @@
             <div class="sidebar-header">
                 <h4>Tu Progreso</h4>
                 <div id="user-badge" style="background: rgba(255,255,255,0.2); padding: 5px 10px; border-radius: 4px; font-size: 0.8rem; margin-top: 5px; display:inline-block;">Alumno</div>
+                
                 <div class="progress-container">
                     <div class="progress-bar-bg"><div id="progress-fill" class="progress-bar-fill"></div></div>
                     <div class="progress-text"><span id="progress-percent">0%</span><span id="progress-count">0/0</span></div>
                 </div>
+
+                <div id="sub-info" class="subscription-card" style="display:none;">
+                    <p style="margin:0 0 5px 0; color:#ccc;">Tu Plan:</p>
+                    <strong id="user-plan-name" style="display:block; margin-bottom:10px;">-</strong>
+                    <p style="margin:0 0 5px 0; color:#ccc;">Vencimiento:</p>
+                    <strong id="user-expiry-date" style="display:block; margin-bottom:10px;">-</strong>
+                    <button onclick="renderPaymentWall()" class="btn-renew">↻ Renovar Cuota</button>
+                </div>
+
             </div>
             <ul id="lesson-list-ul" class="lesson-list"></ul>
         </aside>
@@ -153,7 +190,6 @@
         import { getData, postData, getAuthToken } from './js/api.js';
         import { showMessage } from './js/main.js';
 
-        // --- ACTUALIZACIÓN COMPLETA DE PLANES ---
         const PLAN_DETAILS = {
             'basico': { features: ['Acceso a videos para iniciar homeschool', 'Comunidad en línea', 'Grupo de estudio', 'Clases de ARTE gratis', 'Asesoramiento carpeta', 'Descuento SKEPSI'] },
             'kinder_mensual': { features: ['Plan Kinder Mensual', 'Acceso mensual', 'Clases de Kinder'] },
@@ -162,7 +198,7 @@
             'plus': { features: ['Plan Básico +', '10 Clases grupales mensuales', 'Elección de docentes'] },
             'selecto': { features: ['Plan Básico +', '4 Clases SEMANALES', 'Elección de 4 profesores'] },
             'prestige': { features: ['Plan Básico +', '10 Clases SEMANALES', '10 Materias incluidas'] },
-            'certificacion': { features: ['Matrícula Integrative Learning (USA)', 'Acreditación académica', 'Gestión de Transcript y Diploma'] }
+            'certificacion': { features: ['Matrícula Integrative Learning (USA)', 'Constancia y Credencial', 'Acreditación académica', 'Gestión de Transcript y Diploma', 'Asesoramiento legal'] }
         };
 
         let allVideos = [];
@@ -209,6 +245,18 @@
                         document.getElementById('user-badge').textContent = `Nivel: ${userLevel.toUpperCase()}`;
                         document.getElementById('nivel-info').textContent = `Mostrando clases para: ${userLevel.toUpperCase()}`;
 
+                        // --- LÓGICA DE VENCIMIENTO ---
+                        if (data.fechaInicio) {
+                            const registro = new Date(data.fechaInicio);
+                            const vencimiento = new Date(registro);
+                            vencimiento.setDate(registro.getDate() + 30); // Sumamos 30 días
+                            
+                            document.getElementById('user-plan-name').textContent = data.plan || 'Plan Básico';
+                            document.getElementById('user-expiry-date').textContent = vencimiento.toLocaleDateString('es-AR');
+                            document.getElementById('sub-info').style.display = 'block';
+                        }
+                        // -----------------------------
+
                         document.getElementById('classroom-ui').style.display = 'grid';
                         renderSidebar(allVideos);
                         loadVideo(0);
@@ -235,22 +283,37 @@
             currentVideoIndex = index;
             const video = allVideos[index];
             document.querySelectorAll('.lesson-item').forEach((el, i) => el.classList.toggle('active', i === index));
+            
             let url = video.url_video || '';
             if(url.includes('watch?v=')) url = url.replace('watch?v=', 'embed/');
             document.getElementById('main-video-frame').src = url;
             document.getElementById('main-video-title').textContent = video.titulo_completo;
+            
             const desc = video.descripcion || '';
             const urlRegex = /(https?:\/\/[^\s]+)/g;
             const links = desc.match(urlRegex);
             const cleanDesc = desc.replace(urlRegex, '').trim() || 'Sin descripción adicional.';
             document.getElementById('main-video-desc').textContent = cleanDesc;
+
             const resContainer = document.getElementById('resources-container');
             if (links && links.length > 0) {
-                resContainer.innerHTML = links.map(link => `<a href="${link}" target="_blank" class="btn-zoom-card" style="background: #fff; color: #333; border: 1px solid #ccc; margin-bottom: 10px; justify-content: center;">📂 Descargar Material</a>`).join('');
-            } else { resContainer.innerHTML = `<div style="background:#f8f9fa; padding:20px; border:1px dashed #ccc; text-align:center; color:#666;">No hay adjuntos.</div>`; }
+                resContainer.innerHTML = links.map(link => `
+                    <a href="${link}" target="_blank" class="btn-zoom-card" style="background: #fff; color: #333; border: 1px solid #ccc; margin-bottom: 10px; justify-content: center;">
+                        📂 Descargar Material
+                    </a>
+                `).join('');
+            } else {
+                resContainer.innerHTML = `<div style="background:#f8f9fa; padding:20px; border:1px dashed #ccc; text-align:center; color:#666;">No hay adjuntos.</div>`;
+            }
+
             switchTab('desc');
+
             const btnComplete = document.getElementById('btn-mark-complete');
-            if (video.completado) { btnComplete.textContent = '✅ Completada'; btnComplete.classList.add('completed'); btnComplete.disabled = true; } else { btnComplete.textContent = 'Marcar como Vista'; btnComplete.classList.remove('completed'); btnComplete.disabled = false; }
+            if (video.completado) {
+                btnComplete.textContent = '✅ Completada'; btnComplete.classList.add('completed'); btnComplete.disabled = true;
+            } else {
+                btnComplete.textContent = 'Marcar como Vista'; btnComplete.classList.remove('completed'); btnComplete.disabled = false;
+            }
         };
 
         async function loadClassroomsGrid(token) {
@@ -258,16 +321,23 @@
                 const res = await getData('clases-en-vivo', token);
                 const data = await res.json();
                 const grid = document.getElementById('hub-grid');
+                
                 const filteredClasses = data.clases.filter(c => {
-                    const nivelClase = c.nivel_objetivo || 'general';
-                    return nivelClase === userLevel || nivelClase === 'general' || nivelClase === `id:${userId}`;
+                    const nivelClase = c.nivel_objetivo || 'general'; // Si es null, asumimos 'general'
+                    return nivelClase === userLevel || 
+                           nivelClase === 'general' || 
+                           nivelClase === `id:${userId}`;
                 });
+
                 if (filteredClasses.length > 0) {
                     grid.innerHTML = filteredClasses.map(c => {
                         const isPersonal = (c.nivel_objetivo || '').startsWith('id:');
                         return `
                         <div class="hub-card ${isPersonal ? 'personal' : ''}">
-                            <div><h4>${c.titulo}</h4><span>${c.materia ? c.materia : 'Aula General'} ${c.profesor ? '- ' + c.profesor : ''}</span></div>
+                            <div>
+                                <h4>${c.titulo}</h4>
+                                <span>${c.materia ? c.materia : 'Aula General'} ${c.profesor ? '- ' + c.profesor : ''}</span>
+                            </div>
                             <div>
                                 <a href="${c.link_zoom}" target="_blank" class="btn-zoom-card">🎥 Entrar al Aula</a>
                                 <div style="display:flex; gap:5px; margin-top:8px;">
@@ -277,15 +347,25 @@
                             </div>
                         </div>
                     `}).join('');
-                } else { grid.innerHTML = '<div style="grid-column: 1/-1; text-align:center; padding:20px; color:#666;">No hay aulas activas para tu nivel.</div>'; }
+                } else {
+                    grid.innerHTML = '<div style="grid-column: 1/-1; text-align:center; padding:20px; color:#666;">No hay aulas activas para tu nivel.</div>';
+                }
             } catch (e) { console.error("Error cargando aulas", e); }
         }
 
         document.getElementById('btn-mark-complete').addEventListener('click', async () => {
-            await postData('progreso', { videoId: allVideos[currentVideoIndex].id }, getAuthToken());
-            allVideos[currentVideoIndex].completado = true;
-            renderSidebar(allVideos);
-            loadVideo(currentVideoIndex);
+            const btn = document.getElementById('btn-mark-complete');
+            const originalText = btn.textContent;
+            btn.textContent = 'Guardando...';
+            btn.disabled = true;
+            try {
+                const res = await postData('progreso', { videoId: allVideos[currentVideoIndex].id }, getAuthToken());
+                if (res.ok) { 
+                    allVideos[currentVideoIndex].completado = true; 
+                    renderSidebar(allVideos); 
+                    loadVideo(currentVideoIndex); 
+                } else { btn.textContent = originalText; btn.disabled = false; }
+            } catch (e) { btn.textContent = originalText; btn.disabled = false; }
         });
 
         function updateProgress(videos) {
@@ -296,7 +376,8 @@
             document.getElementById('progress-count').textContent = `${completedCount}/${videos.length}`;
         }
 
-        function renderPaymentWall() {
+        // --- PAYMENT WALL ACTUALIZADO PARA RENOVAR ---
+        window.renderPaymentWall = () => { // Hacemos la función global para el botón de renovar
             const container = document.getElementById('classroom-ui');
             container.style.display = 'block';
             document.querySelector('.course-sidebar').style.display = 'none';
@@ -305,12 +386,11 @@
             
             document.querySelector('.course-content').innerHTML = `
                 <div style="text-align: center; padding: 40px; max-width: 900px; margin: 0 auto;">
-                    <h1 style="color: var(--color-azul-profundo); margin-bottom: 10px;">🔒 Inscripción a Tamar</h1>
+                    <h1 style="color: var(--color-azul-profundo); margin-bottom: 10px;">🔒 Inscripción / Renovación Tamar</h1>
                     <p style="font-size: 1.1rem; margin-bottom: 30px; color:#666;">Personaliza tu plan de estudios.</p>
                     <div style="background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: left;">
-                        
                         <div style="margin-bottom: 20px;">
-                            <label style="display:block; font-weight:bold; margin-bottom:10px; color: var(--color-azul-profundo);">1. Nivel Educativo:</label>
+                            <label style="display:block; font-weight:bold; margin-bottom:10px; color: var(--color-azul-profundo);">1. Selecciona el Nivel Educativo:</label>
                             <select id="level-selector" style="width:100%; padding:15px; border-radius:8px; border:2px solid #2D8CFF; font-size:1.1rem; background-color: #f0f7ff;">
                                 <option value="kinder">Kinder (Jardín)</option>
                                 <option value="primaria">Elementary (Primaria)</option>
@@ -318,7 +398,6 @@
                                 <option value="secundaria_high">High School</option>
                             </select>
                         </div>
-
                         <div style="margin-bottom: 20px;">
                             <label style="display:block; font-weight:bold; margin-bottom:10px; color: var(--color-azul-profundo);">2. Elige tu Plan:</label>
                             <select id="plan-selector" style="width:100%; padding:15px; border-radius:8px; border:2px solid #eee; font-size:1.1rem;">
@@ -332,14 +411,13 @@
                                 <option value="certificacion" data-ars="240000" data-usd="200">Certificación Anual ($240.000 ARS / $200 USD)</option>
                             </select>
                         </div>
-
+                        
                         <div style="margin-bottom: 20px;">
                             <label style="display:block; font-weight:bold; margin-bottom:10px; color: #555;">🎟️ ¿Tenés Cupón? (Santa Fe / Hermanos)</label>
                             <input type="text" id="coupon-code" placeholder="Ingresa tu código aquí" style="width:100%; padding:10px; border:1px dashed #aaa; border-radius:5px;">
                         </div>
 
                         <div id="plan-features-container" class="plan-features"><h4>✨ Incluye:</h4><ul id="features-list"></ul></div>
-                        
                         <div style="display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
                             <div style="border: 1px solid #eee; padding: 20px; border-radius: 8px; text-align:center;">
                                 <h4>🇦🇷 Argentina</h4>
@@ -355,7 +433,6 @@
                     </div>
                 </div>
             `;
-            
             const updatePlanInfo = () => {
                 const selector = document.getElementById('plan-selector');
                 const opt = selector.options[selector.selectedIndex];
@@ -367,30 +444,19 @@
             document.getElementById('plan-selector').addEventListener('change', updatePlanInfo);
             updatePlanInfo();
             
-            // --- ENVÍO DE PAGO CON CUPÓN ---
             window.pagarMP = async () => {
                 const token = getAuthToken();
                 const planId = document.getElementById('plan-selector').value;
                 const nivel = document.getElementById('level-selector').value;
-                const cupon = document.getElementById('coupon-code').value.trim(); // Capturamos cupón
-                try { 
-                    const res = await postData('crear-pago', { planId, nivel, cupon }, token); 
-                    const data = await res.json(); 
-                    if (data.init_point) window.location.href = data.init_point; 
-                } catch (e) { alert('Error MP'); }
+                const cupon = document.getElementById('coupon-code').value.trim();
+                try { const res = await postData('crear-pago', { planId, nivel, cupon }, token); const data = await res.json(); if (data.init_point) window.location.href = data.init_point; } catch (e) { alert('Error MP'); }
             };
-            
             window.pagarPayPal = async () => {
                 const token = getAuthToken();
                 const planId = document.getElementById('plan-selector').value;
                 const nivel = document.getElementById('level-selector').value;
                 const cupon = document.getElementById('coupon-code').value.trim();
-                try { 
-                    const res = await postData('crear-pago-paypal', { planId, nivel, cupon }, token); 
-                    const data = await res.json(); 
-                    const link = data.links.find(l => l.rel === 'approve'); 
-                    if (link) window.location.href = link.href; 
-                } catch (e) { alert('Error PayPal'); }
+                try { const res = await postData('crear-pago-paypal', { planId, nivel, cupon }, token); const data = await res.json(); const link = data.links.find(l => l.rel === 'approve'); if (link) window.location.href = link.href; } catch (e) { alert('Error PayPal'); }
             };
         }
     </script>
