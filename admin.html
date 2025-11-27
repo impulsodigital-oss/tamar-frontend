@@ -6,7 +6,6 @@
     <title>Panel de Administración - Tamar</title>
     <link rel="stylesheet" href="CSS/style.css">
     <style>
-        /* (Mismos estilos de antes) */
         .admin-container { max-width: 1100px; margin: 40px auto; padding: 20px; }
         .admin-header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
         .search-box input { width: 300px; padding: 10px; border-radius: 20px; border: 1px solid #ccc; }
@@ -35,7 +34,12 @@
         <div class="container">
             <img src="images/logo-tamar.png" alt="Logo Tamar" class="logo">
             <h1>Panel Admin</h1>
-            <nav class="nav"><ul><li><a href="index.html">Volver al Sitio</a></li><li><a href="#" id="logout-btn">Cerrar Sesión</a></li></ul></nav>
+            <nav class="nav">
+                <ul>
+                    <li><a href="index.html">Volver al Sitio</a></li>
+                    <li><a href="#" id="logout-btn">Cerrar Sesión</a></li>
+                </ul>
+            </nav>
         </div>
     </header>
 
@@ -44,6 +48,7 @@
             <div><h2>Bienvenida, Sofía</h2><p>Centro de Control</p></div>
             <div class="search-box"><input type="text" id="search-input" placeholder="🔍 Buscar alumno..."></div>
         </div>
+
         <div id="admin-message" class="message" style="display:none;"></div>
 
         <div class="stats-grid">
@@ -65,15 +70,28 @@
             <h3>🎓 Alumnos Matriculados</h3>
             <div class="table-responsive">
                 <table id="tabla-alumnos">
-                    <thead><tr><th>Nombre/Email</th><th>Nivel/Plan</th><th>% Avance</th><th>Profes/Notas</th><th>Acciones</th></tr></thead>
-                    <tbody><tr><td colspan="5">Cargando...</td></tr></tbody>
+                    <thead>
+                        <tr>
+                            <th>Fecha</th> <th>Nombre/Email</th>
+                            <th>Nivel/Plan</th>
+                            <th>% Avance</th>
+                            <th>Profes/Notas</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody><tr><td colspan="6">Cargando...</td></tr></tbody>
                 </table>
             </div>
         </div>
 
         <div class="admin-section">
-            <h3>⏳ Leads</h3>
-            <div class="table-responsive"><table id="tabla-leads"><thead><tr><th>Nombre</th><th>Email</th><th>Fecha</th><th>Acciones</th></tr></thead><tbody></tbody></table></div>
+            <h3>⏳ Leads (Oportunidades)</h3>
+            <div class="table-responsive">
+                <table id="tabla-leads">
+                    <thead><tr><th>Nombre</th><th>Email</th><th>Fecha</th><th>Acciones</th></tr></thead>
+                    <tbody><tr><td colspan="4">Cargando...</td></tr></tbody>
+                </table>
+            </div>
         </div>
 
         <div class="admin-section" style="border-top: 5px solid var(--color-acento);">
@@ -83,48 +101,66 @@
                     <label style="font-weight:bold;">¿Para qué nivel es esta clase?</label>
                     <select id="clase-nivel" required style="width:100%; padding:10px; border-radius:5px; border:1px solid #aaa; margin-top:5px;">
                         <option value="general">🏫 Para Todos (General)</option>
-                        <option value="kinder">🧸 Kinder</option>
-                        <option value="primaria">✏️ Primaria</option>
+                        <option value="kinder">🧸 Kinder (Jardín)</option>
+                        <option value="primaria">✏️ Elementary (Primaria)</option>
                         <option value="secundaria_middle">📚 Middle School</option>
                         <option value="secundaria_high">🎓 High School</option>
                     </select>
                 </div>
                 <div style="display:flex; gap:10px;">
-                    <input type="text" id="clase-titulo" placeholder="Título" required style="padding:8px; flex:2; border:1px solid #ccc; border-radius:5px;">
+                    <input type="text" id="clase-titulo" placeholder="Título (Ej: Matemática)" required style="padding:8px; flex:2; border:1px solid #ccc; border-radius:5px;">
                     <input type="text" id="clase-profesor" placeholder="Profesor" required style="padding:8px; flex:1; border:1px solid #ccc; border-radius:5px;">
                 </div>
                 <div style="display:flex; gap:10px;">
-                    <input type="text" id="clase-materia" placeholder="Detalle" style="padding:8px; flex:1; border:1px solid #ccc; border-radius:5px;">
+                    <input type="text" id="clase-materia" placeholder="Detalle extra" style="padding:8px; flex:1; border:1px solid #ccc; border-radius:5px;">
                     <input type="datetime-local" id="clase-fecha" required style="padding:8px; flex:1; border:1px solid #ccc; border-radius:5px;">
                 </div>
-                <input type="url" id="clase-zoom" placeholder="Link Zoom Fijo" required style="padding:8px; width:100%; border:1px solid #ccc; border-radius:5px;">
-                <input type="url" id="clase-recursos" placeholder="Link Materiales (Opcional)" style="padding:8px; width:100%; border:1px solid #ccc; border-radius:5px;">
-                <input type="url" id="clase-grabaciones" placeholder="Link Grabaciones (Opcional)" style="padding:8px; width:100%; border:1px solid #ccc; border-radius:5px;">
+                <div style="display:flex; gap:10px;">
+                    <input type="url" id="clase-zoom" placeholder="Link Zoom Fijo" required style="padding:8px; flex:1; border:1px solid #ccc; border-radius:5px;">
+                    <input type="url" id="clase-recursos" placeholder="Link Carpeta Drive (Materiales)" style="padding:8px; flex:1; border:1px solid #ccc; border-radius:5px;">
+                </div>
+                <div style="display:flex; gap:10px;">
+                    <input type="url" id="clase-grabaciones" placeholder="Link Carpeta Grabaciones (Drive)" style="padding:8px; flex:1; border:1px solid #ccc; border-radius:5px;">
+                </div>
                 <button type="submit" class="btn" style="padding:10px; cursor: pointer; background-color: var(--color-acento); color: var(--color-azul-profundo);">➕ Publicar Aula</button>
             </form>
-            <div class="table-responsive"><table id="tabla-clases"><thead><tr><th>Nivel</th><th>Título</th><th>Zoom</th><th>Acciones</th></tr></thead><tbody></tbody></table></div>
+            <h4>Aulas Activas:</h4>
+            <div class="table-responsive">
+                <table id="tabla-clases">
+                    <thead><tr><th>Nivel</th><th>Título</th><th>Zoom</th><th>Acciones</th></tr></thead>
+                    <tbody><tr><td colspan="4">Cargando...</td></tr></tbody>
+                </table>
+            </div>
         </div>
 
         <div class="admin-section" style="border-top: 5px solid #9b59b6;">
-            <h3>🎬 Biblioteca de Videos</h3>
+            <h3>🎬 Biblioteca de Videos Grabados</h3>
             <form id="form-video" style="background:#f8f9fa; padding:20px; border-radius:8px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-bottom:30px;">
-                <input type="text" id="vid-titulo" placeholder="Título" required style="padding:8px; grid-column: span 2; border:1px solid #ccc; border-radius:5px;">
-                <input type="text" id="vid-corto" placeholder="Corto" required style="padding:8px; border:1px solid #ccc; border-radius:5px;">
-                <input type="number" id="vid-modulo" placeholder="Mód" required style="padding:8px; border:1px solid #ccc; border-radius:5px;">
-                <input type="number" id="vid-orden" placeholder="Ord" required style="padding:8px; border:1px solid #ccc; border-radius:5px;">
-                <input type="url" id="vid-url" placeholder="Link YT" required style="padding:8px; border:1px solid #ccc; border-radius:5px;">
-                <input type="text" id="vid-desc" placeholder="Descripción" style="padding:8px; grid-column: span 3; border:1px solid #ccc; border-radius:5px;">
+                <input type="text" id="vid-titulo" placeholder="Título Completo" required style="padding:8px; grid-column: span 2; border:1px solid #ccc; border-radius:5px;">
+                <input type="text" id="vid-corto" placeholder="Título Corto (Menú)" required style="padding:8px; border:1px solid #ccc; border-radius:5px;">
+                <input type="number" id="vid-modulo" placeholder="Nro Módulo" required style="padding:8px; border:1px solid #ccc; border-radius:5px;">
+                <input type="number" id="vid-orden" placeholder="Orden" required style="padding:8px; border:1px solid #ccc; border-radius:5px;">
+                <input type="url" id="vid-url" placeholder="Link YouTube" required style="padding:8px; border:1px solid #ccc; border-radius:5px;">
+                <input type="text" id="vid-desc" placeholder="Descripción (Pega aquí el Link de Drive si hay materiales)" style="padding:8px; grid-column: span 3; border:1px solid #ccc; border-radius:5px;">
                 <button type="submit" class="btn" style="grid-column: span 3; background-color:#9b59b6; cursor: pointer; color:white;">➕ Agregar Video</button>
             </form>
-            <div class="table-responsive"><table id="tabla-videos"><thead><tr><th>Mód</th><th>Título</th><th>Link</th><th>Acciones</th></tr></thead><tbody></tbody></table></div>
+            <div class="table-responsive">
+                <table id="tabla-videos">
+                    <thead><tr><th>Mód</th><th>Título</th><th>Link</th><th>Acciones</th></tr></thead>
+                    <tbody><tr><td colspan="4">Cargando...</td></tr></tbody>
+                </table>
+            </div>
         </div>
     </div>
+
+    <footer><div class="container"><p>&copy; 2024 Tamar. Panel Admin.</p></div></footer>
 
     <script type="module" src="js/api.js"></script>
     <script type="module" src="js/main.js"></script>
     <script type="module">
         import { getData, showMessage } from './js/main.js';
         let globalAlumnos = [];
+        let globalLeads = [];
 
         document.addEventListener('DOMContentLoaded', async () => {
             const token = localStorage.getItem('token');
@@ -140,27 +176,41 @@
 
                     const resLeads = await getData('admin/leads-pendientes', token);
                     const dataLeads = await resLeads.json();
-                    renderLeads(dataLeads.leads || []);
-                    
+                    globalLeads = dataLeads.leads || [];
+                    renderLeads(globalLeads);
+
                     loadVideosLibrary();
                     loadActiveClasses();
 
                     document.getElementById('total-alumnos').textContent = globalAlumnos.length;
-                    document.getElementById('total-leads').textContent = (dataLeads.leads || []).length;
+                    document.getElementById('total-leads').textContent = globalLeads.length;
                     document.getElementById('total-ingresos').textContent = `$${(globalAlumnos.length * 46800).toLocaleString()}`;
                 } catch (error) { showMessage('admin-message', 'Error al cargar panel.', 'error'); }
             }
 
-            // RENDERERS
             function renderAlumnos(lista) {
                 const tbody = document.querySelector('#tabla-alumnos tbody');
-                if (lista.length === 0) { tbody.innerHTML = `<tr><td colspan="5">Sin alumnos.</td></tr>`; return; }
+                if (lista.length === 0) { tbody.innerHTML = `<tr><td colspan="6">Sin alumnos.</td></tr>`; return; }
                 tbody.innerHTML = lista.map(u => {
                     const vistos = parseInt(u.videos_vistos || 0);
                     const total = parseInt(u.total_videos || 1);
                     const porcentaje = total > 0 ? Math.round((vistos / total) * 100) : 0;
                     const fecha = u.fecha_registro ? new Date(u.fecha_registro).toLocaleDateString('es-AR') : '-';
-                    return `<tr><td><strong>${u.nombre}</strong><br><small>${u.email}</small><br><small style="color:#aaa">📅 ${fecha}</small></td><td>${u.nivel_educativo || '-'}<br><small style="color:var(--color-acento);">${u.plan_adquirido}</small></td><td><div class="progress-bar-table"><div class="progress-fill-table" style="width:${porcentaje}%"></div></div> <small>${porcentaje}%</small></td><td><span style="font-size:0.85rem;">${u.profesores_elegidos || '-'}</span><button class="btn-action btn-edit" onclick="window.editarProfes(${u.id}, '${u.nombre}', '${u.profesores_elegidos || ''}')">📝</button></td><td><button class="btn-action btn-assign" onclick="window.asignarClasePersonal(${u.id}, '${u.nombre}')">📅</button><button class="btn-action btn-delete" onclick="window.eliminarUsuario(${u.id}, '${u.nombre}')">🗑️</button></td></tr>`;
+                    
+                    return `
+                    <tr>
+                        <td style="font-weight:bold; color:#555;">${fecha}</td> <td><strong>${u.nombre}</strong><br><small>${u.email}</small></td>
+                        <td>${u.nivel_educativo || '-'}<br><small style="color:var(--color-acento);">${u.plan_adquirido}</small></td>
+                        <td><div class="progress-bar-table"><div class="progress-fill-table" style="width:${porcentaje}%"></div></div> <small>${porcentaje}%</small></td>
+                        <td>
+                            <span style="font-size:0.85rem;">${u.profesores_elegidos || '-'}</span>
+                            <button class="btn-action btn-edit" onclick="window.editarProfes(${u.id}, '${u.nombre}', '${u.profesores_elegidos || ''}')">📝</button>
+                        </td>
+                        <td>
+                            <button class="btn-action btn-assign" onclick="window.asignarClasePersonal(${u.id}, '${u.nombre}')">📅</button>
+                            <button class="btn-action btn-delete" onclick="window.eliminarUsuario(${u.id}, '${u.nombre}')">🗑️</button>
+                        </td>
+                    </tr>`;
                 }).join('');
             }
 
@@ -169,23 +219,9 @@
                 tbody.innerHTML = lista.map(u => `<tr><td>${u.nombre}<br><small>${u.email}</small></td><td>${new Date(u.fecha_registro).toLocaleDateString()}</td><td><a href="mailto:${u.email}" class="btn-action btn-contact">📩</a> <button class="btn-action btn-activate" onclick="window.activarManual(${u.id}, '${u.nombre}')">✅</button> <button class="btn-action btn-delete" onclick="window.eliminarUsuario(${u.id}, '${u.nombre}')">🗑️</button></td></tr>`).join('');
             }
 
-            // ACTIONS
-            window.actualizarNovedades = async () => {
-                const texto = document.getElementById('news-text').value;
-                if(confirm('¿Publicar este anuncio?')) {
-                    await fetch('https://tamar-backend-api-gqy9.onrender.com/api/admin/novedades', { method: 'POST', headers: {'Content-Type':'application/json', 'Authorization': `Bearer ${token}`}, body: JSON.stringify({texto}) });
-                    alert('Publicado!');
-                }
-            };
-
-            window.asignarClasePersonal = async (userId, nombre) => {
-                const titulo = prompt(`Clase para ${nombre}:\nTítulo:`); if(!titulo) return;
-                const zoom = prompt("Link Zoom:"); if(!zoom) return;
-                const data = { titulo, materia: 'Personal', profesor: 'Asignado', fecha: new Date().toISOString().split('T')[0], hora: '00:00', link_zoom: zoom, link_recursos: '', link_grabaciones: '', nivel: `id:${userId}`, descripcion: 'Personal' };
-                const res = await fetch('https://tamar-backend-api-gqy9.onrender.com/api/admin/nueva-clase', { method: 'POST', headers: {'Content-Type':'application/json', 'Authorization': `Bearer ${token}`}, body: JSON.stringify(data) });
-                if(res.ok) { alert('Asignada!'); loadActiveClasses(); }
-            };
-
+            // ACTIONS (Igual que antes)
+            window.actualizarNovedades = async () => { const texto = document.getElementById('news-text').value; if(confirm('¿Publicar?')) { await fetch('https://tamar-backend-api-gqy9.onrender.com/api/admin/novedades', { method: 'POST', headers: {'Content-Type':'application/json', 'Authorization': `Bearer ${token}`}, body: JSON.stringify({texto}) }); alert('Publicado!'); }};
+            window.asignarClasePersonal = async (userId, nombre) => { const titulo = prompt(`Clase para ${nombre}:\nTítulo:`); if(!titulo) return; const zoom = prompt("Link Zoom:"); if(!zoom) return; const data = { titulo, materia: 'Personal', profesor: 'Asignado', fecha: new Date().toISOString().split('T')[0], hora: '00:00', link_zoom: zoom, link_recursos: '', link_grabaciones: '', nivel: `id:${userId}`, descripcion: 'Personal' }; const res = await fetch('https://tamar-backend-api-gqy9.onrender.com/api/admin/nueva-clase', { method: 'POST', headers: {'Content-Type':'application/json', 'Authorization': `Bearer ${token}`}, body: JSON.stringify(data) }); if(res.ok) { alert('Asignada!'); loadActiveClasses(); }};
             window.editarProfes = async (id, nombre, actual) => { const notas = prompt(`Notas para ${nombre}:`, actual); if (notas !== null) { await fetch('https://tamar-backend-api-gqy9.onrender.com/api/admin/guardar-profesores', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }, body: JSON.stringify({ userId: id, notas }) }); loadAdminData(); }};
             window.deleteClass = async (id) => { if(confirm('¿Borrar?')) { await fetch(`https://tamar-backend-api-gqy9.onrender.com/api/admin/clases/${id}`, { method: 'DELETE', headers: {'Authorization': `Bearer ${token}`} }); loadActiveClasses(); }};
             window.deleteVideo = async (id) => { if(confirm('¿Borrar?')) { await fetch(`https://tamar-backend-api-gqy9.onrender.com/api/admin/videos/${id}`, { method: 'DELETE', headers: {'Authorization': `Bearer ${token}`} }); loadVideosLibrary(); }};
@@ -202,7 +238,6 @@
 
             document.getElementById('search-input').addEventListener('keyup', (e) => { const term = e.target.value.toLowerCase(); renderAlumnos(globalAlumnos.filter(u => u.nombre.toLowerCase().includes(term))); renderLeads(globalLeads.filter(u => u.nombre.toLowerCase().includes(term))); });
             document.getElementById('logout-btn').addEventListener('click', () => { localStorage.removeItem('token'); window.location.href = 'login.html'; });
-            
             loadAdminData();
         });
     </script>
