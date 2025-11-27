@@ -12,27 +12,52 @@
     <link rel="stylesheet" href="CSS/style.css">
     
     <style>
+        /* --- MEJORA 1: LOGO MÁS GRANDE --- */
+        .logo {
+            max-height: 90px; /* Aumentado de tamaño (antes era automático o más chico) */
+            width: auto;
+            transition: transform 0.3s ease;
+        }
+        
+        .header {
+            padding: 15px 0; /* Un poco más de espacio en el encabezado */
+        }
+
+        /* ESTILOS TESTIMONIOS CON FOTOS */
         .testimonial-header {
             display: flex;
             align-items: center;
             margin-bottom: 15px;
         }
         .testimonial-avatar {
-            width: 50px;
-            height: 50px;
-            min-width: 50px;
-            background-color: #eef1f4;
+            width: 70px; /* Hice el círculo más grande para que se vean bien las fotos */
+            height: 70px;
+            min-width: 70px;
             border-radius: 50%;
             margin-right: 15px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border: 1px solid #e0e0e0;
+            overflow: hidden; /* Para recortar la foto en círculo */
+            border: 3px solid #eef1f4;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
-        .testimonial-avatar svg {
-            width: 30px;
-            height: 30px;
-            fill: #a0aec0;
+        .testimonial-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Esto asegura que la foto no se deforme */
+        }
+
+        /* ESTILO PARA EL RESPALDO ACADÉMICO (INTEGRATIVE LEARNING) */
+        .academic-backing {
+            text-align: center;
+            margin-top: 50px;
+            padding: 30px;
+            background-color: #f9f9f9;
+            border-radius: 15px;
+            border: 1px dashed #ccc;
+        }
+        .academic-logo {
+            max-height: 80px; /* Tamaño destacado para Integrative Learning */
+            width: auto;
+            margin-top: 15px;
         }
     </style>
 </head>
@@ -86,11 +111,17 @@
                         <p>Cada persona de nuestro staff tiene la visión de acompañar a cada familia brindando un servicio de excelencia y cercanía.</p>
                     </div>
                     <div class="card">
-                        <h3>Respaldo Académico</h3>
-                        <img src="images/integrativelearning.png" alt="Integrative Learning Logo" style="max-height: 60px; width: auto; margin-bottom: 15px;">
-                        <p>Ofrecemos una estructura educativa sólida que combina la libertad del homeschooling con la validez de una certificación internacional respaldada por Integrative Learning.</p>
+                        <h3>Libertad Educativa</h3>
+                        <p>Fomentamos un aprendizaje orgánico donde el arte y los valores son pilares fundamentales, respetando siempre los tiempos de cada niño.</p>
                     </div>
                 </div>
+
+                <div class="academic-backing">
+                    <h4 style="color: #555; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px;">Con Respaldo Académico Internacional</h4>
+                    <p>Ofrecemos una estructura educativa sólida que combina la libertad del homeschooling con la validez de una certificación oficial.</p>
+                    <img src="images/integrativelearning.png" alt="Integrative Learning Logo" class="academic-logo">
+                </div>
+
             </div>
         </section>
 
@@ -121,7 +152,7 @@
                     <div class="card testimonial-card">
                         <div class="testimonial-header">
                             <div class="testimonial-avatar">
-                                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                                <img src="images/foto-caso1.jpg" alt="Kismalú y familia" onerror="this.src='https://via.placeholder.com/70?text=Foto'">
                             </div>
                             <span class="author" style="margin:0; text-align:left;">Kismalú, mamá de JJN (6 años)</span>
                         </div>
@@ -131,7 +162,7 @@
                     <div class="card testimonial-card">
                         <div class="testimonial-header">
                             <div class="testimonial-avatar">
-                                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                                <img src="images/foto-caso2.jpg" alt="Virginia y familia" onerror="this.src='https://via.placeholder.com/70?text=Foto'">
                             </div>
                             <span class="author" style="margin:0; text-align:left;">Virgina, mamá de dos peques (2 y 5 años)</span>
                         </div>
@@ -141,7 +172,7 @@
                     <div class="card testimonial-card">
                         <div class="testimonial-header">
                             <div class="testimonial-avatar">
-                                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                                <img src="images/foto-caso3.jpg" alt="Mariana y familia" onerror="this.src='https://via.placeholder.com/70?text=Foto'">
                             </div>
                             <span class="author" style="margin:0; text-align:left;">Mariana, mamá de Luz (10 años)</span>
                         </div>
