@@ -45,6 +45,7 @@
             border-top: 4px solid var(--color-acento);
             display: flex; flex-direction: column; justify-content: space-between;
         }
+        /* Tarjeta Personalizada */
         .hub-card.personal { border-top: 4px solid #9b59b6; background: #fbfaff; }
         
         .hub-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
@@ -186,14 +187,18 @@
         import { showMessage } from './js/main.js';
 
         const PLAN_DETAILS = {
+            'kinder_mensual': { features: ['Acceso Mensual Kinder', 'Actividades recreativas', 'Encuentros mensuales'] },
+            'kinder_semanal': { features: ['Acceso Semanal Kinder', 'Clases más frecuentes', 'Seguimiento cercano'] },
+            
             'basico': { features: ['Acceso a videos para iniciar homeschool', 'Comunidad en línea', 'Grupo de estudio', 'Clases de ARTE gratis', 'Asesoramiento carpeta', 'Descuento SKEPSI'] },
-            'kinder_mensual': { features: ['Plan Kinder Mensual', 'Acceso mensual', 'Clases de Kinder'] },
-            'kinder_semanal': { features: ['Plan Kinder Semanal', 'Acceso a clases semanales', 'Contenido Kinder completo'] },
-            'core': { features: ['Plan Básico +', '3 Clases grupales mensuales', 'Elección de 3 docentes'] },
-            'plus': { features: ['Plan Básico +', '10 Clases grupales mensuales', 'Elección de docentes'] },
-            'selecto': { features: ['Plan Básico +', '4 Clases SEMANALES', 'Elección de 4 profesores'] },
-            'prestige': { features: ['Plan Básico +', '10 Clases SEMANALES', '10 Materias incluidas'] },
-            'certificacion': { features: ['Matrícula Integrative Learning (USA)', 'Constancia y Credencial', 'Acreditación académica', 'Gestión de Transcript y Diploma', 'Asesoramiento legal'] }
+            
+            'core': { features: ['Plan Mensual', 'Incluye 3 Materias', 'Clases grupales mensuales', 'Elección de docentes'] },
+            'plus': { features: ['Plan Mensual Completo', 'Incluye 10 Materias', 'Seguimiento mensual', 'Comunidad con docentes'] },
+            
+            'selecto': { features: ['Plan Semanal', 'Incluye 4 Materias', 'Clases todas las semanas', 'Seguimiento continuo'] },
+            'prestige': { features: ['Plan Semanal Premium', 'Incluye 10 Materias', 'Clases todas las semanas', 'Máxima frecuencia'] },
+            
+            'certificacion': { features: ['Matrícula Integrative Learning (USA)', 'Constancia y Credencial', 'Gestión de Transcript y Diploma'] }
         };
 
         let allVideos = [];
@@ -240,7 +245,6 @@
                         document.getElementById('user-badge').textContent = `Nivel: ${userLevel.toUpperCase()}`;
                         document.getElementById('nivel-info').textContent = `Mostrando clases para: ${userLevel.toUpperCase()}`;
 
-                        // Info Vencimiento
                         if (data.fechaInicio) {
                             const registro = new Date(data.fechaInicio);
                             const vencimiento = new Date(registro);
@@ -299,7 +303,6 @@
                 const res = await getData('clases-en-vivo', token);
                 const data = await res.json();
                 const grid = document.getElementById('hub-grid');
-                // FIX NULOS
                 const filteredClasses = data.clases.filter(c => {
                     const nivelClase = c.nivel_objetivo || 'general';
                     return nivelClase === userLevel || nivelClase === 'general' || nivelClase === `id:${userId}`;
@@ -324,10 +327,18 @@
         }
 
         document.getElementById('btn-mark-complete').addEventListener('click', async () => {
-            await postData('progreso', { videoId: allVideos[currentVideoIndex].id }, getAuthToken());
-            allVideos[currentVideoIndex].completado = true;
-            renderSidebar(allVideos);
-            loadVideo(currentVideoIndex);
+            const btn = document.getElementById('btn-mark-complete');
+            const originalText = btn.textContent;
+            btn.textContent = 'Guardando...';
+            btn.disabled = true;
+            try {
+                const res = await postData('progreso', { videoId: allVideos[currentVideoIndex].id }, getAuthToken());
+                if (res.ok) { 
+                    allVideos[currentVideoIndex].completado = true; 
+                    renderSidebar(allVideos); 
+                    loadVideo(currentVideoIndex); 
+                } else { btn.textContent = originalText; btn.disabled = false; }
+            } catch (e) { btn.textContent = originalText; btn.disabled = false; }
         });
 
         function updateProgress(videos) {
@@ -338,7 +349,7 @@
             document.getElementById('progress-count').textContent = `${completedCount}/${videos.length}`;
         }
 
-        // --- PAYMENT WALL ACTUALIZADO CON FILTRO DINÁMICO ---
+        // --- PAYMENT WALL ACTUALIZADO ---
         window.renderPaymentWall = () => {
             const container = document.getElementById('classroom-ui');
             container.style.display = 'block';
@@ -365,15 +376,15 @@
                         <div style="margin-bottom: 20px;">
                             <label style="display:block; font-weight:bold; margin-bottom:10px; color: var(--color-azul-profundo);">2. Elige tu Plan:</label>
                             <select id="plan-selector" style="width:100%; padding:15px; border-radius:8px; border:2px solid #eee; font-size:1.1rem;">
-                                <option value="kinder_mensual" data-target="kinder" data-ars="58800" data-usd="49">Kinder Mensual ($58.800 ARS / $49 USD)</option>
-                                <option value="kinder_semanal" data-target="kinder" data-ars="70800" data-usd="59">Kinder Semanal ($70.800 ARS / $59 USD)</option>
+                                <option value="kinder_mensual" data-target="kinder" data-ars="58800" data-usd="49">Kinder Mensual ($58.800 / $49 USD)</option>
+                                <option value="kinder_semanal" data-target="kinder" data-ars="70800" data-usd="59">Kinder Semanal ($70.800 / $59 USD)</option>
                                 
-                                <option value="basico" data-target="school" data-ars="46800" data-usd="39">Plan Básico ($46.800 ARS / $39 USD)</option>
-                                <option value="core" data-target="school" data-ars="70800" data-usd="59">Plan Core ($70.800 ARS / $59 USD)</option>
-                                <option value="plus" data-target="school" data-ars="154800" data-usd="129">Plan Plus ($154.800 ARS / $129 USD)</option>
-                                <option value="selecto" data-target="school" data-ars="130800" data-usd="109">Plan Selecto ($130.800 ARS / $109 USD)</option>
-                                <option value="prestige" data-target="school" data-ars="274800" data-usd="229">Plan Prestige ($274.800 ARS / $229 USD)</option>
-                                <option value="certificacion" data-target="school" data-ars="240000" data-usd="200">Certificación Anual ($240.000 ARS / $200 USD)</option>
+                                <option value="basico" data-target="school" data-ars="46800" data-usd="39">Plan Básico ($46.800 / $39 USD)</option>
+                                <option value="core" data-target="school" data-ars="70800" data-usd="59">Plan Core (3 Materias - $59 USD)</option>
+                                <option value="plus" data-target="school" data-ars="154800" data-usd="129">Plan Plus (10 Materias - $129 USD)</option>
+                                <option value="selecto" data-target="school" data-ars="130800" data-usd="109">Plan Selecto (4 Mat. Semanal - $109 USD)</option>
+                                <option value="prestige" data-target="school" data-ars="274800" data-usd="229">Plan Prestige (10 Mat. Semanal - $229 USD)</option>
+                                <option value="certificacion" data-target="school" data-ars="240000" data-usd="200">Certificación Anual ($200 USD)</option>
                             </select>
                         </div>
                         
@@ -399,17 +410,14 @@
                 </div>
             `;
 
-            // --- LÓGICA DE FILTRADO ---
             const filterPlansByLevel = () => {
                 const levelSelect = document.getElementById('level-selector');
                 const planSelect = document.getElementById('plan-selector');
                 const isKinder = (levelSelect.value === 'kinder');
                 
-                // Recorremos opciones para mostrar/ocultar
                 let firstVisible = null;
                 Array.from(planSelect.options).forEach(opt => {
                     const target = opt.getAttribute('data-target');
-                    // Si es Kinder: mostrar solo kinder. Si no es Kinder: mostrar solo school.
                     if ((isKinder && target === 'kinder') || (!isKinder && target === 'school')) {
                         opt.hidden = false;
                         if(!firstVisible) firstVisible = opt;
@@ -418,8 +426,9 @@
                     }
                 });
                 
-                // Auto-seleccionar el primero visible para que no quede uno oculto seleccionado
-                if(firstVisible) planSelect.value = firstVisible.value;
+                if (planSelect.selectedOptions[0].hidden && firstVisible) {
+                    planSelect.value = firstVisible.value;
+                }
                 updatePlanInfo();
             };
 
@@ -427,8 +436,6 @@
                 const selector = document.getElementById('plan-selector');
                 const opt = selector.options[selector.selectedIndex];
                 const list = document.getElementById('features-list');
-                
-                // Actualizar precios visuales
                 document.getElementById('price-display-ars').textContent = `$${new Intl.NumberFormat('es-AR').format(opt.getAttribute('data-ars'))} ARS`;
                 document.getElementById('price-display-usd').textContent = `$${opt.getAttribute('data-usd')} USD`;
                 list.innerHTML = PLAN_DETAILS[opt.value] ? PLAN_DETAILS[opt.value].features.map(f => `<li>${f}</li>`).join('') : '';
@@ -436,8 +443,6 @@
 
             document.getElementById('plan-selector').addEventListener('change', updatePlanInfo);
             document.getElementById('level-selector').addEventListener('change', filterPlansByLevel);
-            
-            // Inicializar filtro
             filterPlansByLevel();
             
             window.pagarMP = async () => {
