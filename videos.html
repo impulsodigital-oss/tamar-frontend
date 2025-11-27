@@ -21,11 +21,6 @@
         .progress-bar-fill { background: var(--color-acento); height: 100%; width: 0%; transition: width 0.6s ease; }
         .progress-text { font-size: 0.85rem; margin-top: 8px; display: flex; justify-content: space-between; font-weight: bold; color: rgba(255,255,255,0.9); }
         
-        /* ESTILO NUEVO: TARJETA DE SUSCRIPCIÓN */
-        .subscription-card { background: rgba(0,0,0,0.2); padding: 15px; border-radius: 8px; margin-top: 20px; color: white; font-size: 0.9rem; }
-        .btn-renew { background: var(--color-acento); color: var(--color-azul-profundo); border: none; padding: 8px 15px; border-radius: 4px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; display: block; text-align: center; text-decoration: none; }
-        .btn-renew:hover { background: #fff; }
-
         .lesson-list { list-style: none; padding: 0; margin: 0; }
         .lesson-item { border-bottom: 1px solid #f0f0f0; cursor: pointer; transition: all 0.2s; padding: 18px 25px; display: flex; align-items: flex-start; gap: 12px; }
         .lesson-item:hover { background-color: #f8f9fa; }
@@ -120,12 +115,12 @@
                     <div class="progress-text"><span id="progress-percent">0%</span><span id="progress-count">0/0</span></div>
                 </div>
 
-                <div id="sub-info" class="subscription-card" style="display:none;">
+                <div id="sub-info" class="subscription-card" style="display:none; background: rgba(0,0,0,0.2); padding: 15px; border-radius: 8px; margin-top: 20px; color: white; font-size: 0.9rem;">
                     <p style="margin:0 0 5px 0; color:#ccc;">Tu Plan:</p>
                     <strong id="user-plan-name" style="display:block; margin-bottom:10px;">-</strong>
                     <p style="margin:0 0 5px 0; color:#ccc;">Vencimiento:</p>
                     <strong id="user-expiry-date" style="display:block; margin-bottom:10px;">-</strong>
-                    <button onclick="renderPaymentWall()" class="btn-renew">↻ Renovar Cuota</button>
+                    <button onclick="renderPaymentWall()" class="btn-zoom-card" style="background:var(--color-acento); color:var(--color-azul-profundo); border:none; width:100%; cursor:pointer;">↻ Renovar Cuota</button>
                 </div>
 
             </div>
@@ -245,17 +240,15 @@
                         document.getElementById('user-badge').textContent = `Nivel: ${userLevel.toUpperCase()}`;
                         document.getElementById('nivel-info').textContent = `Mostrando clases para: ${userLevel.toUpperCase()}`;
 
-                        // --- LÓGICA DE VENCIMIENTO ---
+                        // Info Vencimiento
                         if (data.fechaInicio) {
                             const registro = new Date(data.fechaInicio);
                             const vencimiento = new Date(registro);
-                            vencimiento.setDate(registro.getDate() + 30); // Sumamos 30 días
-                            
+                            vencimiento.setDate(registro.getDate() + 30);
                             document.getElementById('user-plan-name').textContent = data.plan || 'Plan Básico';
                             document.getElementById('user-expiry-date').textContent = vencimiento.toLocaleDateString('es-AR');
                             document.getElementById('sub-info').style.display = 'block';
                         }
-                        // -----------------------------
 
                         document.getElementById('classroom-ui').style.display = 'grid';
                         renderSidebar(allVideos);
@@ -283,37 +276,22 @@
             currentVideoIndex = index;
             const video = allVideos[index];
             document.querySelectorAll('.lesson-item').forEach((el, i) => el.classList.toggle('active', i === index));
-            
             let url = video.url_video || '';
             if(url.includes('watch?v=')) url = url.replace('watch?v=', 'embed/');
             document.getElementById('main-video-frame').src = url;
             document.getElementById('main-video-title').textContent = video.titulo_completo;
-            
             const desc = video.descripcion || '';
             const urlRegex = /(https?:\/\/[^\s]+)/g;
             const links = desc.match(urlRegex);
             const cleanDesc = desc.replace(urlRegex, '').trim() || 'Sin descripción adicional.';
             document.getElementById('main-video-desc').textContent = cleanDesc;
-
             const resContainer = document.getElementById('resources-container');
             if (links && links.length > 0) {
-                resContainer.innerHTML = links.map(link => `
-                    <a href="${link}" target="_blank" class="btn-zoom-card" style="background: #fff; color: #333; border: 1px solid #ccc; margin-bottom: 10px; justify-content: center;">
-                        📂 Descargar Material
-                    </a>
-                `).join('');
-            } else {
-                resContainer.innerHTML = `<div style="background:#f8f9fa; padding:20px; border:1px dashed #ccc; text-align:center; color:#666;">No hay adjuntos.</div>`;
-            }
-
+                resContainer.innerHTML = links.map(link => `<a href="${link}" target="_blank" class="btn-zoom-card" style="background: #fff; color: #333; border: 1px solid #ccc; margin-bottom: 10px; justify-content: center;">📂 Descargar Material</a>`).join('');
+            } else { resContainer.innerHTML = `<div style="background:#f8f9fa; padding:20px; border:1px dashed #ccc; text-align:center; color:#666;">No hay adjuntos.</div>`; }
             switchTab('desc');
-
             const btnComplete = document.getElementById('btn-mark-complete');
-            if (video.completado) {
-                btnComplete.textContent = '✅ Completada'; btnComplete.classList.add('completed'); btnComplete.disabled = true;
-            } else {
-                btnComplete.textContent = 'Marcar como Vista'; btnComplete.classList.remove('completed'); btnComplete.disabled = false;
-            }
+            if (video.completado) { btnComplete.textContent = '✅ Completada'; btnComplete.classList.add('completed'); btnComplete.disabled = true; } else { btnComplete.textContent = 'Marcar como Vista'; btnComplete.classList.remove('completed'); btnComplete.disabled = false; }
         };
 
         async function loadClassroomsGrid(token) {
@@ -321,23 +299,17 @@
                 const res = await getData('clases-en-vivo', token);
                 const data = await res.json();
                 const grid = document.getElementById('hub-grid');
-                
+                // FIX NULOS
                 const filteredClasses = data.clases.filter(c => {
-                    const nivelClase = c.nivel_objetivo || 'general'; // Si es null, asumimos 'general'
-                    return nivelClase === userLevel || 
-                           nivelClase === 'general' || 
-                           nivelClase === `id:${userId}`;
+                    const nivelClase = c.nivel_objetivo || 'general';
+                    return nivelClase === userLevel || nivelClase === 'general' || nivelClase === `id:${userId}`;
                 });
-
                 if (filteredClasses.length > 0) {
                     grid.innerHTML = filteredClasses.map(c => {
                         const isPersonal = (c.nivel_objetivo || '').startsWith('id:');
                         return `
                         <div class="hub-card ${isPersonal ? 'personal' : ''}">
-                            <div>
-                                <h4>${c.titulo}</h4>
-                                <span>${c.materia ? c.materia : 'Aula General'} ${c.profesor ? '- ' + c.profesor : ''}</span>
-                            </div>
+                            <div><h4>${c.titulo}</h4><span>${c.materia ? c.materia : 'Aula General'} ${c.profesor ? '- ' + c.profesor : ''}</span></div>
                             <div>
                                 <a href="${c.link_zoom}" target="_blank" class="btn-zoom-card">🎥 Entrar al Aula</a>
                                 <div style="display:flex; gap:5px; margin-top:8px;">
@@ -347,25 +319,15 @@
                             </div>
                         </div>
                     `}).join('');
-                } else {
-                    grid.innerHTML = '<div style="grid-column: 1/-1; text-align:center; padding:20px; color:#666;">No hay aulas activas para tu nivel.</div>';
-                }
+                } else { grid.innerHTML = '<div style="grid-column: 1/-1; text-align:center; padding:20px; color:#666;">No hay aulas activas para tu nivel.</div>'; }
             } catch (e) { console.error("Error cargando aulas", e); }
         }
 
         document.getElementById('btn-mark-complete').addEventListener('click', async () => {
-            const btn = document.getElementById('btn-mark-complete');
-            const originalText = btn.textContent;
-            btn.textContent = 'Guardando...';
-            btn.disabled = true;
-            try {
-                const res = await postData('progreso', { videoId: allVideos[currentVideoIndex].id }, getAuthToken());
-                if (res.ok) { 
-                    allVideos[currentVideoIndex].completado = true; 
-                    renderSidebar(allVideos); 
-                    loadVideo(currentVideoIndex); 
-                } else { btn.textContent = originalText; btn.disabled = false; }
-            } catch (e) { btn.textContent = originalText; btn.disabled = false; }
+            await postData('progreso', { videoId: allVideos[currentVideoIndex].id }, getAuthToken());
+            allVideos[currentVideoIndex].completado = true;
+            renderSidebar(allVideos);
+            loadVideo(currentVideoIndex);
         });
 
         function updateProgress(videos) {
@@ -376,8 +338,8 @@
             document.getElementById('progress-count').textContent = `${completedCount}/${videos.length}`;
         }
 
-        // --- PAYMENT WALL ACTUALIZADO PARA RENOVAR ---
-        window.renderPaymentWall = () => { // Hacemos la función global para el botón de renovar
+        // --- PAYMENT WALL ACTUALIZADO CON FILTRO DINÁMICO ---
+        window.renderPaymentWall = () => {
             const container = document.getElementById('classroom-ui');
             container.style.display = 'block';
             document.querySelector('.course-sidebar').style.display = 'none';
@@ -386,29 +348,32 @@
             
             document.querySelector('.course-content').innerHTML = `
                 <div style="text-align: center; padding: 40px; max-width: 900px; margin: 0 auto;">
-                    <h1 style="color: var(--color-azul-profundo); margin-bottom: 10px;">🔒 Inscripción / Renovación Tamar</h1>
-                    <p style="font-size: 1.1rem; margin-bottom: 30px; color:#666;">Personaliza tu plan de estudios.</p>
+                    <h1 style="color: var(--color-azul-profundo); margin-bottom: 10px;">🔒 Inscripción / Renovación</h1>
+                    <p style="font-size: 1.1rem; margin-bottom: 30px; color:#666;">Selecciona nivel y plan.</p>
                     <div style="background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: left;">
+                        
                         <div style="margin-bottom: 20px;">
-                            <label style="display:block; font-weight:bold; margin-bottom:10px; color: var(--color-azul-profundo);">1. Selecciona el Nivel Educativo:</label>
+                            <label style="display:block; font-weight:bold; margin-bottom:10px; color: var(--color-azul-profundo);">1. Nivel Educativo:</label>
                             <select id="level-selector" style="width:100%; padding:15px; border-radius:8px; border:2px solid #2D8CFF; font-size:1.1rem; background-color: #f0f7ff;">
                                 <option value="kinder">Kinder (Jardín)</option>
-                                <option value="primaria">Elementary (Primaria)</option>
-                                <option value="secundaria_middle">Middle School</option>
-                                <option value="secundaria_high">High School</option>
+                                <option value="primaria">Primaria (Elementary)</option>
+                                <option value="secundaria_middle">Secundaria (Middle)</option>
+                                <option value="secundaria_high">Secundaria (High)</option>
                             </select>
                         </div>
+
                         <div style="margin-bottom: 20px;">
                             <label style="display:block; font-weight:bold; margin-bottom:10px; color: var(--color-azul-profundo);">2. Elige tu Plan:</label>
                             <select id="plan-selector" style="width:100%; padding:15px; border-radius:8px; border:2px solid #eee; font-size:1.1rem;">
-                                <option value="basico" data-ars="46800" data-usd="39">Plan Básico ($46.800 ARS / $39 USD)</option>
-                                <option value="kinder_mensual" data-ars="58800" data-usd="49">Kinder Mensual ($58.800 ARS / $49 USD)</option>
-                                <option value="kinder_semanal" data-ars="70800" data-usd="59">Kinder Semanal ($70.800 ARS / $59 USD)</option>
-                                <option value="core" data-ars="70800" data-usd="59">Plan Core ($70.800 ARS / $59 USD)</option>
-                                <option value="plus" data-ars="154800" data-usd="129">Plan Plus ($154.800 ARS / $129 USD)</option>
-                                <option value="selecto" data-ars="130800" data-usd="109">Plan Selecto ($130.800 ARS / $109 USD)</option>
-                                <option value="prestige" data-ars="274800" data-usd="229">Plan Prestige ($274.800 ARS / $229 USD)</option>
-                                <option value="certificacion" data-ars="240000" data-usd="200">Certificación Anual ($240.000 ARS / $200 USD)</option>
+                                <option value="kinder_mensual" data-target="kinder" data-ars="58800" data-usd="49">Kinder Mensual ($58.800 ARS / $49 USD)</option>
+                                <option value="kinder_semanal" data-target="kinder" data-ars="70800" data-usd="59">Kinder Semanal ($70.800 ARS / $59 USD)</option>
+                                
+                                <option value="basico" data-target="school" data-ars="46800" data-usd="39">Plan Básico ($46.800 ARS / $39 USD)</option>
+                                <option value="core" data-target="school" data-ars="70800" data-usd="59">Plan Core ($70.800 ARS / $59 USD)</option>
+                                <option value="plus" data-target="school" data-ars="154800" data-usd="129">Plan Plus ($154.800 ARS / $129 USD)</option>
+                                <option value="selecto" data-target="school" data-ars="130800" data-usd="109">Plan Selecto ($130.800 ARS / $109 USD)</option>
+                                <option value="prestige" data-target="school" data-ars="274800" data-usd="229">Plan Prestige ($274.800 ARS / $229 USD)</option>
+                                <option value="certificacion" data-target="school" data-ars="240000" data-usd="200">Certificación Anual ($240.000 ARS / $200 USD)</option>
                             </select>
                         </div>
                         
@@ -433,16 +398,47 @@
                     </div>
                 </div>
             `;
+
+            // --- LÓGICA DE FILTRADO ---
+            const filterPlansByLevel = () => {
+                const levelSelect = document.getElementById('level-selector');
+                const planSelect = document.getElementById('plan-selector');
+                const isKinder = (levelSelect.value === 'kinder');
+                
+                // Recorremos opciones para mostrar/ocultar
+                let firstVisible = null;
+                Array.from(planSelect.options).forEach(opt => {
+                    const target = opt.getAttribute('data-target');
+                    // Si es Kinder: mostrar solo kinder. Si no es Kinder: mostrar solo school.
+                    if ((isKinder && target === 'kinder') || (!isKinder && target === 'school')) {
+                        opt.hidden = false;
+                        if(!firstVisible) firstVisible = opt;
+                    } else {
+                        opt.hidden = true;
+                    }
+                });
+                
+                // Auto-seleccionar el primero visible para que no quede uno oculto seleccionado
+                if(firstVisible) planSelect.value = firstVisible.value;
+                updatePlanInfo();
+            };
+
             const updatePlanInfo = () => {
                 const selector = document.getElementById('plan-selector');
                 const opt = selector.options[selector.selectedIndex];
                 const list = document.getElementById('features-list');
+                
+                // Actualizar precios visuales
                 document.getElementById('price-display-ars').textContent = `$${new Intl.NumberFormat('es-AR').format(opt.getAttribute('data-ars'))} ARS`;
                 document.getElementById('price-display-usd').textContent = `$${opt.getAttribute('data-usd')} USD`;
                 list.innerHTML = PLAN_DETAILS[opt.value] ? PLAN_DETAILS[opt.value].features.map(f => `<li>${f}</li>`).join('') : '';
             };
+
             document.getElementById('plan-selector').addEventListener('change', updatePlanInfo);
-            updatePlanInfo();
+            document.getElementById('level-selector').addEventListener('change', filterPlansByLevel);
+            
+            // Inicializar filtro
+            filterPlansByLevel();
             
             window.pagarMP = async () => {
                 const token = getAuthToken();
