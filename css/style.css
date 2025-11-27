@@ -21,7 +21,7 @@ body {
     background-color: var(--color-fondo); 
     color: var(--color-texto); 
     line-height: 1.7; 
-    padding-top: 80px; /* Espacio para el header fijo */
+    padding-top: 100px; /* AUMENTADO: Más espacio para el header más alto */
 }
 
 .container { 
@@ -76,20 +76,31 @@ hr { border: none; border-top: 1px solid var(--color-gris-claro); margin: 40px a
     background-image: linear-gradient(to right, #c23082 0%, var(--color-acento) 100%);
 }
 
-/* --- HEADER & NAV --- */
+/* --- HEADER & NAV (CON LOGO GRANDE) --- */
 .header { 
     background-color: var(--color-blanco); 
     box-shadow: 0 2px 8px rgba(0,0,0,0.1); 
-    position: fixed; top: 0; left: 0; width: 100%; height: 80px; z-index: 1000; 
+    position: fixed; top: 0; left: 0; width: 100%; 
+    height: 100px; /* AUMENTADO: De 80px a 100px para que quepa el logo */
+    z-index: 1000; 
     display: flex; align-items: center;
 }
 .header .container { 
     display: flex; justify-content: space-between; align-items: center; width: 100%; height: 100%; 
 }
+
+/* --- CAMBIO SOLICITADO: LOGO MÁS GRANDE --- */
 img.logo { 
-    height: 50px; width: auto; max-width: 200px; object-fit: contain; display: block; margin-right: 20px; transition: transform 0.3s;
+    height: auto; 
+    max-height: 90px; /* CAMBIO: De 50px a 90px */
+    width: auto; 
+    max-width: 250px; 
+    object-fit: contain; 
+    display: block; 
+    margin-right: 20px; 
+    transition: transform 0.3s;
 }
-img.logo:hover { transform: rotate(-3deg); }
+img.logo:hover { transform: scale(1.05); } /* Efecto zoom sutil en vez de rotación */
 
 .nav ul { list-style: none; display: flex; gap: 20px; align-items: center; margin: 0; padding: 0; }
 .nav ul li { padding: 0; margin: 0; }
@@ -100,11 +111,11 @@ img.logo:hover { transform: rotate(-3deg); }
 
 /* --- AULA VIRTUAL (VIDEOS.HTML) --- */
 .classroom-container {
-    display: grid; grid-template-columns: 350px 1fr; gap: 0; min-height: calc(100vh - 80px); margin-top: 0;
+    display: grid; grid-template-columns: 350px 1fr; gap: 0; min-height: calc(100vh - 100px); margin-top: 0;
 }
 /* Sidebar */
 .course-sidebar {
-    background: white; border-right: 1px solid #e0e0e0; height: calc(100vh - 80px); overflow-y: auto; position: fixed; width: 350px; top: 80px; bottom: 0; z-index: 10;
+    background: white; border-right: 1px solid #e0e0e0; height: calc(100vh - 100px); overflow-y: auto; position: fixed; width: 350px; top: 100px; bottom: 0; z-index: 10;
 }
 .sidebar-header { padding: 20px; background: var(--color-azul-profundo); color: white; }
 .progress-container { margin-top: 10px; }
@@ -164,10 +175,10 @@ img.logo:hover { transform: rotate(-3deg); }
 #hero { 
     background: url('images/nina-hamaca.jpg') no-repeat center center; 
     background-size: cover; background-attachment: fixed; 
-    color: var(--color-blanco); min-height: calc(90vh - 80px); 
+    color: var(--color-blanco); min-height: calc(90vh - 100px); 
     display: flex; flex-direction: column; justify-content: center; align-items: center; 
     text-align: center; position: relative; padding: 30px; 
-    margin-top: -80px; padding-top: 110px; 
+    margin-top: -100px; padding-top: 130px; 
 }
 #hero::before { 
     content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
@@ -249,7 +260,11 @@ footer a { color: var(--color-blanco); text-decoration: underline; }
     .header { height: auto; position: sticky; }
     .header .container { flex-direction: column; padding: 15px; height: auto; }
     body { padding-top: 0; }
-    img.logo { height: 50px; margin-bottom: 10px; margin-right: 0; }
+    img.logo { 
+        height: 50px; /* En móvil lo dejamos más chico para que no ocupe toda la pantalla */
+        max-height: 60px; 
+        margin-bottom: 10px; margin-right: 0; 
+    }
     .nav ul { gap: 10px; flex-wrap: wrap; justify-content: center; }
     .nav ul li a:not(.btn) { font-size: 0.8rem; }
     .grid-3-col { grid-template-columns: 1fr; gap: 20px; }
