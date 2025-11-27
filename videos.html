@@ -177,8 +177,9 @@
         import { getData, postData, getAuthToken } from './js/api.js';
         import { showMessage } from './js/main.js';
 
+        // --- ACTUALIZACIÓN DE TEXTOS PLAN BÁSICO ---
         const PLAN_DETAILS = {
-            'basico': { features: ['Acceso a videos cortos', 'Comunidad en línea', 'Grupo de estudio', 'Clases de ARTE gratis', 'Asesoramiento carpeta', 'Descuento SKEPSI'] },
+            'basico': { features: ['Acceso a videos para iniciar homeschool', 'Comunidad en línea', 'Grupo de estudio', 'Clases de ARTE gratis', 'Asesoramiento en el armado de la carpeta de evidencias', 'Descuento SKEPSI'] },
             'core': { features: ['Todo lo del Plan Básico', '3 Clases grupales mensuales', 'Elección de 3 docentes', 'Comunidad con docentes', 'Descuento clases extras'] },
             'plus': { features: ['Todo lo del Plan Básico', '10 Clases grupales mensuales', 'Elección de docentes', 'Comunidad con docentes', 'Descuento clases extras'] },
             'selecto': { features: ['Todo lo del Plan Básico', '4 Clases SEMANALES', '40 min mínimo por clase', 'Elección de 4 profesores', 'Comunidad con profesores'] },
@@ -189,7 +190,7 @@
         let allVideos = [];
         let currentVideoIndex = 0;
         let userLevel = 'general';
-        let userId = 0; // Variable global para el ID
+        let userId = 0;
 
         window.switchTab = (tabName) => {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
@@ -225,7 +226,7 @@
                     if (data.videos) {
                         allVideos = data.videos;
                         userLevel = data.userLevel || 'general';
-                        userId = data.userId; // Guardamos el ID
+                        userId = data.userId;
                         
                         document.getElementById('user-badge').textContent = `Nivel: ${userLevel.toUpperCase()}`;
                         document.getElementById('nivel-info').textContent = `Mostrando clases para: ${userLevel.toUpperCase()}`;
@@ -295,9 +296,8 @@
                 const data = await res.json();
                 const grid = document.getElementById('hub-grid');
                 
-                // FIX DEL ERROR DE CARGA: Comprobamos que los valores existan antes de usarlos
                 const filteredClasses = data.clases.filter(c => {
-                    const nivelClase = c.nivel_objetivo || 'general'; // Si es null, asumimos 'general'
+                    const nivelClase = c.nivel_objetivo || 'general';
                     return nivelClase === userLevel || 
                            nivelClase === 'general' || 
                            nivelClase === `id:${userId}`;
@@ -305,9 +305,7 @@
 
                 if (filteredClasses.length > 0) {
                     grid.innerHTML = filteredClasses.map(c => {
-                        // Comprobamos si es personalizada para darle estilo
                         const isPersonal = (c.nivel_objetivo || '').startsWith('id:');
-                        
                         return `
                         <div class="hub-card ${isPersonal ? 'personal' : ''}">
                             <div>
