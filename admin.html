@@ -12,7 +12,7 @@
         .admin-section { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 40px; }
         .admin-section h3 { border-bottom: 2px solid var(--color-gris-claro); padding-bottom: 15px; margin-bottom: 20px; }
         table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th, td { text-align: left; padding: 12px; border-bottom: 1px solid #eee; }
+        th, td { text-align: left; padding: 12px; border-bottom: 1px solid #eee; vertical-align: middle; }
         th { background-color: var(--color-fondo); color: var(--color-azul-profundo); font-weight: 700; }
         tr:hover { background-color: #f9f9f9; }
         .badge-pago { background-color: #d4edda; color: #155724; padding: 5px 10px; border-radius: 20px; font-size: 0.85rem; font-weight: 700; }
@@ -23,6 +23,11 @@
         .btn-contact { background-color: #333; }
         .btn-activate { background-color: #28a745; }
         .btn-delete { background-color: #e74c3c; }
+        .btn-edit { background-color: #3498db; }
+        
+        /* Estilos Barra de Progreso en Tabla */
+        .progress-bar-table { background: #eee; border-radius: 5px; height: 10px; width: 100px; overflow: hidden; display: inline-block; vertical-align: middle; margin-right: 5px; }
+        .progress-fill-table { background: #27ae60; height: 100%; }
     </style>
 </head>
 <body>
@@ -57,15 +62,22 @@
             <h3>🎓 Alumnos Matriculados</h3>
             <div class="table-responsive">
                 <table id="tabla-alumnos">
-                    <thead><tr><th>ID</th><th>Nombre</th><th>Email</th><th>Nivel</th><th>Plan</th><th>Acciones</th></tr></thead>
-                    <tbody><tr><td colspan="6">Cargando...</td></tr></tbody>
+                    <thead>
+                        <tr>
+                            <th>Nombre/Email</th>
+                            <th>Plan/Nivel</th>
+                            <th>% Progreso</th>
+                            <th>Profes/Notas</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody><tr><td colspan="5">Cargando...</td></tr></tbody>
                 </table>
             </div>
         </div>
 
         <div class="admin-section">
             <h3>⏳ Leads (Oportunidades)</h3>
-            <p>Interesados registrados desde el formulario web.</p>
             <div class="table-responsive">
                 <table id="tabla-leads">
                     <thead><tr><th>Nombre</th><th>Email</th><th>Fecha</th><th>Acciones</th></tr></thead>
@@ -76,7 +88,6 @@
 
         <div class="admin-section" style="border-top: 5px solid var(--color-acento);">
             <h3>🔴 Gestión de Aulas (Hub)</h3>
-            <p>Carga aquí los accesos a Zoom. <strong>Selecciona correctamente el nivel</strong> para que solo lo vean los alumnos correspondientes.</p>
             
             <form id="form-clase" style="display: flex; flex-direction: column; gap: 15px; background: #fff8e1; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
                 <div>
@@ -122,7 +133,7 @@
         </div>
 
         <div class="admin-section" style="border-top: 5px solid #9b59b6;">
-            <h3>🎬 Biblioteca de Videos Grabados</h3>
+            <h3>🎬 Videos Grabados</h3>
             <form id="form-video" style="background:#f8f9fa; padding:20px; border-radius:8px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-bottom:30px;">
                 <input type="text" id="vid-titulo" placeholder="Título Completo" required style="padding:8px; grid-column: span 2; border:1px solid #ccc; border-radius:5px;">
                 <input type="text" id="vid-corto" placeholder="Título Corto" required style="padding:8px; border:1px solid #ccc; border-radius:5px;">
@@ -168,7 +179,6 @@
                     globalLeads = dataLeads.leads || [];
                     renderLeads(globalLeads);
 
-                    // Stats
                     document.getElementById('total-alumnos').textContent = globalAlumnos.length;
                     document.getElementById('total-leads').textContent = globalLeads.length;
                     document.getElementById('total-ingresos').textContent = `$${(globalAlumnos.length * 46800).toLocaleString()}`;
@@ -179,19 +189,38 @@
                 } catch (error) { showMessage('admin-message', 'Error al cargar panel.', 'error'); }
             }
 
-            // RENDERIZADO ALUMNOS
             function renderAlumnos(lista) {
                 const tbody = document.querySelector('#tabla-alumnos tbody');
-                if (lista.length === 0) { tbody.innerHTML = `<tr><td colspan="6">Sin alumnos.</td></tr>`; return; }
-                tbody.innerHTML = lista.map(u => `
-                    <tr><td>#${u.id}</td><td><strong>${u.nombre}</strong></td><td>${u.email}</td>
-                        <td>${u.nivel_educativo || '-'}</td>
-                        <td style="color:var(--color-acento);">${u.plan_adquirido || '-'}</td>
-                        <td><button class="btn-action btn-delete" style="background:red;" onclick="window.eliminarUsuario(${u.id}, '${u.nombre}')">🗑️</button></td>
-                    </tr>`).join('');
+                if (lista.length === 0) { tbody.innerHTML = `<tr><td colspan="5">Sin alumnos.</td></tr>`; return; }
+                tbody.innerHTML = lista.map(u => {
+                    // Calculo de progreso
+                    const vistos = parseInt(u.videos_vistos || 0);
+                    const total = parseInt(u.total_videos || 1);
+                    const porcentaje = Math.round((vistos / total) * 100);
+                    
+                    return `
+                    <tr>
+                        <td>
+                            <strong>${u.nombre}</strong><br>
+                            <small style="color:#777;">${u.email}</small>
+                        </td>
+                        <td>
+                            <span class="badge-pago">${u.plan_adquirido || '-'}</span><br>
+                            <small>${u.nivel_educativo || 'Sin nivel'}</small>
+                        </td>
+                        <td>
+                            <div class="progress-bar-table"><div class="progress-fill-table" style="width:${porcentaje}%"></div></div>
+                            <small>${porcentaje}%</small>
+                        </td>
+                        <td>
+                            <span style="font-size:0.85rem;">${u.profesores_elegidos || 'Sin asignar'}</span>
+                            <button class="btn-action btn-edit" onclick="window.editarProfes(${u.id}, '${u.nombre}', '${u.profesores_elegidos || ''}')">📝</button>
+                        </td>
+                        <td><button class="btn-action btn-delete" onclick="window.eliminarUsuario(${u.id}, '${u.nombre}')">🗑️</button></td>
+                    </tr>`;
+                }).join('');
             }
 
-            // RENDERIZADO LEADS (RECUPERADO)
             function renderLeads(lista) {
                 const tbody = document.querySelector('#tabla-leads tbody');
                 if (lista.length === 0) { tbody.innerHTML = '<tr><td colspan="4">Sin leads.</td></tr>'; return; }
@@ -210,7 +239,48 @@
                 `}).join('');
             }
 
-            // RENDERIZADO AULAS ACTIVAS
+            // --- ACTIONS ---
+            window.activarManual = async (userId, nombre) => {
+                const plan = prompt(`¿Activar a ${nombre}? Escribe el Plan:`, "Plan Manual");
+                if (plan && confirm('¿Confirmar?')) {
+                    const res = await fetch('https://tamar-backend-api-gqy9.onrender.com/api/admin/activar-manual', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }, body: JSON.stringify({ userId, plan }) });
+                    if (res.ok) { alert('¡Activado!'); loadAdminData(); }
+                }
+            };
+
+            window.eliminarUsuario = async (id, nombre) => {
+                if(confirm(`⚠️ ¿Borrar a ${nombre}?`)) {
+                    try { await fetch(`https://tamar-backend-api-gqy9.onrender.com/api/admin/usuarios/${id}`, { method: 'DELETE', headers: {'Authorization': `Bearer ${token}`} }); loadAdminData(); } catch (error) { alert('Error.'); }
+                }
+            };
+
+            // NUEVA FUNCIÓN: EDITAR PROFESORES
+            window.editarProfes = async (id, nombre, actual) => {
+                const notas = prompt(`Editar Profesores/Notas para ${nombre}:`, actual);
+                if (notas !== null) {
+                    const res = await fetch('https://tamar-backend-api-gqy9.onrender.com/api/admin/guardar-profesores', { 
+                        method: 'POST', 
+                        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }, 
+                        body: JSON.stringify({ userId: id, notas }) 
+                    });
+                    if(res.ok) loadAdminData();
+                }
+            };
+            
+            window.deleteClass = async (id) => {
+                if(confirm('¿Borrar esta Aula?')) {
+                    const res = await fetch(`https://tamar-backend-api-gqy9.onrender.com/api/admin/clases/${id}`, { method: 'DELETE', headers: {'Authorization': `Bearer ${token}`} });
+                    if(res.ok) loadActiveClasses();
+                }
+            };
+            
+            window.deleteVideo = async (id) => {
+                if(confirm('¿Borrar video?')) {
+                    const res = await fetch(`https://tamar-backend-api-gqy9.onrender.com/api/admin/videos/${id}`, { method: 'DELETE', headers: {'Authorization': `Bearer ${token}`} });
+                    if(res.ok) loadVideosLibrary();
+                }
+            };
+
             async function loadActiveClasses() {
                 try {
                     const res = await getData('clases-en-vivo', token);
@@ -231,35 +301,6 @@
                 } catch (e) { console.error(e); }
             }
 
-            // ACTIONS
-            window.activarManual = async (userId, nombre) => {
-                const plan = prompt(`¿Activar a ${nombre}? Escribe el Plan:`, "Plan Manual");
-                if (plan && confirm('¿Confirmar?')) {
-                    const res = await fetch('https://tamar-backend-api-gqy9.onrender.com/api/admin/activar-manual', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }, body: JSON.stringify({ userId, plan }) });
-                    if (res.ok) { alert('¡Activado!'); loadAdminData(); }
-                }
-            };
-
-            window.eliminarUsuario = async (id, nombre) => {
-                if(confirm(`⚠️ ¿Borrar a ${nombre}?`)) {
-                    try { await fetch(`https://tamar-backend-api-gqy9.onrender.com/api/admin/usuarios/${id}`, { method: 'DELETE', headers: {'Authorization': `Bearer ${token}`} }); loadAdminData(); } catch (error) { alert('Error.'); }
-                }
-            };
-            
-            window.deleteClass = async (id) => {
-                if(confirm('¿Borrar esta Aula?')) {
-                    const res = await fetch(`https://tamar-backend-api-gqy9.onrender.com/api/admin/clases/${id}`, { method: 'DELETE', headers: {'Authorization': `Bearer ${token}`} });
-                    if(res.ok) loadActiveClasses();
-                }
-            };
-            
-            window.deleteVideo = async (id) => {
-                if(confirm('¿Borrar video?')) {
-                    const res = await fetch(`https://tamar-backend-api-gqy9.onrender.com/api/admin/videos/${id}`, { method: 'DELETE', headers: {'Authorization': `Bearer ${token}`} });
-                    if(res.ok) loadVideosLibrary();
-                }
-            };
-
             async function loadVideosLibrary() {
                 try {
                     const res = await getData('admin/videos', token);
@@ -271,7 +312,6 @@
                 } catch (e) { console.error(e); }
             }
 
-            // SUBMIT CLASE
             document.getElementById('form-clase').addEventListener('submit', async (e) => {
                 e.preventDefault();
                 const data = { 
