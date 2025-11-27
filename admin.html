@@ -6,6 +6,7 @@
     <title>Panel de Administración - Tamar</title>
     <link rel="stylesheet" href="CSS/style.css">
     <style>
+        /* Estilos base (iguales) */
         .admin-container { max-width: 1100px; margin: 40px auto; padding: 20px; }
         .admin-header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
         .search-box input { width: 300px; padding: 10px; border-radius: 20px; border: 1px solid #ccc; }
@@ -24,8 +25,8 @@
         .btn-activate { background-color: #28a745; }
         .btn-delete { background-color: #e74c3c; }
         .btn-edit { background-color: #3498db; }
+        .btn-assign { background-color: #9b59b6; } /* Botón Violeta para asignar */
         
-        /* Estilos Barra de Progreso en Tabla */
         .progress-bar-table { background: #eee; border-radius: 5px; height: 10px; width: 100px; overflow: hidden; display: inline-block; vertical-align: middle; margin-right: 5px; }
         .progress-fill-table { background: #27ae60; height: 100%; }
     </style>
@@ -35,12 +36,7 @@
         <div class="container">
             <img src="images/logo-tamar.png" alt="Logo Tamar" class="logo">
             <h1>Panel Admin</h1>
-            <nav class="nav">
-                <ul>
-                    <li><a href="index.html">Volver al Sitio</a></li>
-                    <li><a href="#" id="logout-btn">Cerrar Sesión</a></li>
-                </ul>
-            </nav>
+            <nav class="nav"><ul><li><a href="index.html">Volver al Sitio</a></li><li><a href="#" id="logout-btn">Cerrar Sesión</a></li></ul></nav>
         </div>
     </header>
 
@@ -59,108 +55,66 @@
         </div>
 
         <div class="admin-section">
-            <h3>🎓 Alumnos Matriculados</h3>
+            <h3>🎓 Alumnos y Gestión Individual</h3>
             <div class="table-responsive">
                 <table id="tabla-alumnos">
                     <thead>
                         <tr>
                             <th>Nombre/Email</th>
-                            <th>Plan/Nivel</th>
-                            <th>% Progreso</th>
-                            <th>Profes/Notas</th>
-                            <th>Acciones</th>
+                            <th>Nivel/Plan</th>
+                            <th>% Avance</th>
+                            <th>Acciones Rápidas</th>
                         </tr>
                     </thead>
-                    <tbody><tr><td colspan="5">Cargando...</td></tr></tbody>
-                </table>
-            </div>
-        </div>
-
-        <div class="admin-section">
-            <h3>⏳ Leads (Oportunidades)</h3>
-            <div class="table-responsive">
-                <table id="tabla-leads">
-                    <thead><tr><th>Nombre</th><th>Email</th><th>Fecha</th><th>Acciones</th></tr></thead>
                     <tbody><tr><td colspan="4">Cargando...</td></tr></tbody>
                 </table>
             </div>
         </div>
 
         <div class="admin-section" style="border-top: 5px solid var(--color-acento);">
-            <h3>🔴 Gestión de Aulas (Hub)</h3>
+            <h3>🔴 Gestión de Aulas Generales</h3>
+            <p>Estas clases son visibles para <strong>TODOS</strong> los alumnos del nivel seleccionado.</p>
             
             <form id="form-clase" style="display: flex; flex-direction: column; gap: 15px; background: #fff8e1; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
                 <div>
-                    <label style="font-weight:bold;">¿Para qué nivel es esta clase?</label>
-                    <select id="clase-nivel" required style="width:100%; padding:10px; border-radius:5px; border:1px solid #aaa; margin-top:5px;">
+                    <select id="clase-nivel" required style="width:100%; padding:10px; border-radius:5px; border:1px solid #aaa;">
                         <option value="general">🏫 Para Todos (General)</option>
-                        <option value="kinder">🧸 Kinder (Jardín)</option>
-                        <option value="primaria">✏️ Elementary (Primaria)</option>
-                        <option value="secundaria_middle">📚 Middle School</option>
-                        <option value="secundaria_high">🎓 High School</option>
+                        <option value="kinder">🧸 Kinder</option>
+                        <option value="primaria">✏️ Primaria</option>
+                        <option value="secundaria_middle">📚 Secundaria (Middle)</option>
+                        <option value="secundaria_high">🎓 Secundaria (High)</option>
                     </select>
                 </div>
-
                 <div style="display:flex; gap:10px;">
-                    <input type="text" id="clase-titulo" placeholder="Título (Ej: Matemática)" required style="padding:8px; flex:2; border:1px solid #ccc; border-radius:5px;">
+                    <input type="text" id="clase-titulo" placeholder="Título (Ej: Asamblea General)" required style="padding:8px; flex:2; border:1px solid #ccc; border-radius:5px;">
                     <input type="text" id="clase-profesor" placeholder="Profesor" required style="padding:8px; flex:1; border:1px solid #ccc; border-radius:5px;">
                 </div>
-                
                 <div style="display:flex; gap:10px;">
-                    <input type="text" id="clase-materia" placeholder="Detalle extra" style="padding:8px; flex:1; border:1px solid #ccc; border-radius:5px;">
                     <input type="datetime-local" id="clase-fecha" required style="padding:8px; flex:1; border:1px solid #ccc; border-radius:5px;">
+                    <input type="url" id="clase-zoom" placeholder="Link Zoom" required style="padding:8px; flex:1; border:1px solid #ccc; border-radius:5px;">
                 </div>
-
-                <div style="display:flex; gap:10px;">
-                    <input type="url" id="clase-zoom" placeholder="Link Zoom Fijo" required style="padding:8px; flex:1; border:1px solid #ccc; border-radius:5px;">
-                    <input type="url" id="clase-recursos" placeholder="Link Carpeta Drive (Materiales)" style="padding:8px; flex:1; border:1px solid #ccc; border-radius:5px;">
-                </div>
-                
-                <div style="display:flex; gap:10px;">
-                    <input type="url" id="clase-grabaciones" placeholder="Link Carpeta Grabaciones (Drive)" style="padding:8px; flex:1; border:1px solid #ccc; border-radius:5px;">
-                </div>
-
-                <button type="submit" class="btn" style="padding:10px; cursor: pointer; background-color: var(--color-acento); color: var(--color-azul-profundo);">➕ Publicar Aula</button>
+                <input type="url" id="clase-recursos" placeholder="Link Drive Materiales (Opcional)" style="padding:8px; width:100%; border:1px solid #ccc; border-radius:5px;">
+                <input type="url" id="clase-grabaciones" placeholder="Link Drive Grabaciones (Opcional)" style="padding:8px; width:100%; border:1px solid #ccc; border-radius:5px;">
+                <button type="submit" class="btn" style="padding:10px; background-color: var(--color-acento); color: var(--color-azul-profundo);">➕ Publicar Aula General</button>
             </form>
 
-            <h4>Aulas Activas:</h4>
+            <h4>Aulas Activas (Generales y Personales):</h4>
             <div class="table-responsive">
                 <table id="tabla-clases">
-                    <thead><tr><th>Nivel</th><th>Título</th><th>Zoom</th><th>Acciones</th></tr></thead>
+                    <thead><tr><th>Nivel/ID</th><th>Título</th><th>Zoom</th><th>Acciones</th></tr></thead>
                     <tbody><tr><td colspan="4">Cargando...</td></tr></tbody>
                 </table>
             </div>
         </div>
 
-        <div class="admin-section" style="border-top: 5px solid #9b59b6;">
-            <h3>🎬 Videos Grabados</h3>
-            <form id="form-video" style="background:#f8f9fa; padding:20px; border-radius:8px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-bottom:30px;">
-                <input type="text" id="vid-titulo" placeholder="Título Completo" required style="padding:8px; grid-column: span 2; border:1px solid #ccc; border-radius:5px;">
-                <input type="text" id="vid-corto" placeholder="Título Corto" required style="padding:8px; border:1px solid #ccc; border-radius:5px;">
-                <input type="number" id="vid-modulo" placeholder="Módulo" required style="padding:8px; border:1px solid #ccc; border-radius:5px;">
-                <input type="number" id="vid-orden" placeholder="Orden" required style="padding:8px; border:1px solid #ccc; border-radius:5px;">
-                <input type="url" id="vid-url" placeholder="Link YouTube" required style="padding:8px; border:1px solid #ccc; border-radius:5px;">
-                <input type="text" id="vid-desc" placeholder="Descripción (Link Drive aquí)" style="padding:8px; grid-column: span 3; border:1px solid #ccc; border-radius:5px;">
-                <button type="submit" class="btn" style="grid-column: span 3; background-color:#9b59b6; cursor: pointer;">➕ Agregar Video</button>
-            </form>
-            <div class="table-responsive">
-                <table id="tabla-videos">
-                    <thead><tr><th>Mód</th><th>Título</th><th>Acciones</th></tr></thead>
-                    <tbody><tr><td colspan="3">Cargando...</td></tr></tbody>
-                </table>
-            </div>
-        </div>
+        <div class="admin-section"><h3>⏳ Leads</h3><table id="tabla-leads"><thead><tr><th>Datos</th><th>Fecha</th><th>Acciones</th></tr></thead><tbody></tbody></table></div>
     </div>
-
-    <footer><div class="container"><p>&copy; 2024 Tamar. Panel Admin.</p></div></footer>
 
     <script type="module" src="js/api.js"></script>
     <script type="module" src="js/main.js"></script>
     <script type="module">
         import { getData, showMessage } from './js/main.js';
-
         let globalAlumnos = [];
-        let globalLeads = [];
 
         document.addEventListener('DOMContentLoaded', async () => {
             const token = localStorage.getItem('token');
@@ -176,110 +130,41 @@
 
                     const resLeads = await getData('admin/leads-pendientes', token);
                     const dataLeads = await resLeads.json();
-                    globalLeads = dataLeads.leads || [];
-                    renderLeads(globalLeads);
+                    renderLeads(dataLeads.leads || []);
 
                     document.getElementById('total-alumnos').textContent = globalAlumnos.length;
-                    document.getElementById('total-leads').textContent = globalLeads.length;
+                    document.getElementById('total-leads').textContent = (dataLeads.leads || []).length;
                     document.getElementById('total-ingresos').textContent = `$${(globalAlumnos.length * 46800).toLocaleString()}`;
                     
-                    loadVideosLibrary();
                     loadActiveClasses();
-
                 } catch (error) { showMessage('admin-message', 'Error al cargar panel.', 'error'); }
             }
 
             function renderAlumnos(lista) {
                 const tbody = document.querySelector('#tabla-alumnos tbody');
-                if (lista.length === 0) { tbody.innerHTML = `<tr><td colspan="5">Sin alumnos.</td></tr>`; return; }
+                if (lista.length === 0) { tbody.innerHTML = `<tr><td colspan="4">Sin alumnos.</td></tr>`; return; }
                 tbody.innerHTML = lista.map(u => {
-                    // Calculo de progreso
                     const vistos = parseInt(u.videos_vistos || 0);
                     const total = parseInt(u.total_videos || 1);
                     const porcentaje = Math.round((vistos / total) * 100);
                     
                     return `
                     <tr>
+                        <td><strong>${u.nombre}</strong><br><small>${u.email}</small></td>
+                        <td>${u.nivel_educativo || '-'}<br><small style="color:var(--color-acento);">${u.plan_adquirido}</small></td>
+                        <td><div class="progress-bar-table"><div class="progress-fill-table" style="width:${porcentaje}%"></div></div> <small>${porcentaje}%</small></td>
                         <td>
-                            <strong>${u.nombre}</strong><br>
-                            <small style="color:#777;">${u.email}</small>
+                            <button class="btn-action btn-assign" onclick="window.asignarClasePersonal(${u.id}, '${u.nombre}')">📅 Asignar Clase</button>
+                            <button class="btn-action btn-delete" onclick="window.eliminarUsuario(${u.id}, '${u.nombre}')">🗑️</button>
                         </td>
-                        <td>
-                            <span class="badge-pago">${u.plan_adquirido || '-'}</span><br>
-                            <small>${u.nivel_educativo || 'Sin nivel'}</small>
-                        </td>
-                        <td>
-                            <div class="progress-bar-table"><div class="progress-fill-table" style="width:${porcentaje}%"></div></div>
-                            <small>${porcentaje}%</small>
-                        </td>
-                        <td>
-                            <span style="font-size:0.85rem;">${u.profesores_elegidos || 'Sin asignar'}</span>
-                            <button class="btn-action btn-edit" onclick="window.editarProfes(${u.id}, '${u.nombre}', '${u.profesores_elegidos || ''}')">📝</button>
-                        </td>
-                        <td><button class="btn-action btn-delete" onclick="window.eliminarUsuario(${u.id}, '${u.nombre}')">🗑️</button></td>
                     </tr>`;
                 }).join('');
             }
 
             function renderLeads(lista) {
                 const tbody = document.querySelector('#tabla-leads tbody');
-                if (lista.length === 0) { tbody.innerHTML = '<tr><td colspan="4">Sin leads.</td></tr>'; return; }
-                tbody.innerHTML = lista.map(u => {
-                    const mailLink = `mailto:${u.email}?subject=Hola ${u.nombre} - Escuela Tamar&body=Hola...`;
-                    return `
-                    <tr>
-                        <td><strong>${u.nombre}</strong></td><td>${u.email}</td>
-                        <td>${u.fecha_registro ? new Date(u.fecha_registro).toLocaleDateString() : '-'}</td>
-                        <td>
-                            <a href="${mailLink}" class="btn-action btn-contact">📩</a> 
-                            <button class="btn-action btn-activate" onclick="window.activarManual(${u.id}, '${u.nombre}')">✅</button>
-                            <button class="btn-action btn-delete" style="background:red;" onclick="window.eliminarUsuario(${u.id}, '${u.nombre}')">🗑️</button>
-                        </td>
-                    </tr>
-                `}).join('');
+                tbody.innerHTML = lista.map(u => `<tr><td>${u.nombre}<br><small>${u.email}</small></td><td>${new Date(u.fecha_registro).toLocaleDateString()}</td><td><button class="btn-action btn-activate" onclick="window.activarManual(${u.id}, '${u.nombre}')">✅</button></td></tr>`).join('');
             }
-
-            // --- ACTIONS ---
-            window.activarManual = async (userId, nombre) => {
-                const plan = prompt(`¿Activar a ${nombre}? Escribe el Plan:`, "Plan Manual");
-                if (plan && confirm('¿Confirmar?')) {
-                    const res = await fetch('https://tamar-backend-api-gqy9.onrender.com/api/admin/activar-manual', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }, body: JSON.stringify({ userId, plan }) });
-                    if (res.ok) { alert('¡Activado!'); loadAdminData(); }
-                }
-            };
-
-            window.eliminarUsuario = async (id, nombre) => {
-                if(confirm(`⚠️ ¿Borrar a ${nombre}?`)) {
-                    try { await fetch(`https://tamar-backend-api-gqy9.onrender.com/api/admin/usuarios/${id}`, { method: 'DELETE', headers: {'Authorization': `Bearer ${token}`} }); loadAdminData(); } catch (error) { alert('Error.'); }
-                }
-            };
-
-            // NUEVA FUNCIÓN: EDITAR PROFESORES
-            window.editarProfes = async (id, nombre, actual) => {
-                const notas = prompt(`Editar Profesores/Notas para ${nombre}:`, actual);
-                if (notas !== null) {
-                    const res = await fetch('https://tamar-backend-api-gqy9.onrender.com/api/admin/guardar-profesores', { 
-                        method: 'POST', 
-                        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }, 
-                        body: JSON.stringify({ userId: id, notas }) 
-                    });
-                    if(res.ok) loadAdminData();
-                }
-            };
-            
-            window.deleteClass = async (id) => {
-                if(confirm('¿Borrar esta Aula?')) {
-                    const res = await fetch(`https://tamar-backend-api-gqy9.onrender.com/api/admin/clases/${id}`, { method: 'DELETE', headers: {'Authorization': `Bearer ${token}`} });
-                    if(res.ok) loadActiveClasses();
-                }
-            };
-            
-            window.deleteVideo = async (id) => {
-                if(confirm('¿Borrar video?')) {
-                    const res = await fetch(`https://tamar-backend-api-gqy9.onrender.com/api/admin/videos/${id}`, { method: 'DELETE', headers: {'Authorization': `Bearer ${token}`} });
-                    if(res.ok) loadVideosLibrary();
-                }
-            };
 
             async function loadActiveClasses() {
                 try {
@@ -289,62 +174,77 @@
                     if (data.clases && data.clases.length > 0) {
                         tbody.innerHTML = data.clases.map(c => `
                             <tr>
-                                <td><span class="badge-pago">${c.nivel_objetivo || 'General'}</span></td>
-                                <td><strong>${c.titulo}</strong></td>
-                                <td><a href="${c.link_zoom}" target="_blank">Link</a></td>
+                                <td><span class="badge-pago">${c.nivel_objetivo}</span></td>
+                                <td><strong>${c.titulo}</strong><br><small>${c.profesor || ''}</small></td>
+                                <td><a href="${c.link_zoom}" target="_blank">Zoom</a></td>
                                 <td><button class="btn-action btn-delete" onclick="window.deleteClass(${c.id})">🗑️</button></td>
                             </tr>
                         `).join('');
-                    } else {
-                        tbody.innerHTML = '<tr><td colspan="4">No hay aulas activas.</td></tr>';
-                    }
+                    } else { tbody.innerHTML = '<tr><td colspan="4">No hay aulas activas.</td></tr>'; }
                 } catch (e) { console.error(e); }
             }
 
-            async function loadVideosLibrary() {
-                try {
-                    const res = await getData('admin/videos', token);
-                    const data = await res.json();
-                    const tbody = document.querySelector('#tabla-videos tbody');
-                    tbody.innerHTML = (data.videos && data.videos.length) ? data.videos.map(v => `
-                        <tr><td>${v.modulo}</td><td>${v.titulo_completo}</td><td><button class="btn-action btn-delete" onclick="window.deleteVideo(${v.id})">🗑️</button></td></tr>
-                    `).join('') : '<tr><td colspan="3">Sin videos.</td></tr>';
-                } catch (e) { console.error(e); }
-            }
+            // --- FUNCIÓN MÁGICA: ASIGNAR CLASE PERSONAL ---
+            window.asignarClasePersonal = async (userId, nombre) => {
+                // Usamos prompts simples para no complicar la UI
+                const titulo = prompt(`Clase para ${nombre}:\nIngresa el Título (ej: Matemática - Profe Juan):`);
+                if (!titulo) return;
+                
+                const zoom = prompt("Ingresa el link de Zoom:");
+                if (!zoom) return;
+
+                const data = { 
+                    titulo: titulo,
+                    materia: 'Clase Particular',
+                    profesor: 'Asignado por Sofía',
+                    fecha: new Date().toISOString().split('T')[0], // Fecha hoy
+                    hora: '00:00',
+                    link_zoom: zoom,
+                    link_recursos: '',
+                    link_grabaciones: '',
+                    nivel: `id:${userId}`, // <--- ETIQUETA ÚNICA POR ID
+                    descripcion: 'Personal' 
+                };
+
+                const res = await fetch('https://tamar-backend-api-gqy9.onrender.com/api/admin/nueva-clase', { method: 'POST', headers: {'Content-Type':'application/json', 'Authorization': `Bearer ${token}`}, body: JSON.stringify(data) });
+                if(res.ok) { alert(`¡Clase asignada a ${nombre}!`); loadActiveClasses(); }
+            };
+
+            window.deleteClass = async (id) => {
+                if(confirm('¿Borrar esta clase?')) {
+                    const res = await fetch(`https://tamar-backend-api-gqy9.onrender.com/api/admin/clases/${id}`, { method: 'DELETE', headers: {'Authorization': `Bearer ${token}`} });
+                    if(res.ok) loadActiveClasses();
+                }
+            };
+            
+            window.eliminarUsuario = async (id, nombre) => { if(confirm(`Borrar a ${nombre}?`)) { await fetch(`https://tamar-backend-api-gqy9.onrender.com/api/admin/usuarios/${id}`, { method: 'DELETE', headers: {'Authorization': `Bearer ${token}`} }); loadAdminData(); }};
+            window.activarManual = async (userId, nombre) => { const plan = prompt("Plan:"); if(plan) { await fetch('https://tamar-backend-api-gqy9.onrender.com/api/admin/activar-manual', { method: 'POST', headers: {'Content-Type':'application/json', 'Authorization': `Bearer ${token}`}, body: JSON.stringify({userId, plan}) }); loadAdminData(); }};
 
             document.getElementById('form-clase').addEventListener('submit', async (e) => {
                 e.preventDefault();
+                // (Lógica de clase general igual que antes)
                 const data = { 
                     titulo: document.getElementById('clase-titulo').value, 
-                    materia: document.getElementById('clase-materia').value, 
+                    materia: 'General', 
                     profesor: document.getElementById('clase-profesor').value, 
                     fecha: document.getElementById('clase-fecha').value.split('T')[0], 
                     hora: document.getElementById('clase-fecha').value.split('T')[1], 
                     link_zoom: document.getElementById('clase-zoom').value, 
                     link_recursos: document.getElementById('clase-recursos').value,
-                    link_grabaciones: document.getElementById('clase-grabaciones').value, 
+                    link_grabaciones: document.getElementById('clase-grabaciones').value,
                     nivel: document.getElementById('clase-nivel').value, 
-                    descripcion: 'Clase Hub' 
+                    descripcion: 'General' 
                 };
                 const res = await fetch('https://tamar-backend-api-gqy9.onrender.com/api/admin/nueva-clase', { method: 'POST', headers: {'Content-Type':'application/json', 'Authorization': `Bearer ${token}`}, body: JSON.stringify(data) });
-                if(res.ok) { alert('Aula publicada!'); document.getElementById('form-clase').reset(); loadActiveClasses(); }
-            });
-
-            document.getElementById('form-video').addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const data = { titulo: document.getElementById('vid-titulo').value, corto: document.getElementById('vid-corto').value, modulo: document.getElementById('vid-modulo').value, orden: document.getElementById('vid-orden').value, url: document.getElementById('vid-url').value, desc: document.getElementById('vid-desc').value };
-                const res = await fetch('https://tamar-backend-api-gqy9.onrender.com/api/admin/videos', { method: 'POST', headers: {'Content-Type':'application/json', 'Authorization': `Bearer ${token}`}, body: JSON.stringify(data) });
-                if(res.ok) { alert('Video agregado.'); document.getElementById('form-video').reset(); loadVideosLibrary(); }
+                if(res.ok) { alert('Aula General Publicada!'); loadActiveClasses(); }
             });
 
             document.getElementById('search-input').addEventListener('keyup', (e) => {
                 const term = e.target.value.toLowerCase();
-                renderAlumnos(globalAlumnos.filter(u => u.nombre.toLowerCase().includes(term) || u.email.toLowerCase().includes(term)));
-                renderLeads(globalLeads.filter(u => u.nombre.toLowerCase().includes(term) || u.email.toLowerCase().includes(term)));
+                renderAlumnos(globalAlumnos.filter(u => u.nombre.toLowerCase().includes(term)));
             });
 
-            document.getElementById('logout-btn').addEventListener('click', (e) => { e.preventDefault(); localStorage.removeItem('token'); window.location.href = 'login.html'; });
-
+            document.getElementById('logout-btn').addEventListener('click', () => { localStorage.removeItem('token'); window.location.href = 'login.html'; });
             loadAdminData();
         });
     </script>
