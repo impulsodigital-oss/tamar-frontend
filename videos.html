@@ -295,17 +295,21 @@
                 const data = await res.json();
                 const grid = document.getElementById('hub-grid');
                 
-                // FILTRO MEJORADO: Nivel General, Nivel Específico, o ID Personal
-                const filteredClasses = data.clases.filter(c => 
-                    c.nivel_objetivo === userLevel || 
-                    c.nivel_objetivo === 'general' || 
-                    c.nivel_objetivo === `id:${userId}` || // <--- AQUÍ ESTÁ LA CLAVE
-                    !c.nivel_objetivo
-                );
+                // FIX DEL ERROR DE CARGA: Comprobamos que los valores existan antes de usarlos
+                const filteredClasses = data.clases.filter(c => {
+                    const nivelClase = c.nivel_objetivo || 'general'; // Si es null, asumimos 'general'
+                    return nivelClase === userLevel || 
+                           nivelClase === 'general' || 
+                           nivelClase === `id:${userId}`;
+                });
 
                 if (filteredClasses.length > 0) {
-                    grid.innerHTML = filteredClasses.map(c => `
-                        <div class="hub-card ${c.nivel_objetivo.startsWith('id:') ? 'personal' : ''}">
+                    grid.innerHTML = filteredClasses.map(c => {
+                        // Comprobamos si es personalizada para darle estilo
+                        const isPersonal = (c.nivel_objetivo || '').startsWith('id:');
+                        
+                        return `
+                        <div class="hub-card ${isPersonal ? 'personal' : ''}">
                             <div>
                                 <h4>${c.titulo}</h4>
                                 <span>${c.materia ? c.materia : 'Aula General'} ${c.profesor ? '- ' + c.profesor : ''}</span>
@@ -318,7 +322,7 @@
                                 </div>
                             </div>
                         </div>
-                    `).join('');
+                    `}).join('');
                 } else {
                     grid.innerHTML = '<div style="grid-column: 1/-1; text-align:center; padding:20px; color:#666;">No hay aulas activas para tu nivel.</div>';
                 }
